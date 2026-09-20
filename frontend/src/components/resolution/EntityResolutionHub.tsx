@@ -134,18 +134,18 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header */}
-      <div className="workstation-panel p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="bg-white border border-[#D9E0E8] p-4 rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-base font-bold text-slate-100 font-mono tracking-wide">
-              ENTITY RESOLUTION & IDENTITY HUB
+            <h1 className="text-base font-bold text-[#172033] tracking-tight">
+              Entity Resolution & Identity Hub
             </h1>
             <Badge variant="inferred">Human-in-the-Loop Verified</Badge>
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            AI-proposed entity resolution candidates across aliases, transliterations, phonetics, and hardware identifiers.
+          <p className="text-xs text-[#64748B] mt-0.5">
+            Resolution candidates across aliases, transliterations, phonetics, and hardware identifiers.
             In accordance with Indian legal standards (Section 63 BSA), uncertain matches are never silently merged without recorded investigator authorization.
           </p>
         </div>
@@ -153,7 +153,7 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
         <div className="flex items-center gap-2">
           <button
             onClick={fetchCandidates}
-            className="btn-rect-secondary text-xs"
+            className="btn-secondary text-xs flex items-center gap-1.5"
           >
             <RotateCw className="w-3.5 h-3.5" />
             <span>Refresh</span>
@@ -161,7 +161,7 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
           <button
             onClick={handleRunResolution}
             disabled={runningER}
-            className="btn-rect-primary text-xs"
+            className="btn-primary text-xs flex items-center gap-1.5"
           >
             <Play className="w-3.5 h-3.5 fill-current" />
             <span>{runningER ? 'Running Pipeline...' : 'Run Resolution'}</span>
@@ -170,38 +170,38 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
       </div>
 
       {/* Main Tabs Navigation */}
-      <div className="flex items-center justify-between border-b border-slate-800 text-xs font-mono">
+      <div className="flex items-center justify-between border-b border-[#D9E0E8] text-xs">
         <div className="flex gap-6">
           <button
             onClick={() => setActiveTab('CANDIDATES')}
-            className={`pb-3 font-semibold transition-all border-b-2 flex items-center gap-2 ${
+            className={`pb-2.5 font-semibold transition-all border-b-2 flex items-center gap-2 ${
               activeTab === 'CANDIDATES'
-                ? 'text-purple-400 border-purple-400'
-                : 'text-slate-400 border-transparent hover:text-slate-200'
+                ? 'text-[#163A5F] border-[#163A5F]'
+                : 'text-[#64748B] border-transparent hover:text-[#172033]'
             }`}
           >
             <GitMerge className="w-4 h-4" />
-            <span>AI Proposed Candidates ({candidates.length})</span>
+            <span>Proposed Candidates ({candidates.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('CANONICAL')}
-            className={`pb-3 font-semibold transition-all border-b-2 flex items-center gap-2 ${
+            className={`pb-2.5 font-semibold transition-all border-b-2 flex items-center gap-2 ${
               activeTab === 'CANONICAL'
-                ? 'text-purple-400 border-purple-400'
-                : 'text-slate-400 border-transparent hover:text-slate-200'
+                ? 'text-[#163A5F] border-[#163A5F]'
+                : 'text-[#64748B] border-transparent hover:text-[#172033]'
             }`}
           >
             <UserCheck className="w-4 h-4" />
-            <span>Resolved Canonical Personas ({canonicalEntities.length})</span>
+            <span>Canonical Personas ({canonicalEntities.length})</span>
           </button>
         </div>
 
         {/* Confidence Threshold Slider */}
-        <div className="hidden sm:flex items-center gap-2 pb-2 text-[11px] text-slate-400">
-          <Sliders className="w-3.5 h-3.5 text-purple-400" />
+        <div className="hidden sm:flex items-center gap-2 pb-2 text-xs text-[#64748B]">
+          <Sliders className="w-3.5 h-3.5 text-[#64748B]" />
           <span>Match Threshold:</span>
-          <span className="font-bold text-cyan-300">{(threshold * 100).toFixed(0)}%</span>
+          <span className="font-bold text-[#163A5F]">{(threshold * 100).toFixed(0)}%</span>
           <input
             type="range"
             min="0.5"
@@ -209,36 +209,36 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
             step="0.05"
             value={threshold}
             onChange={(e) => setThreshold(parseFloat(e.target.value))}
-            className="w-20 accent-purple-500"
+            className="w-20 accent-[#163A5F]"
           />
         </div>
       </div>
 
       {/* Candidates Tab */}
       {activeTab === 'CANDIDATES' && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {/* Filter Bar */}
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-            <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 rounded-xl px-3 py-2 flex-1 max-w-md">
-              <Search className="w-4 h-4 text-slate-500" />
+            <div className="flex items-center gap-2 bg-white border border-[#D9E0E8] rounded px-2.5 py-1.5 flex-1 max-w-md shadow-xs">
+              <Search className="w-3.5 h-3.5 text-[#64748B]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search candidate source, target, or match type..."
-                className="bg-transparent border-none outline-none text-xs text-slate-200 placeholder-slate-500 w-full font-mono"
+                className="bg-transparent border-none outline-none text-xs text-[#172033] placeholder-[#94A3B8] w-full"
               />
             </div>
 
-            <div className="flex items-center gap-1.5 overflow-x-auto text-xs font-mono">
+            <div className="flex items-center gap-1.5 overflow-x-auto text-xs">
               {['ALL', 'PENDING_REVIEW', 'ACCEPTED', 'REJECTED', 'CHALLENGED'].map((st) => (
                 <button
                   key={st}
                   onClick={() => setStatusFilter(st)}
-                  className={`px-3 py-1.5 rounded-lg transition-all ${
+                  className={`px-2.5 py-1 rounded transition-colors text-xs font-medium ${
                     statusFilter === st
-                      ? 'bg-purple-600 text-white font-bold'
-                      : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                      ? 'bg-[#163A5F] text-white'
+                      : 'bg-white text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
                   }`}
                 >
                   {st.replace('_', ' ')}
@@ -249,64 +249,64 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
 
           {/* Candidate Match Cards */}
           {loading ? (
-            <div className="p-12 text-center text-xs font-mono text-slate-500">
+            <div className="p-12 text-center text-xs text-[#64748B]">
               Evaluating pairwise identity candidates...
             </div>
           ) : filteredCandidates.length === 0 ? (
-            <div className="p-12 text-center cyber-glass rounded-2xl border border-slate-800 space-y-3">
-              <GitMerge className="w-10 h-10 text-slate-600 mx-auto" />
-              <p className="text-sm text-slate-300 font-medium">No resolution candidates in this view</p>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
+            <div className="p-12 text-center bg-white border border-[#D9E0E8] rounded space-y-2 shadow-xs">
+              <GitMerge className="w-8 h-8 text-[#94A3B8] mx-auto" />
+              <p className="text-xs text-[#172033] font-medium">No resolution candidates in this view</p>
+              <p className="text-xs text-[#64748B] max-w-md mx-auto">
                 Click &ldquo;Run Resolution&rdquo; above to generate AI-proposed entity pairings.
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {filteredCandidates.map((cand) => (
                 <div
                   key={cand.id}
-                  className="p-5 rounded-xl cyber-glass-card border border-slate-800/80 hover:border-purple-500/40 transition-all space-y-4"
+                  className="p-4 rounded bg-white border border-[#D9E0E8] hover:border-[#94A3B8] transition-colors space-y-3 shadow-xs"
                 >
                   <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono font-bold text-cyan-300">
+                      <span className="px-2 py-0.5 rounded bg-[#EFF6FF] border border-[#BFDBFE] text-xs font-semibold text-[#163A5F]">
                         {cand.entity_type}
                       </span>
-                      <span className="text-xs font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-slate-800">
-                        Match Strategy: <strong className="text-purple-300">{cand.match_type}</strong>
+                      <span className="text-xs text-[#64748B] bg-[#F8FAFC] px-2 py-0.5 rounded border border-[#D9E0E8]">
+                        Strategy: <strong className="text-[#172033]">{cand.match_type}</strong>
                       </span>
                       <Badge variant={getStatusBadgeVariant(cand.review_status)}>
                         {cand.review_status.replace('_', ' ')}
                       </Badge>
                     </div>
 
-                    <div className="flex items-center gap-2 font-mono text-xs">
-                      <span className="text-slate-400">Match Confidence:</span>
-                      <span className="text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-900">
+                    <div className="flex items-center gap-2 text-xs">
+                      <span className="text-[#64748B]">Confidence:</span>
+                      <span className="text-[#16805C] font-bold bg-[#ECFDF5] px-2 py-0.5 rounded border border-[#A7F3D0]">
                         {(cand.confidence_score * 100).toFixed(1)}%
                       </span>
                     </div>
                   </div>
 
                   {/* Side-by-side comparison */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 font-mono text-xs">
-                    <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                      <span className="text-slate-500 text-[10px] uppercase">Entity Candidate A</span>
-                      <div className="font-bold text-sm text-slate-100 truncate">{cand.source_value}</div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                    <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1">
+                      <span className="text-[#64748B] text-[10px] uppercase font-semibold">Entity Candidate A</span>
+                      <div className="font-bold text-xs text-[#172033] truncate font-mono">{cand.source_value}</div>
                     </div>
 
-                    <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800/80 space-y-1">
-                      <span className="text-slate-500 text-[10px] uppercase">Entity Candidate B</span>
-                      <div className="font-bold text-sm text-slate-100 truncate">{cand.target_value}</div>
+                    <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1">
+                      <span className="text-[#64748B] text-[10px] uppercase font-semibold">Entity Candidate B</span>
+                      <div className="font-bold text-xs text-[#172033] truncate font-mono">{cand.target_value}</div>
                     </div>
                   </div>
 
                   {/* Feature Score Breakdown & Decision Audit */}
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
-                    <div className="flex flex-wrap items-center gap-3 text-slate-400">
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-2 border-t border-[#D9E0E8] text-xs">
+                    <div className="flex flex-wrap items-center gap-2 text-[#64748B]">
                       {Object.entries(cand.feature_scores || {}).map(([k, v]) => (
-                        <span key={k} className="bg-slate-900 px-2 py-0.5 rounded">
-                          {k}: <strong className="text-cyan-400">{typeof v === 'number' ? `${(v * 100).toFixed(0)}%` : String(v)}</strong>
+                        <span key={k} className="bg-[#F8FAFC] border border-[#D9E0E8] px-2 py-0.5 rounded text-[11px]">
+                          {k}: <strong className="text-[#163A5F]">{typeof v === 'number' ? `${(v * 100).toFixed(0)}%` : String(v)}</strong>
                         </span>
                       ))}
                     </div>
@@ -316,31 +316,31 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
                       <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
                         <button
                           onClick={() => handleOpenReview(cand, 'ACCEPTED')}
-                          className="px-3 py-1.5 bg-emerald-950 hover:bg-emerald-900 border border-emerald-800 text-emerald-300 rounded-lg flex items-center gap-1 font-semibold transition-all"
+                          className="btn-primary text-xs flex items-center gap-1.5"
                         >
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+                          <CheckCircle2 className="w-3.5 h-3.5" />
                           <span>Accept & Merge</span>
                         </button>
                         <button
                           onClick={() => handleOpenReview(cand, 'REJECTED')}
-                          className="px-3 py-1.5 bg-rose-950 hover:bg-rose-900 border border-rose-800 text-rose-300 rounded-lg flex items-center gap-1 font-semibold transition-all"
+                          className="btn-danger text-xs flex items-center gap-1.5"
                         >
-                          <XCircle className="w-3.5 h-3.5 text-rose-400" />
+                          <XCircle className="w-3.5 h-3.5" />
                           <span>Reject</span>
                         </button>
                         <button
                           onClick={() => handleOpenReview(cand, 'CHALLENGED')}
-                          className="px-3 py-1.5 bg-amber-950 hover:bg-amber-900 border border-amber-800 text-amber-300 rounded-lg flex items-center gap-1 font-semibold transition-all"
+                          className="btn-secondary text-xs text-[#B7791F] flex items-center gap-1.5"
                         >
-                          <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                          <AlertTriangle className="w-3.5 h-3.5" />
                           <span>Challenge</span>
                         </button>
                       </div>
                     ) : (
-                      <div className="text-slate-400 text-right">
-                        <span>Reviewed by <strong className="text-slate-200">{cand.reviewer_username}</strong></span>
+                      <div className="text-[#64748B] text-right text-xs">
+                        <span>Reviewed by <strong className="text-[#172033]">{cand.reviewer_username}</strong></span>
                         {cand.decision_reason && (
-                          <div className="text-[10px] text-slate-500 italic max-w-sm truncate">
+                          <div className="text-[11px] text-[#64748B] italic max-w-sm truncate">
                             &ldquo;{cand.decision_reason}&rdquo;
                           </div>
                         )}
@@ -358,39 +358,39 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
       {activeTab === 'CANONICAL' && (
         <div className="space-y-4">
           {canonicalEntities.length === 0 ? (
-            <div className="p-12 text-center cyber-glass rounded-2xl border border-slate-800 space-y-3">
-              <UserCheck className="w-10 h-10 text-slate-600 mx-auto" />
-              <p className="text-sm text-slate-300 font-medium">No verified canonical personas yet</p>
-              <p className="text-xs text-slate-500 max-w-md mx-auto">
+            <div className="p-12 text-center bg-white border border-[#D9E0E8] rounded space-y-2 shadow-xs">
+              <UserCheck className="w-8 h-8 text-[#94A3B8] mx-auto" />
+              <p className="text-xs text-[#172033] font-medium">No verified canonical personas yet</p>
+              <p className="text-xs text-[#64748B] max-w-md mx-auto">
                 Review and accept AI-proposed candidate matches to establish verified canonical identity records.
               </p>
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
               {canonicalEntities.map((canon) => (
                 <div
                   key={canon.id}
-                  className="p-5 rounded-xl cyber-glass-card border border-purple-500/30 space-y-3 font-mono text-xs"
+                  className="p-4 rounded bg-white border border-[#D9E0E8] space-y-2.5 text-xs shadow-xs"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-purple-400 font-bold bg-purple-950 px-2 py-0.5 rounded border border-purple-800">
+                    <span className="text-[#163A5F] font-bold bg-[#EFF6FF] px-2 py-0.5 rounded border border-[#BFDBFE] font-mono">
                       {canon.canonical_code}
                     </span>
-                    <Badge variant="emerald">VERIFIED CANONICAL</Badge>
+                    <Badge variant="verified">VERIFIED CANONICAL</Badge>
                   </div>
 
                   <div>
-                    <h3 className="text-base font-bold text-white">{canon.canonical_name}</h3>
-                    <p className="text-slate-500 text-[11px]">Type: {canon.entity_type} | Merged Records: {canon.members_count}</p>
+                    <h3 className="text-sm font-bold text-[#172033]">{canon.canonical_name}</h3>
+                    <p className="text-[#64748B] text-xs">Type: {canon.entity_type} | Merged Records: {canon.members_count}</p>
                   </div>
 
                   {/* Aliases List */}
                   {canon.aliases && canon.aliases.length > 0 && (
                     <div className="space-y-1">
-                      <span className="text-slate-400 text-[11px] block">Known Aliases & Transliterations:</span>
+                      <span className="text-[#64748B] text-[11px] font-semibold block">Known Aliases & Transliterations:</span>
                       <div className="flex flex-wrap gap-1.5">
                         {canon.aliases.map((al, idx) => (
-                          <span key={idx} className="px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-cyan-300 text-[11px]">
+                          <span key={idx} className="px-2 py-0.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[#172033] text-xs font-mono">
                             {al}
                           </span>
                         ))}
@@ -406,50 +406,50 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
 
       {/* Investigator Review Decision Modal */}
       {selectedCandidate && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-[#0b1329] border border-purple-500/40 rounded-2xl shadow-2xl overflow-hidden cyber-glow-cyan p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+          <div className="w-full max-w-lg bg-white border border-[#D9E0E8] rounded shadow-xl p-5 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-2.5">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-purple-400" />
-                <span className="font-bold text-white text-sm">Investigator Decision & Justification Audit</span>
+                <ShieldCheck className="w-4 h-4 text-[#163A5F]" />
+                <span className="font-bold text-[#172033] text-xs">Investigator Decision & Justification Audit</span>
               </div>
-              <button onClick={() => setSelectedCandidate(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setSelectedCandidate(null)} className="text-[#64748B] hover:text-[#172033] text-base">
                 &times;
               </button>
             </div>
 
-            <div className="space-y-3 font-mono text-xs">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-                <div className="flex justify-between text-slate-400">
+            <div className="space-y-3 text-xs">
+              <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1.5">
+                <div className="flex justify-between text-[#64748B] text-xs">
                   <span>Match Confidence:</span>
-                  <span className="text-emerald-400 font-bold">{(selectedCandidate.confidence_score * 100).toFixed(1)}%</span>
+                  <span className="text-[#16805C] font-bold">{(selectedCandidate.confidence_score * 100).toFixed(1)}%</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Source: </span>
-                  <span className="text-slate-200 font-bold">{selectedCandidate.source_value}</span>
+                  <span className="text-[#64748B]">Source: </span>
+                  <span className="text-[#172033] font-bold font-mono">{selectedCandidate.source_value}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Target: </span>
-                  <span className="text-slate-200 font-bold">{selectedCandidate.target_value}</span>
+                  <span className="text-[#64748B]">Target: </span>
+                  <span className="text-[#172033] font-bold font-mono">{selectedCandidate.target_value}</span>
                 </div>
               </div>
 
               <div>
-                <label className="text-slate-400 text-[11px] block mb-1">Decision Action</label>
+                <label className="text-[#64748B] text-xs font-medium block mb-1">Decision Action</label>
                 <div className="grid grid-cols-3 gap-2">
                   {(['ACCEPTED', 'REJECTED', 'CHALLENGED'] as const).map((d) => (
                     <button
                       key={d}
                       type="button"
                       onClick={() => setReviewDecision(d)}
-                      className={`py-2 rounded-lg font-bold border transition-all text-xs ${
+                      className={`py-1.5 rounded font-bold border transition-colors text-xs ${
                         reviewDecision === d
                           ? d === 'ACCEPTED'
-                            ? 'bg-emerald-950 border-emerald-500 text-emerald-300 ring-1 ring-emerald-500'
+                            ? 'bg-[#ECFDF5] border-[#16805C] text-[#16805C]'
                             : d === 'REJECTED'
-                            ? 'bg-rose-950 border-rose-500 text-rose-300 ring-1 ring-rose-500'
-                            : 'bg-amber-950 border-amber-500 text-amber-300 ring-1 ring-amber-500'
-                          : 'bg-slate-900 border-slate-800 text-slate-400 hover:border-slate-700'
+                            ? 'bg-[#FEF2F2] border-[#C53030] text-[#C53030]'
+                            : 'bg-[#FFFBEB] border-[#B7791F] text-[#B7791F]'
+                          : 'bg-white border-[#D9E0E8] text-[#64748B] hover:border-[#94A3B8]'
                       }`}
                     >
                       {d}
@@ -460,11 +460,11 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
 
               {reviewDecision === 'ACCEPTED' && (
                 <div>
-                  <label className="text-slate-400 text-[11px] block mb-1">Merge Directive</label>
+                  <label className="text-[#64748B] text-xs font-medium block mb-1">Merge Directive</label>
                   <select
                     value={mergeDirective}
                     onChange={(e) => setMergeDirective(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-slate-200 text-xs focus:border-purple-500 focus:outline-none font-mono"
+                    className="w-full bg-white border border-[#D9E0E8] rounded px-2.5 py-1.5 text-[#172033] text-xs focus:outline-none focus:border-[#163A5F]"
                   >
                     <option value="MERGE_AS_CANONICAL">Merge as Unified Canonical Persona</option>
                     <option value="LINK_AS_ALIAS">Link as Known Alias / Alternate Identity</option>
@@ -474,30 +474,30 @@ export const EntityResolutionHub: React.FC<EntityResolutionHubProps> = ({ active
               )}
 
               <div>
-                <label className="text-slate-400 text-[11px] block mb-1">
-                  Investigative Justification Reason <span className="text-rose-400">*</span>
+                <label className="text-[#64748B] text-xs font-medium block mb-1">
+                  Investigative Justification Reason <span className="text-[#C53030]">*</span>
                 </label>
                 <textarea
                   value={decisionReason}
                   onChange={(e) => setDecisionReason(e.target.value)}
                   rows={3}
                   placeholder="Record evidentiary basis (e.g. Alias corroborated by witness statement, or Different parentage recorded)..."
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-slate-200 text-xs focus:border-purple-500 focus:outline-none"
+                  className="w-full bg-white border border-[#D9E0E8] rounded p-2.5 text-[#172033] text-xs focus:outline-none focus:border-[#163A5F]"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-2 border-t border-slate-800">
+            <div className="flex justify-end gap-2 pt-2 border-t border-[#D9E0E8]">
               <button
                 onClick={() => setSelectedCandidate(null)}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono rounded-xl"
+                className="btn-secondary text-xs"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSubmitReview}
                 disabled={submittingReview || !decisionReason.trim()}
-                className="px-4 py-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white text-xs font-mono font-bold rounded-xl flex items-center gap-1.5 transition-all shadow-lg shadow-purple-900/50"
+                className="btn-primary text-xs"
               >
                 {submittingReview ? 'Recording Decision...' : 'Confirm Decision & Log Audit'}
               </button>

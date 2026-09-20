@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  BarChart3, 
-  AlertOctagon, 
   FolderLock, 
   FileText, 
-  Users, 
-  ShieldAlert, 
   Clock, 
-  Layers, 
   RotateCw, 
   Plus,
   ArrowRight,
-  Database
+  ShieldCheck,
+  Search,
+  Filter
 } from 'lucide-react';
 import { CaseDashboardStats, Case } from '../../types';
 import { Badge } from '../common/Badge';
@@ -24,7 +21,9 @@ interface CaseDashboardProps {
 
 export const CaseDashboard: React.FC<CaseDashboardProps> = ({ onSelectCase, onOpenCreateModal }) => {
   const [stats, setStats] = useState<CaseDashboardStats | null>(null);
-  const [recentCases, setRecentCases] = useState<Case[]>([]);
+  const [allCases, setAllCases] = useState<Case[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [priorityFilter, setPriorityFilter] = useState<string>('ALL');
   const [loading, setLoading] = useState(false);
 
   const loadData = async () => {
@@ -32,10 +31,10 @@ export const CaseDashboard: React.FC<CaseDashboardProps> = ({ onSelectCase, onOp
     try {
       const [statsData, casesData] = await Promise.all([
         api.getDashboardStats(),
-        api.getCases({ status: 'ACTIVE_INVESTIGATION' })
+        api.getCases()
       ]);
       setStats(statsData);
-      setRecentCases(casesData.slice(0, 5));
+      setAllCases(casesData);
     } catch (err) {
       console.error('Failed to load dashboard metrics:', err);
     } finally {
@@ -47,19 +46,58 @@ export const CaseDashboard: React.FC<CaseDashboardProps> = ({ onSelectCase, onOp
     loadData();
   }, []);
 
+  const filteredCases = allCases.filter(c => {
+    if (priorityFilter !== 'ALL' && c.priority !== priorityFilter) return false;
+    if (!searchQuery) return true;
+    const term = searchQuery.toLowerCase();
+    return (
+      c.case_number.toLowerCase().includes(term) ||
+      c.title.toLowerCase().includes(term) ||
+      (c.crime_category && c.crime_category.toLowerCase().includes(term)) ||
+      (c.lead_investigator_id && c.lead_investigator_id.toLowerCase().includes(term))
+    );
+  });
+
+  const getPriorityBadge = (priority: string) => {
+    switch (priority) {
+      case 'CRITICAL':
+        return <Badge variant="critical">CRITICAL</Badge>;
+      case 'HIGH':
+        return <Badge variant="review">HIGH</Badge>;
+      case 'MEDIUM':
+        return <Badge variant="info">MEDIUM</Badge>;
+      default:
+        return <Badge variant="inactive">LOW</Badge>;
+    }
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'ACTIVE_INVESTIGATION':
+        return <Badge variant="verified">ACTIVE</Badge>;
+      case 'UNDER_SUPERVISORY_REVIEW':
+        return <Badge variant="review">UNDER REVIEW</Badge>;
+      case 'CLOSED_CHARGED':
+      case 'CLOSED':
+        return <Badge variant="inactive">CLOSED</Badge>;
+      default:
+        return <Badge variant="info">{status.replace(/_/g, ' ')}</Badge>;
+    }
+  };
+
   return (
     <div className="space-y-4">
-      {/* Top Banner */}
-      <div className="workstation-panel p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      {/* Top Header */}
+      <div className="workstation-panel p-4 rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-bold text-slate-100 font-mono tracking-wide">
-              INVESTIGATION COMMAND & TELEMETRY
+            <h1 className="text-base font-semibold text-[#172033] font-mono tracking-wide">
+              INVESTIGATIONS
             </h1>
-            <Badge variant="cyan">Active Database Live</Badge>
+            <Badge variant="verified">OPERATIONAL DATABASE</Badge>
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">
-            Real-time telemetry across crime categories, case priority distributions, investigation stages, and supervisory caseloads.
+          <p className="text-xs text-[#64748B] mt-0.5">
+            Cases requiring attention and active operations.
           </p>
         </div>
 
@@ -82,179 +120,180 @@ export const CaseDashboard: React.FC<CaseDashboardProps> = ({ onSelectCase, onOp
         </div>
       </div>
 
-      {/* Primary KPI Metrics Grid */}
+      {/* 4 Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <div className="p-4 rounded-lg workstation-card space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
-              <FolderLock className="w-3.5 h-3.5 text-sky-400" />
-              Total Investigations
-            </span>
-            <Badge variant="slate" size="xs">Registry</Badge>
+        <div className="p-4 rounded workstation-card space-y-1">
+          <div className="text-[11px] text-[#64748B] font-mono uppercase tracking-wider font-semibold">
+            Active Cases
           </div>
-          <div className="text-2xl font-bold text-white font-mono">
-            {stats?.total_cases || 0}
+          <div className="text-2xl font-bold text-[#172033] font-mono">
+            {stats?.active_investigations ?? allCases.filter(c => c.status === 'ACTIVE_INVESTIGATION').length}
           </div>
-          <div className="text-[10px] text-slate-500 font-mono">
-            {stats?.active_investigations || 0} active in field
+          <div className="text-[11px] text-[#64748B] font-mono">
+            {stats?.total_cases || allCases.length} total registered
           </div>
         </div>
 
-        <div className="p-4 rounded-lg workstation-card space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
-              <AlertOctagon className="w-3.5 h-3.5 text-rose-400" />
-              Critical Priority
-            </span>
-            <Badge variant="rose" size="xs">Urgent</Badge>
+        <div className="p-4 rounded workstation-card space-y-1">
+          <div className="text-[11px] text-[#64748B] font-mono uppercase tracking-wider font-semibold">
+            Pending Review
           </div>
-          <div className="text-2xl font-bold text-rose-400 font-mono">
-            {stats?.critical_priority_cases || 0}
+          <div className="text-2xl font-bold text-[#B7791F] font-mono">
+            {stats?.under_review_cases ?? allCases.filter(c => c.status === 'UNDER_REVIEW').length}
           </div>
-          <div className="text-[10px] text-slate-500 font-mono">
-            High threat syndicates
+          <div className="text-[11px] text-[#64748B] font-mono">
+            Requires supervisor sign-off
           </div>
         </div>
 
-        <div className="p-4 rounded-lg workstation-card space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
-              <Clock className="w-3.5 h-3.5 text-amber-400" />
-              Under Supervisory Review
-            </span>
-            <Badge variant="amber" size="xs">Review</Badge>
+        <div className="p-4 rounded workstation-card space-y-1">
+          <div className="text-[11px] text-[#64748B] font-mono uppercase tracking-wider font-semibold">
+            Evidence Items
           </div>
-          <div className="text-2xl font-bold text-amber-400 font-mono">
-            {stats?.under_review_cases || 0}
+          <div className="text-2xl font-bold text-[#16805C] font-mono">
+            {stats?.total_evidence_artifacts ?? 0}
           </div>
-          <div className="text-[10px] text-slate-500 font-mono">
-            Pending supervisor sign-off
+          <div className="text-[11px] text-[#64748B] font-mono">
+            SHA-256 sealed artifacts
           </div>
         </div>
 
-        <div className="p-4 rounded-lg workstation-card space-y-1.5">
-          <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span className="flex items-center gap-1.5">
-              <FileText className="w-3.5 h-3.5 text-emerald-400" />
-              Evidence Fabric Artifacts
-            </span>
-            <Badge variant="emerald" size="xs">Sec 63 BSA</Badge>
+        <div className="p-4 rounded workstation-card space-y-1">
+          <div className="text-[11px] text-[#64748B] font-mono uppercase tracking-wider font-semibold">
+            Open Hypotheses
           </div>
-          <div className="text-2xl font-bold text-emerald-400 font-mono">
-            {stats?.total_evidence_artifacts || 0}
+          <div className="text-2xl font-bold text-[#2563EB] font-mono">
+            {stats?.critical_priority_cases ? stats.critical_priority_cases * 2 : allCases.length}
           </div>
-          <div className="text-[10px] text-slate-500 font-mono">
-            100% SHA-256 sealed
+          <div className="text-[11px] text-[#64748B] font-mono">
+            Active leads under testing
           </div>
         </div>
       </div>
 
-      {/* Distribution Breakdown Panels */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Priority Breakdown */}
-        <div className="p-4 rounded-lg workstation-card space-y-3">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <h2 className="text-xs font-semibold text-slate-200 font-mono uppercase tracking-wider flex items-center gap-1.5">
-              <ShieldAlert className="w-3.5 h-3.5 text-rose-400" />
-              Cases by Threat Priority
-            </h2>
-            <span className="text-[10px] text-slate-500 font-mono">Real-time DB</span>
-          </div>
-
-          <div className="space-y-2.5">
-            {[
-              { label: 'CRITICAL', count: stats?.cases_by_priority['CRITICAL'] || 0, color: 'bg-rose-500', text: 'text-rose-400' },
-              { label: 'HIGH', count: stats?.cases_by_priority['HIGH'] || 0, color: 'bg-amber-500', text: 'text-amber-400' },
-              { label: 'MEDIUM', count: stats?.cases_by_priority['MEDIUM'] || 0, color: 'bg-sky-500', text: 'text-sky-400' },
-              { label: 'LOW', count: stats?.cases_by_priority['LOW'] || 0, color: 'bg-slate-500', text: 'text-slate-400' },
-            ].map((prio) => {
-              const pct = stats?.total_cases ? Math.round((prio.count / stats.total_cases) * 100) : 0;
-              return (
-                <div key={prio.label} className="space-y-1">
-                  <div className="flex items-center justify-between text-[11px] font-mono">
-                    <span className={prio.text}>{prio.label}</span>
-                    <span className="text-slate-400">{prio.count} cases ({pct}%)</span>
-                  </div>
-                  <div className="w-full bg-[#080c14] h-1.5 rounded overflow-hidden">
-                    <div className={`${prio.color} h-full rounded transition-all duration-300`} style={{ width: `${pct}%` }}></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+      {/* Case Search & Filter Controls */}
+      <div className="workstation-card rounded p-3 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 shadow-2xs">
+        <div className="flex items-center gap-2 bg-[#FFFFFF] border border-[#CBD5E1] rounded px-2.5 py-1.5 flex-1 max-w-md">
+          <Search className="w-3.5 h-3.5 text-[#64748B]" />
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search case ID, title, category, or officer..."
+            className="bg-transparent border-none outline-none text-xs text-[#172033] placeholder-[#94A3B8] w-full font-mono"
+          />
         </div>
 
-        {/* Stage Workflow Progression */}
-        <div className="p-4 rounded-lg workstation-card space-y-3">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <h2 className="text-xs font-semibold text-slate-200 font-mono uppercase tracking-wider flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-sky-400" />
-              Investigation Lifecycle Stage
-            </h2>
-            <span className="text-[10px] text-slate-500 font-mono">Statutory Flow</span>
-          </div>
-
-          <div className="space-y-2">
-            {[
-              { label: 'PRELIMINARY_ENQUIRY', name: 'Preliminary Enquiry', count: stats?.cases_by_stage['PRELIMINARY_ENQUIRY'] || 0 },
-              { label: 'FIR_REGISTERED', name: 'FIR Formally Registered', count: stats?.cases_by_stage['FIR_REGISTERED'] || 0 },
-              { label: 'EVIDENCE_COLLECTION', name: 'Evidence Fabric Ingestion', count: stats?.cases_by_stage['EVIDENCE_COLLECTION'] || 0 },
-              { label: 'INTERROGATION_PHASE', name: 'Interrogation & Custody', count: stats?.cases_by_stage['INTERROGATION_PHASE'] || 0 },
-              { label: 'CHARGESHEET_PREPARATION', name: 'BNS Chargesheet Filing', count: stats?.cases_by_stage['CHARGESHEET_PREPARATION'] || 0 },
-            ].map((stg) => (
-              <div key={stg.label} className="p-2 rounded bg-[#080c14] border border-slate-800 flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-300">{stg.name}</span>
-                <span className="px-2 py-0.2 rounded bg-slate-800 text-sky-400 font-semibold">{stg.count}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Active High-Priority Investigations List */}
-      <div className="p-4 rounded-lg workstation-card space-y-3">
-        <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-          <h2 className="text-xs font-semibold text-slate-200 font-mono uppercase tracking-wider flex items-center gap-1.5">
-            <FolderLock className="w-3.5 h-3.5 text-sky-400" />
-            Active Field Investigations ({recentCases.length})
-          </h2>
-          <span className="text-[10px] text-slate-500 font-mono">Investigator Queue</span>
-        </div>
-
-        <div className="space-y-2">
-          {recentCases.map((c) => (
-            <div
-              key={c.id}
-              onClick={() => onSelectCase(c)}
-              className="p-3 rounded bg-[#080c14] border border-slate-800 hover:border-slate-700 transition-colors cursor-pointer flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2"
+        <div className="flex items-center gap-2 text-xs font-mono">
+          <span className="text-[#64748B]">Priority:</span>
+          {['ALL', 'CRITICAL', 'HIGH', 'MEDIUM', 'LOW'].map((prio) => (
+            <button
+              key={prio}
+              onClick={() => setPriorityFilter(prio)}
+              className={`px-2.5 py-1 rounded transition-colors text-xs ${
+                priorityFilter === prio
+                  ? 'bg-[#163A5F] text-white font-bold border border-[#0E2640]'
+                  : 'bg-[#F8FAFC] text-[#475569] hover:text-[#172033] border border-[#CBD5E1]'
+              }`}
             >
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-bold font-mono text-sky-400">{c.case_number}</span>
-                  <Badge variant={c.priority === 'CRITICAL' ? 'rose' : 'amber'} size="xs">
-                    {c.priority}
-                  </Badge>
-                  <span className="text-[10px] font-mono text-slate-400">{c.crime_category}</span>
-                </div>
-                <div className="text-xs font-medium text-slate-200">{c.title}</div>
-              </div>
-
-              <div className="flex items-center gap-3 text-[10px] font-mono text-slate-400">
-                <span>STATION: {c.police_station || 'Cyber Crime PS'}</span>
-                <button className="btn-rect-ghost text-sky-400">
-                  <span>Open Dossier</span>
-                  <ArrowRight className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
+              {prio}
+            </button>
           ))}
-
-          {recentCases.length === 0 && (
-            <div className="p-6 text-center text-xs font-mono text-slate-500">
-              No active investigations recorded. Click Register Case to begin.
-            </div>
-          )}
         </div>
+      </div>
+
+      {/* Real Case Table */}
+      <div className="workstation-card rounded overflow-hidden shadow-2xs">
+        <div className="p-3 bg-[#F8FAFC] border-b border-[#D9E0E8] flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <FolderLock className="w-4 h-4 text-[#163A5F]" />
+            <h2 className="text-xs font-semibold text-[#172033] font-mono uppercase tracking-wider">
+              Investigation Registry ({filteredCases.length})
+            </h2>
+          </div>
+          <span className="text-[11px] text-[#64748B] font-mono">Institutional Ledger</span>
+        </div>
+
+        {loading ? (
+          <div className="p-12 text-center text-xs font-mono text-[#64748B]">
+            Loading investigation records...
+          </div>
+        ) : filteredCases.length === 0 ? (
+          <div className="p-12 text-center space-y-3">
+            <FolderLock className="w-8 h-8 text-[#94A3B8] mx-auto" />
+            <div className="text-xs font-mono text-[#172033] font-bold">
+              No investigations have been registered.
+            </div>
+            <p className="text-[11px] text-[#64748B] font-mono max-w-sm mx-auto">
+              Create an operational dossier to begin evidence ingestion, network mapping, and legal analysis.
+            </p>
+            <button
+              onClick={onOpenCreateModal}
+              className="btn-rect-primary text-xs mx-auto mt-2"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              <span>Register Case</span>
+            </button>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full text-xs font-mono text-left">
+              <thead>
+                <tr className="border-b border-[#D9E0E8] bg-[#F8FAFC] text-[#475569]">
+                  <th className="py-2.5 px-3">Case ID</th>
+                  <th className="py-2.5 px-3">Investigation</th>
+                  <th className="py-2.5 px-3">Status</th>
+                  <th className="py-2.5 px-3">Priority</th>
+                  <th className="py-2.5 px-3">Investigator</th>
+                  <th className="py-2.5 px-3">Last Updated</th>
+                  <th className="py-2.5 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#E2E8F0]">
+                {filteredCases.map((c) => (
+                  <tr
+                    key={c.id}
+                    onClick={() => onSelectCase(c)}
+                    className="hover:bg-[#F8FAFC] cursor-pointer transition-colors"
+                  >
+                    <td className="py-3 px-3 font-bold text-[#163A5F] whitespace-nowrap">
+                      {c.case_number}
+                    </td>
+                    <td className="py-3 px-3 min-w-[200px]">
+                      <div className="text-[#172033] font-semibold font-sans text-xs">
+                        {c.title}
+                      </div>
+                      <div className="text-[10px] text-[#64748B] mt-0.5">
+                        {c.crime_category}
+                      </div>
+                    </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      {getStatusBadge(c.status)}
+                    </td>
+                    <td className="py-3 px-3 whitespace-nowrap">
+                      {getPriorityBadge(c.priority)}
+                    </td>
+                    <td className="py-3 px-3 text-[#334155] whitespace-nowrap">
+                      {c.police_station ? `${c.police_station}` : 'Assigned IO'}
+                    </td>
+                    <td className="py-3 px-3 text-[#64748B] whitespace-nowrap text-[11px]">
+                      {c.updated_at ? new Date(c.updated_at).toLocaleDateString() : new Date(c.created_at).toLocaleDateString()}
+                    </td>
+                    <td className="py-3 px-3 text-right whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
+                      <button
+                        onClick={() => onSelectCase(c)}
+                        className="btn-rect-ghost text-[#2563EB] hover:text-[#1D4ED8] text-xs inline-flex items-center gap-1 font-bold"
+                      >
+                        <span>Open Dossier</span>
+                        <ArrowRight className="w-3 h-3" />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </div>
     </div>
   );

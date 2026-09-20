@@ -61,3 +61,10 @@ pnpm-debug.log*
 *.swo
 .DS_Store
 Thumbs.db
+
+# MLflow & Logs
+mlruns/
+mlflow_artifacts/
+backend/mlflow_artifacts/
+*.log
+

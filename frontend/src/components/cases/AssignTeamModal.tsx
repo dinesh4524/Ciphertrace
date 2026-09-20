@@ -53,34 +53,34 @@ export const AssignTeamModal: React.FC<AssignTeamModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/75 backdrop-blur-sm p-4">
-      <div className="w-full max-w-md bg-[#0f172a] border border-cyan-500/40 rounded-2xl shadow-2xl overflow-hidden cyber-glow-cyan animate-in fade-in">
-        <div className="px-6 py-4 bg-slate-900 border-b border-slate-800 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-cyan-400 font-semibold text-sm">
-            <UserPlus className="w-5 h-5" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4">
+      <div className="w-full max-w-md bg-white border border-[#D9E0E8] rounded shadow-2xl overflow-hidden animate-in fade-in">
+        <div className="px-6 py-4 bg-[#F8FAFC] border-b border-[#D9E0E8] flex items-center justify-between">
+          <div className="flex items-center gap-2 text-[#163A5F] font-semibold text-sm">
+            <UserPlus className="w-4 h-4" />
             <span>Assign Investigation Team Member</span>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white">
-            <X className="w-5 h-5" />
+          <button onClick={onClose} className="text-[#64748B] hover:text-[#172033]">
+            <X className="w-4 h-4" />
           </button>
         </div>
 
         {error && (
-          <div className="mx-6 mt-4 p-3 rounded-lg bg-rose-950/50 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+          <div className="mx-6 mt-4 p-3 rounded bg-rose-50 border border-rose-200 text-[#C53030] text-xs flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div>
-            <label className="block text-xs font-mono uppercase text-slate-400 mb-1">
+            <label className="block text-xs font-mono uppercase text-[#64748B] mb-1">
               Select Officer / Analyst
             </label>
             <select
               value={selectedUserId}
               onChange={(e) => setSelectedUserId(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-2 text-xs text-[#172033] focus:outline-none focus:border-[#163A5F]"
             >
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
@@ -91,13 +91,13 @@ export const AssignTeamModal: React.FC<AssignTeamModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-mono uppercase text-slate-400 mb-1">
+            <label className="block text-xs font-mono uppercase text-[#64748B] mb-1">
               Designation in this Case
             </label>
             <select
               value={roleInCase}
               onChange={(e) => setRoleInCase(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-2 text-xs text-[#172033] focus:outline-none focus:border-[#163A5F]"
             >
               <option value="LEAD_INVESTIGATOR">Lead Investigating Officer (IO)</option>
               <option value="ASSISTANT_IO">Assistant Investigating Officer</option>
@@ -107,23 +107,23 @@ export const AssignTeamModal: React.FC<AssignTeamModalProps> = ({
             </select>
           </div>
 
-          <div className="p-3 rounded-lg bg-cyan-950/30 border border-cyan-800/60 text-cyan-300 text-xs font-mono flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 flex-shrink-0 text-cyan-400" />
+          <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[#163A5F] text-xs font-mono flex items-center gap-2">
+            <ShieldCheck className="w-4 h-4 shrink-0 text-[#16805C]" />
             <span>Grants Case-Level Access & Write Privileges for {activeCase.case_number}.</span>
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[#D9E0E8]">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs"
+              className="btn-secondary text-xs"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-5 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-xs rounded-lg shadow-lg cyber-glow-cyan"
+              className="btn-primary text-xs"
             >
               {loading ? 'Assigning...' : 'Confirm Assignment'}
             </button>

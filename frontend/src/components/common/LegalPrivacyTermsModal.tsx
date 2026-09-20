@@ -10,73 +10,72 @@ export const LegalPrivacyTermsModal: React.FC<LegalPrivacyTermsModalProps> = ({ 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-[#0b0f19] border border-slate-700 rounded-lg max-w-2xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 font-sans">
+      <div className="bg-[#FFFFFF] border border-[#D9E0E8] rounded-lg max-w-2xl w-full max-h-[85vh] flex flex-col shadow-xl overflow-hidden">
         {/* Modal Header */}
-        <div className="p-4 border-b border-slate-800 flex items-center justify-between bg-[#0e1422]">
+        <div className="p-4 border-b border-[#D9E0E8] flex items-center justify-between bg-[#F8FAFC]">
           <div className="flex items-center gap-2.5">
-            <div className="p-1.5 bg-emerald-950/60 border border-emerald-700/80 rounded text-emerald-400">
+            <div className="p-1.5 bg-[#ECFDF5] border border-[#A7F3D0] rounded text-[#16805C]">
               <Scale className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-sm font-semibold text-slate-100 uppercase tracking-wide">
+              <h3 className="text-sm font-semibold text-[#172033] uppercase tracking-wide">
                 Institutional Privacy, Terms & Data Sovereignty
               </h3>
-              <p className="text-[11px] font-mono text-slate-400">
-                Digital Personal Data Protection (DPDP) Act, 2023 & Law Enforcement Exemptions
+              <p className="text-[11px] font-mono text-[#64748B]">
+                Digital Personal Data Protection (DPDP) Act, 2023 & Law Enforcement Compliance
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-slate-100 hover:bg-slate-800 rounded transition-colors"
+            className="p-1 text-[#64748B] hover:text-[#172033] hover:bg-[#F1F5F9] rounded transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Modal Body */}
-        <div className="p-6 overflow-y-auto space-y-4 text-xs text-slate-300 leading-relaxed font-sans">
+        <div className="p-6 overflow-y-auto space-y-4 text-xs text-[#334155] leading-relaxed font-sans">
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 uppercase font-mono text-[11px]">
-              <Shield className="w-3.5 h-3.5 text-sky-400" />
+            <h4 className="font-semibold text-[#172033] flex items-center gap-1.5 uppercase font-mono text-[11px]">
+              <Shield className="w-3.5 h-3.5 text-[#163A5F]" />
               1. Law Enforcement Data Governance
             </h4>
-            <p className="text-slate-400 text-[11px]">
+            <p className="text-[#64748B] text-[11px]">
               All case materials, digital forensics, telecom CDR files, and financial statements uploaded to CIPHERTRACE X are processed exclusively for criminal investigation, intelligence collation, and judicial prosecution under statutory police powers.
             </p>
           </div>
 
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 uppercase font-mono text-[11px]">
-              <FileText className="w-3.5 h-3.5 text-emerald-400" />
+            <h4 className="font-semibold text-[#172033] flex items-center gap-1.5 uppercase font-mono text-[11px]">
+              <FileText className="w-3.5 h-3.5 text-[#16805C]" />
               2. Chain of Custody & Retention
             </h4>
-            <p className="text-slate-400 text-[11px]">
+            <p className="text-[#64748B] text-[11px]">
               Data retention adheres to standard state police records retention manuals and National Crime Records Bureau (NCRB) guidelines. All evidentiary mutations, entity merges, and investigator notes are permanently recorded in the immutable SHA-256 audit ledger.
             </p>
           </div>
 
           <div className="space-y-1.5">
-            <h4 className="font-semibold text-slate-100 flex items-center gap-1.5 uppercase font-mono text-[11px]">
-              <Scale className="w-3.5 h-3.5 text-amber-400" />
-              3. Terms of System Use
+            <h4 className="font-semibold text-[#172033] flex items-center gap-1.5 uppercase font-mono text-[11px]">
+              <Scale className="w-3.5 h-3.5 text-[#B7791F]" />
+              3. Synthetic Universe & Demonstration Notice
             </h4>
-            <ul className="list-disc pl-4 space-y-1 text-slate-400 text-[11px]">
-              <li>Authorized access is restricted to credentialed law enforcement and prosecution personnel.</li>
-              <li>Unauthorized export, alteration, or disclosure of case files is punishable under the Bharatiya Nyaya Sanhita, 2023 and Information Technology Act, 2000.</li>
-              <li>System administrators maintain real-time audit logs of all search queries, GraphRAG retrievals, and report exports.</li>
-            </ul>
+            <p className="text-[#64748B] text-[11px]">
+              The pre-seeded records (Case CTX-001: Operation Shadow Exchange, FIR references, phone numbers, IMEI values, bank transactions) are entirely synthetic constructs engineered for evaluation and benchmark demonstration purposes.
+            </p>
           </div>
         </div>
 
         {/* Modal Footer */}
-        <div className="p-3.5 border-t border-slate-800 bg-[#0e1422] flex justify-end">
+        <div className="p-4 border-t border-[#D9E0E8] bg-[#F8FAFC] flex justify-between items-center text-[11px] font-mono">
+          <span className="text-[#64748B]">State Police CID Cyber Wing Standards</span>
           <button
             onClick={onClose}
-            className="btn-rect-primary"
+            className="btn-rect-primary text-xs"
           >
-            I Understand & Agree
+            Acknowledge & Close
           </button>
         </div>
       </div>

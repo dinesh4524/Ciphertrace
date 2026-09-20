@@ -8,6 +8,12 @@ export type BadgeVariant =
   | 'blue' 
   | 'purple' 
   | 'slate'
+  | 'gray'
+  | 'verified'
+  | 'review'
+  | 'critical'
+  | 'info'
+  | 'inactive'
   | 'observed'
   | 'inferred'
   | 'predicted'
@@ -15,8 +21,7 @@ export type BadgeVariant =
   | 'evidence'
   | 'inference'
   | 'prediction'
-  | 'uncertainty'
-  | 'verified';
+  | 'uncertainty';
 
 interface BadgeProps {
   children: React.ReactNode;
@@ -32,30 +37,37 @@ export const Badge: React.FC<BadgeProps> = ({
   className = '' 
 }) => {
   const variantStyles: Record<BadgeVariant, string> = {
-    cyan: 'bg-sky-950/70 text-sky-300 border-sky-800/80',
-    emerald: 'bg-emerald-950/70 text-emerald-300 border-emerald-800/80',
-    rose: 'bg-rose-950/70 text-rose-300 border-rose-800/80',
-    amber: 'bg-amber-950/70 text-amber-300 border-amber-800/80',
-    blue: 'bg-blue-950/70 text-blue-300 border-blue-800/80',
-    purple: 'bg-purple-950/70 text-purple-300 border-purple-800/80',
-    slate: 'bg-slate-800/80 text-slate-300 border-slate-700/60',
-    
-    // 4-Tier Semantic Relationship Taxonomy
-    observed: 'bg-emerald-950/60 text-emerald-300 border-emerald-600 border-solid',
-    inferred: 'bg-sky-950/60 text-sky-300 border-sky-500 border-dashed',
-    predicted: 'bg-amber-950/60 text-amber-300 border-amber-500 border-dotted',
-    contested: 'bg-rose-950/60 text-rose-300 border-rose-600 border-dashed',
+    // Light Institutional Semantic Colors
+    emerald: 'bg-[#ECFDF5] text-[#16805C] border-[#16805C]',
+    verified: 'bg-[#ECFDF5] text-[#16805C] border-[#16805C]',
+    observed: 'bg-[#ECFDF5] text-[#16805C] border-[#16805C] border-solid',
+    evidence: 'bg-[#D1FAE5] text-[#065F46] border-[#10B981] font-bold',
 
-    // 5-Level AI Provenance Tags
-    evidence: 'bg-emerald-950 text-emerald-200 border-emerald-500 font-bold',
-    inference: 'bg-sky-950 text-sky-200 border-sky-500 font-bold',
-    prediction: 'bg-amber-950 text-amber-200 border-amber-500 font-bold',
-    uncertainty: 'bg-purple-950 text-purple-200 border-purple-500 font-bold',
-    verified: 'bg-emerald-900 text-emerald-100 border-emerald-400 font-bold',
+    amber: 'bg-[#FFFBEB] text-[#B7791F] border-[#B7791F]',
+    review: 'bg-[#FFFBEB] text-[#B7791F] border-[#B7791F]',
+    predicted: 'bg-[#FFFBEB] text-[#B7791F] border-[#B7791F] border-dotted',
+    prediction: 'bg-[#FEF3C7] text-[#92400E] border-[#F59E0B] font-bold',
+
+    rose: 'bg-[#FEF2F2] text-[#C53030] border-[#C53030]',
+    critical: 'bg-[#FEF2F2] text-[#C53030] border-[#C53030]',
+    contested: 'bg-[#FEF2F2] text-[#C53030] border-[#C53030] border-dashed',
+
+    blue: 'bg-[#EFF6FF] text-[#2563EB] border-[#2563EB]',
+    cyan: 'bg-[#F0F9FF] text-[#0369A1] border-[#0EA5E9]',
+    info: 'bg-[#EFF6FF] text-[#2563EB] border-[#2563EB]',
+    inferred: 'bg-[#EFF6FF] text-[#2563EB] border-[#2563EB] border-dashed',
+    inference: 'bg-[#DBEAFE] text-[#1E40AF] border-[#3B82F6] font-bold',
+
+    purple: 'bg-[#F5F3FF] text-[#6D28D9] border-[#7C3AED]',
+    uncertainty: 'bg-[#EDE9FE] text-[#5B21B6] border-[#8B5CF6] font-bold',
+
+    slate: 'bg-[#F1F5F9] text-[#334155] border-[#CBD5E1]',
+    gray: 'bg-[#F8FAFC] text-[#475569] border-[#CBD5E1]',
+    inactive: 'bg-[#F1F5F9] text-[#64748B] border-[#E2E8F0]',
   };
 
   const sizeStyles = {
-    xs: 'text-[9px] px-1.5 py-0.5 font-semibold tracking-wider',
+    xs: 'text-[9px] px-1.5 py-0.2 font-semibold tracking-wider',
     sm: 'text-[10px] px-2 py-0.5 font-medium tracking-wide',
     md: 'text-xs px-2.5 py-1 font-semibold tracking-wide',
   };

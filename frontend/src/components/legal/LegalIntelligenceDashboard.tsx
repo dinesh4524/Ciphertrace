@@ -165,25 +165,25 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
     switch (status) {
       case 'MET':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[#ECFDF5] text-[#16805C] border border-[#A7F3D0]">
             <Check className="w-3 h-3 mr-1" /> CONDITION MET
           </span>
         );
       case 'PARTIALLY_MET':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[#FFFBEB] text-[#B7791F] border border-[#FDE68A]">
             <AlertTriangle className="w-3 h-3 mr-1" /> PARTIALLY MET
           </span>
         );
       case 'UNMET':
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[#FEF2F2] text-[#C53030] border border-[#FECACA]">
             <X className="w-3 h-3 mr-1" /> UNMET / GAP
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-500/10 text-slate-300 border border-slate-500/20">
+          <span className="inline-flex items-center px-2.5 py-0.5 rounded text-xs font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#D9E0E8]">
             {status}
           </span>
         );
@@ -191,89 +191,88 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
   };
 
   const getStatuteColor = (statute: string) => {
-    if (statute.includes('BNS') || statute.includes('Nyaya')) return 'text-indigo-400 border-indigo-500/30 bg-indigo-500/10';
-    if (statute.includes('BNSS') || statute.includes('Nagarik')) return 'text-sky-400 border-sky-500/30 bg-sky-500/10';
-    return 'text-purple-400 border-purple-500/30 bg-purple-500/10';
+    if (statute.includes('BNS') || statute.includes('Nyaya')) return 'text-[#163A5F] border-[#BFDBFE] bg-[#EFF6FF]';
+    if (statute.includes('BNSS') || statute.includes('Nagarik')) return 'text-[#2563EB] border-[#BFDBFE] bg-[#EFF6FF]';
+    return 'text-[#7E22CE] border-[#E9D5FF] bg-[#FAF5FF]';
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Header Banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950/60 to-slate-900 border border-indigo-500/20 p-6 shadow-xl">
-        <div className="absolute top-0 right-0 translate-x-8 -translate-y-8 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
+      <div className="rounded bg-white border border-[#D9E0E8] p-4 shadow-xs">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center space-x-3 mb-2">
-              <div className="p-2.5 rounded-xl bg-indigo-600/20 border border-indigo-400/30 text-indigo-400">
-                <Scale className="w-6 h-6" />
+            <div className="flex items-center space-x-3 mb-1">
+              <div className="p-2 rounded bg-[#EFF6FF] border border-[#BFDBFE] text-[#163A5F]">
+                <Scale className="w-5 h-5" />
               </div>
-              <h1 className="text-2xl font-bold text-white tracking-wide">
-                Indian Legal Intelligence <span className="text-xs px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 ml-2 font-normal">BNS • BNSS • BSA (2023)</span>
+              <h1 className="text-base font-bold text-[#172033] tracking-tight">
+                Indian Legal Intelligence <span className="text-xs px-2 py-0.5 rounded bg-[#EFF6FF] text-[#163A5F] border border-[#BFDBFE] ml-2 font-mono">BNS • BNSS • BSA (2023)</span>
               </h1>
             </div>
-            <p className="text-sm text-slate-400 max-w-3xl">
+            <p className="text-xs text-[#64748B] max-w-3xl">
               Authoritative statutory grounding across the three criminal codes enacted in 2023. Enforces the strict 7-step evidence-to-law chain reasoning and procedural admissibility compliance.
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => loadEvidenceAlignment()}
               disabled={loading}
-              className="inline-flex items-center px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition shadow-lg shadow-indigo-600/20 disabled:opacity-50"
+              className="btn-primary text-xs flex items-center gap-1.5"
             >
-              <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
-              Re-evaluate Case Law
+              <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
+              <span>Re-evaluate Case Law</span>
             </button>
           </div>
         </div>
 
         {/* Mandatory Non-Culpability Notice */}
-        <div className="mt-5 p-3.5 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-start space-x-3 text-xs text-amber-200/90 leading-relaxed">
-          <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="mt-4 p-3 rounded bg-[#FFFBEB] border border-[#F59E0B] flex items-start space-x-2.5 text-xs text-[#92400E] leading-relaxed shadow-xs">
+          <ShieldAlert className="w-4 h-4 text-[#B7791F] shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold text-amber-300 tracking-wider uppercase">Statutory Decision Support Doctrine: </span>
+            <span className="font-semibold text-[#92400E] uppercase tracking-wide">Statutory Decision Support Doctrine: </span>
             This module operates strictly as investigative decision support under the Bharatiya Nyaya Sanhita (BNS), Bharatiya Nagarik Suraksha Sanhita (BNSS), and Bharatiya Sakshya Adhiniyam (BSA). It does NOT act as an autonomous judge, nor does it make judicial findings or automatically determine criminal guilt. All conclusions require judicial evaluation and legal scrutiny.
           </div>
         </div>
       </div>
 
       {/* Tabs Navigation */}
-      <div className="flex space-x-2 border-b border-slate-800 pb-3">
+      <div className="flex space-x-2 border-b border-[#D9E0E8] pb-2 text-xs">
         <button
           onClick={() => setActiveTab('alignment')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
             activeTab === 'alignment'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              ? 'bg-[#163A5F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#172033] bg-[#F8FAFC] border border-[#D9E0E8]'
           }`}
         >
-          <Layers className="w-4 h-4" />
-          <span>Evidence-to-Law Alignment</span>
+          <Layers className="w-3.5 h-3.5" />
+          <span>7-Step Evidence-to-Law Chains</span>
         </button>
 
         <button
           onClick={() => setActiveTab('rag')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
             activeTab === 'rag'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              ? 'bg-[#163A5F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#172033] bg-[#F8FAFC] border border-[#D9E0E8]'
           }`}
         >
-          <Sparkles className="w-4 h-4" />
-          <span>Legal RAG Assistant</span>
+          <Search className="w-3.5 h-3.5" />
+          <span>Statutory QA & Case Precedents</span>
         </button>
 
         <button
           onClick={() => setActiveTab('explorer')}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
             activeTab === 'explorer'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              ? 'bg-[#163A5F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#172033] bg-[#F8FAFC] border border-[#D9E0E8]'
           }`}
         >
-          <BookOpen className="w-4 h-4" />
-          <span>Statute Explorer & Concordance</span>
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>Statute Code Explorer</span>
         </button>
 
         <button
@@ -281,14 +280,14 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
             setActiveTab('graph');
             if (!graphData) loadLegalGraph();
           }}
-          className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-sm font-medium transition ${
+          className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
             activeTab === 'graph'
-              ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-600/25'
-              : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+              ? 'bg-[#163A5F] text-white shadow-xs'
+              : 'text-[#64748B] hover:text-[#172033] bg-[#F8FAFC] border border-[#D9E0E8]'
           }`}
         >
-          <GitBranch className="w-4 h-4" />
-          <span>Legal Knowledge Graph</span>
+          <GitBranch className="w-3.5 h-3.5" />
+          <span>Legal Knowledge Topology</span>
         </button>
       </div>
 
@@ -311,76 +310,76 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
           {alignmentData?.statutory_summary && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* BNS Summary */}
-              <div className="p-5 rounded-2xl bg-slate-900/80 border border-indigo-500/20 backdrop-blur-sm">
+              <div className="p-5 rounded bg-white border border-[#D9E0E8] shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-indigo-500" />
-                    <h3 className="font-semibold text-white text-sm">BNS 2023 (Substantive)</h3>
+                    <div className="w-2 h-2 rounded-full bg-[#163A5F]" />
+                    <h3 className="font-bold text-[#172033] text-xs uppercase tracking-wider">BNS 2023 (Substantive)</h3>
                   </div>
-                  <span className="text-xs text-indigo-400 font-mono">Offenses</span>
+                  <span className="text-xs text-[#2563EB] font-mono">Offenses</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                    <div className="text-base font-bold text-emerald-400">{alignmentData.statutory_summary.BNS.met}</div>
-                    <div className="text-slate-400 text-[10px]">Conditions Met</div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2 font-mono">
+                  <div className="p-2 rounded bg-emerald-50 border border-emerald-200">
+                    <div className="text-base font-bold text-[#16805C]">{alignmentData.statutory_summary.BNS.met}</div>
+                    <div className="text-[#64748B] text-[10px]">Met</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                    <div className="text-base font-bold text-amber-400">{alignmentData.statutory_summary.BNS.partially_met}</div>
-                    <div className="text-slate-400 text-[10px]">Partial</div>
+                  <div className="p-2 rounded bg-amber-50 border border-amber-200">
+                    <div className="text-base font-bold text-[#B7791F]">{alignmentData.statutory_summary.BNS.partially_met}</div>
+                    <div className="text-[#64748B] text-[10px]">Partial</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
-                    <div className="text-base font-bold text-rose-400">{alignmentData.statutory_summary.BNS.unmet}</div>
-                    <div className="text-slate-400 text-[10px]">Gaps</div>
+                  <div className="p-2 rounded bg-rose-50 border border-rose-200">
+                    <div className="text-base font-bold text-[#C53030]">{alignmentData.statutory_summary.BNS.unmet}</div>
+                    <div className="text-[#64748B] text-[10px]">Gaps</div>
                   </div>
                 </div>
               </div>
 
               {/* BNSS Summary */}
-              <div className="p-5 rounded-2xl bg-slate-900/80 border border-sky-500/20 backdrop-blur-sm">
+              <div className="p-5 rounded bg-white border border-[#D9E0E8] shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-sky-500" />
-                    <h3 className="font-semibold text-white text-sm">BNSS 2023 (Procedure)</h3>
+                    <div className="w-2 h-2 rounded-full bg-[#2563EB]" />
+                    <h3 className="font-bold text-[#172033] text-xs uppercase tracking-wider">BNSS 2023 (Procedure)</h3>
                   </div>
-                  <span className="text-xs text-sky-400 font-mono">Investigation</span>
+                  <span className="text-xs text-[#2563EB] font-mono">Procedure</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                    <div className="text-base font-bold text-emerald-400">{alignmentData.statutory_summary.BNSS.met}</div>
-                    <div className="text-slate-400 text-[10px]">Conditions Met</div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2 font-mono">
+                  <div className="p-2 rounded bg-emerald-50 border border-emerald-200">
+                    <div className="text-base font-bold text-[#16805C]">{alignmentData.statutory_summary.BNSS.met}</div>
+                    <div className="text-[#64748B] text-[10px]">Met</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                    <div className="text-base font-bold text-amber-400">{alignmentData.statutory_summary.BNSS.partially_met}</div>
-                    <div className="text-slate-400 text-[10px]">Partial</div>
+                  <div className="p-2 rounded bg-amber-50 border border-amber-200">
+                    <div className="text-base font-bold text-[#B7791F]">{alignmentData.statutory_summary.BNSS.partially_met}</div>
+                    <div className="text-[#64748B] text-[10px]">Partial</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
-                    <div className="text-base font-bold text-rose-400">{alignmentData.statutory_summary.BNSS.unmet}</div>
-                    <div className="text-slate-400 text-[10px]">Gaps</div>
+                  <div className="p-2 rounded bg-rose-50 border border-rose-200">
+                    <div className="text-base font-bold text-[#C53030]">{alignmentData.statutory_summary.BNSS.unmet}</div>
+                    <div className="text-[#64748B] text-[10px]">Gaps</div>
                   </div>
                 </div>
               </div>
 
               {/* BSA Summary */}
-              <div className="p-5 rounded-2xl bg-slate-900/80 border border-purple-500/20 backdrop-blur-sm">
+              <div className="p-5 rounded bg-white border border-[#D9E0E8] shadow-xs">
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center space-x-2">
-                    <div className="w-2 h-2 rounded-full bg-purple-500" />
-                    <h3 className="font-semibold text-white text-sm">BSA 2023 (Evidence)</h3>
+                    <div className="w-2 h-2 rounded-full bg-[#16805C]" />
+                    <h3 className="font-bold text-[#172033] text-xs uppercase tracking-wider">BSA 2023 (Evidence)</h3>
                   </div>
-                  <span className="text-xs text-purple-400 font-mono">Admissibility</span>
+                  <span className="text-xs text-[#16805C] font-mono">Admissibility</span>
                 </div>
-                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2">
-                  <div className="p-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                    <div className="text-base font-bold text-emerald-400">{alignmentData.statutory_summary.BSA.met}</div>
-                    <div className="text-slate-400 text-[10px]">Conditions Met</div>
+                <div className="grid grid-cols-3 gap-2 text-center text-xs mt-2 font-mono">
+                  <div className="p-2 rounded bg-emerald-50 border border-emerald-200">
+                    <div className="text-base font-bold text-[#16805C]">{alignmentData.statutory_summary.BSA.met}</div>
+                    <div className="text-[#64748B] text-[10px]">Met</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                    <div className="text-base font-bold text-amber-400">{alignmentData.statutory_summary.BSA.partially_met}</div>
-                    <div className="text-slate-400 text-[10px]">Partial</div>
+                  <div className="p-2 rounded bg-amber-50 border border-amber-200">
+                    <div className="text-base font-bold text-[#B7791F]">{alignmentData.statutory_summary.BSA.partially_met}</div>
+                    <div className="text-[#64748B] text-[10px]">Partial</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-rose-500/10 border border-rose-500/20">
-                    <div className="text-base font-bold text-rose-400">{alignmentData.statutory_summary.BSA.unmet}</div>
-                    <div className="text-slate-400 text-[10px]">Gaps</div>
+                  <div className="p-2 rounded bg-rose-50 border border-rose-200">
+                    <div className="text-base font-bold text-[#C53030]">{alignmentData.statutory_summary.BSA.unmet}</div>
+                    <div className="text-[#64748B] text-[10px]">Gaps</div>
                   </div>
                 </div>
               </div>
@@ -389,12 +388,12 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
 
           {/* Procedural Safeguard Callouts */}
           {alignmentData?.procedural_safeguards && alignmentData.procedural_safeguards.length > 0 && (
-            <div className="p-4 rounded-xl bg-amber-950/20 border border-amber-500/30 space-y-2">
-              <div className="flex items-center space-x-2 text-xs font-bold text-amber-400 tracking-wide uppercase">
+            <div className="p-4 rounded bg-amber-50 border border-amber-200 space-y-2">
+              <div className="flex items-center space-x-2 text-xs font-bold text-[#B7791F] tracking-wide uppercase">
                 <AlertTriangle className="w-4 h-4" />
                 <span>Procedural Compliance & Admissibility Alerts</span>
               </div>
-              <ul className="space-y-1.5 text-xs text-amber-200/90 pl-6 list-disc">
+              <ul className="space-y-1 text-xs text-[#172033] pl-6 list-disc">
                 {alignmentData.procedural_safeguards.map((item, idx) => (
                   <li key={idx}>{item}</li>
                 ))}
@@ -403,17 +402,17 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
           )}
 
           {/* Filter Bar */}
-          <div className="flex items-center justify-between bg-slate-900/60 p-3 rounded-xl border border-slate-800">
+          <div className="flex items-center justify-between bg-white p-3 rounded border border-[#D9E0E8]">
             <div className="flex items-center space-x-2">
-              <span className="text-xs text-slate-400 font-medium">Compliance Filter:</span>
+              <span className="text-xs text-[#64748B] font-medium">Compliance Filter:</span>
               {(['ALL', 'MET', 'PARTIALLY_MET', 'UNMET'] as const).map((st) => (
                 <button
                   key={st}
                   onClick={() => setSelectedStatusFilter(st)}
-                  className={`px-3 py-1 rounded-lg text-xs font-medium transition ${
+                  className={`px-3 py-1 rounded text-xs font-medium transition ${
                     selectedStatusFilter === st
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      ? 'bg-[#163A5F] text-white font-bold'
+                      : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
                   }`}
                 >
                   {st.replace('_', ' ')}
@@ -421,8 +420,8 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
               ))}
             </div>
 
-            <div className="text-xs text-slate-400">
-              Showing <span className="text-white font-semibold">{filteredChains.length}</span> statutory condition chains
+            <div className="text-xs text-[#64748B]">
+              Showing <span className="text-[#172033] font-semibold">{filteredChains.length}</span> statutory condition chains
             </div>
           </div>
 
@@ -431,15 +430,15 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
             {filteredChains.map((chain, index) => (
               <div 
                 key={index}
-                className="rounded-2xl bg-slate-900/90 border border-slate-800 overflow-hidden shadow-lg transition hover:border-slate-700"
+                className="rounded bg-white border border-[#D9E0E8] overflow-hidden shadow-xs transition hover:border-[#163A5F]"
               >
                 {/* Header: LAW, PROVISION, STATUS */}
-                <div className="p-4 bg-slate-800/40 border-b border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="p-4 bg-[#F8FAFC] border-b border-[#D9E0E8] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                   <div className="flex items-center space-x-3">
-                    <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold border ${getStatuteColor(chain.law)}`}>
+                    <span className={`px-2.5 py-0.5 rounded text-xs font-bold border ${getStatuteColor(chain.law)}`}>
                       1. LAW: {chain.law.split(',')[0]}
                     </span>
-                    <h4 className="text-sm font-bold text-white tracking-wide">
+                    <h4 className="text-xs font-bold text-[#172033] tracking-wide">
                       2. PROVISION: {chain.provision}
                     </h4>
                   </div>
@@ -449,33 +448,33 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                 </div>
 
                 {/* 7-Step Pipeline Body */}
-                <div className="p-5 space-y-4">
+                <div className="p-5 space-y-4 text-xs font-sans">
                   {/* Step 3: CONDITION */}
-                  <div className="p-3 rounded-xl bg-slate-800/30 border border-slate-700/50">
-                    <div className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1 flex items-center space-x-1.5">
+                  <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                    <div className="text-[11px] font-bold text-[#163A5F] uppercase tracking-wider mb-1 flex items-center space-x-1.5">
                       <FileCheck className="w-3.5 h-3.5" />
                       <span>3. Statutory Condition / Essential Ingredient</span>
                     </div>
-                    <div className="text-sm text-slate-200 font-medium">{chain.condition}</div>
+                    <div className="text-xs text-[#172033] font-medium">{chain.condition}</div>
                   </div>
 
                   {/* Step 4: AVAILABLE EVIDENCE */}
                   <div>
-                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 flex items-center space-x-1.5">
-                      <Database className="w-3.5 h-3.5 text-sky-400" />
+                    <div className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-1.5 flex items-center space-x-1.5">
+                      <Database className="w-3.5 h-3.5 text-[#2563EB]" />
                       <span>4. Corroborated Case Evidence</span>
                     </div>
                     {chain.available_evidence && chain.available_evidence.length > 0 ? (
                       <div className="space-y-1">
                         {chain.available_evidence.map((ev, evIdx) => (
-                          <div key={evIdx} className="text-xs text-slate-300 bg-slate-950/60 p-2.5 rounded-lg border border-slate-800/80 flex items-start space-x-2">
-                            <span className="text-sky-400 font-mono font-bold">•</span>
+                          <div key={evIdx} className="text-xs text-[#172033] bg-[#F8FAFC] p-2.5 rounded border border-[#D9E0E8] flex items-start space-x-2">
+                            <span className="text-[#2563EB] font-mono font-bold">•</span>
                             <span>{ev}</span>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div className="text-xs text-slate-500 italic p-2.5 rounded-lg bg-slate-950/40 border border-slate-800/40">
+                      <div className="text-xs text-[#64748B] italic p-2.5 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
                         No corroborated evidence item currently meets this specific statutory condition in case dossier.
                       </div>
                     )}
@@ -483,11 +482,11 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
 
                   {/* Step 5: RELEVANCE */}
                   <div>
-                    <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1 flex items-center space-x-1.5">
-                      <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                    <div className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider mb-1 flex items-center space-x-1.5">
+                      <Sparkles className="w-3.5 h-3.5 text-[#16805C]" />
                       <span>5. Legal & Evidentiary Relevance</span>
                     </div>
-                    <div className="text-xs text-slate-300 bg-emerald-950/10 border border-emerald-500/20 p-2.5 rounded-lg leading-relaxed">
+                    <div className="text-xs text-[#172033] bg-emerald-50/50 border border-emerald-200 p-2.5 rounded leading-relaxed">
                       {chain.relevance}
                     </div>
                   </div>
@@ -495,23 +494,23 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                   {/* Grid for Steps 6 and 7: Missing Information & Verification */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
                     {/* Step 6: MISSING INFORMATION */}
-                    <div className="p-3 rounded-xl bg-amber-950/15 border border-amber-500/20">
-                      <div className="text-[11px] font-bold text-amber-400 uppercase tracking-wider mb-1 flex items-center space-x-1.5">
-                        <AlertTriangle className="w-3.5 h-3.5 text-amber-400" />
+                    <div className="p-3 rounded bg-amber-50/60 border border-amber-200">
+                      <div className="text-[11px] font-bold text-[#B7791F] uppercase tracking-wider mb-1 flex items-center space-x-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-[#B7791F]" />
                         <span>6. Evidentiary Gap / Missing Information</span>
                       </div>
-                      <div className="text-xs text-amber-200/90 leading-relaxed">
+                      <div className="text-xs text-[#172033] leading-relaxed">
                         {chain.missing_information}
                       </div>
                     </div>
 
                     {/* Step 7: VERIFICATION */}
-                    <div className="p-3 rounded-xl bg-indigo-950/20 border border-indigo-500/20">
-                      <div className="text-[11px] font-bold text-indigo-400 uppercase tracking-wider mb-1 flex items-center space-x-1.5">
-                        <ArrowRight className="w-3.5 h-3.5 text-indigo-400" />
+                    <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                      <div className="text-[11px] font-bold text-[#163A5F] uppercase tracking-wider mb-1 flex items-center space-x-1.5">
+                        <ArrowRight className="w-3.5 h-3.5 text-[#163A5F]" />
                         <span>7. Actionable Statutory Verification</span>
                       </div>
-                      <div className="text-xs text-indigo-200 leading-relaxed font-medium">
+                      <div className="text-xs text-[#172033] leading-relaxed font-medium">
                         {chain.verification}
                       </div>
                     </div>
@@ -527,8 +526,8 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
       {activeTab === 'rag' && (
         <div className="space-y-6">
           {/* Query Input Card */}
-          <div className="p-6 rounded-2xl bg-slate-900/90 border border-indigo-500/20 shadow-xl space-y-4">
-            <div className="flex items-center space-x-2 text-indigo-400 text-sm font-semibold">
+          <div className="p-6 rounded bg-white border border-[#D9E0E8] shadow-xs space-y-4">
+            <div className="flex items-center space-x-2 text-[#163A5F] text-xs font-bold uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
               <span>Ask Indian Statutory Intelligence (BNS / BNSS / BSA 2023)</span>
             </div>
@@ -539,13 +538,13 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                 onChange={(e) => setRagQuery(e.target.value)}
                 placeholder="Ask about offenses, conditions of electronic admissibility, summons procedures, or search powers..."
                 rows={3}
-                className="w-full px-4 py-3 rounded-xl bg-slate-950/90 border border-slate-800 text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm resize-none"
+                className="w-full px-4 py-3 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F] text-xs resize-none"
               />
             </div>
 
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="flex items-center space-x-3 text-xs text-slate-300">
-                <span className="text-slate-400">Statute Focus:</span>
+              <div className="flex items-center space-x-3 text-xs text-[#172033]">
+                <span className="text-[#64748B]">Statute Focus:</span>
                 {['BNS', 'BNSS', 'BSA'].map((code) => (
                   <label key={code} className="flex items-center space-x-1.5 cursor-pointer">
                     <input
@@ -558,9 +557,9 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                           setSelectedStatutes(selectedStatutes.filter((c) => c !== code));
                         }
                       }}
-                      className="rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-0"
+                      className="rounded border-[#D9E0E8] text-[#163A5F] focus:ring-0"
                     />
-                    <span className="font-mono">{code}</span>
+                    <span className="font-mono text-xs">{code}</span>
                   </label>
                 ))}
               </div>
@@ -568,16 +567,16 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
               <button
                 onClick={() => handleRunRAGQuery()}
                 disabled={ragLoading || !ragQuery.trim()}
-                className="inline-flex items-center px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-semibold transition shadow-lg shadow-indigo-600/25 disabled:opacity-50"
+                className="btn-primary text-xs flex items-center space-x-1.5"
               >
-                <Send className={`w-4 h-4 mr-2 ${ragLoading ? 'animate-spin' : ''}`} />
-                {ragLoading ? 'Analyzing Statutory Corpus...' : 'Query Legal Intelligence'}
+                <Send className={`w-3.5 h-3.5 ${ragLoading ? 'animate-spin' : ''}`} />
+                <span>{ragLoading ? 'Analyzing Statutory Corpus...' : 'Query Legal Intelligence'}</span>
               </button>
             </div>
 
             {/* Quick Prompt Chips */}
-            <div className="pt-2 border-t border-slate-800/80">
-              <div className="text-xs text-slate-400 font-medium mb-2">Pre-configured Statutory Queries:</div>
+            <div className="pt-2 border-t border-[#D9E0E8]">
+              <div className="text-[11px] text-[#64748B] font-medium mb-2 uppercase font-bold">Pre-configured Statutory Queries:</div>
               <div className="flex flex-wrap gap-2">
                 {quickPrompts.map((qp, qIdx) => (
                   <button
@@ -586,7 +585,7 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                       setRagQuery(qp.prompt);
                       handleRunRAGQuery(qp.prompt);
                     }}
-                    className="text-xs px-3 py-1.5 rounded-lg bg-slate-800/80 hover:bg-indigo-600/20 hover:border-indigo-500/30 border border-slate-700/60 text-slate-300 transition text-left"
+                    className="text-xs px-3 py-1.5 rounded bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#D9E0E8] text-[#172033] transition text-left"
                   >
                     {qp.title}
                   </button>
@@ -599,33 +598,33 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
           {ragResponse && (
             <div className="space-y-6">
               {/* Grounded Narrative Response */}
-              <div className="p-6 rounded-2xl bg-slate-900/90 border border-slate-800 shadow-xl space-y-4">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
-                  <div className="flex items-center space-x-2 text-emerald-400 text-sm font-semibold">
+              <div className="p-6 rounded bg-white border border-[#D9E0E8] shadow-xs space-y-4">
+                <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-3">
+                  <div className="flex items-center space-x-2 text-[#16805C] text-xs font-bold uppercase tracking-wider">
                     <CheckCircle2 className="w-4 h-4" />
                     <span>Authoritative Statutory Answer</span>
                   </div>
-                  <span className="text-xs text-slate-400 font-mono">Case-Grounded</span>
+                  <span className="text-xs text-[#64748B] font-mono">Case-Grounded</span>
                 </div>
 
-                <p className="text-sm text-slate-200 leading-relaxed font-sans">
+                <p className="text-xs text-[#172033] leading-relaxed font-sans">
                   {ragResponse.answer}
                 </p>
 
                 {/* Cited Provisions */}
                 {ragResponse.cited_sections && ragResponse.cited_sections.length > 0 && (
-                  <div className="pt-3 border-t border-slate-800/80">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Authoritative Sections Cited:</div>
+                  <div className="pt-3 border-t border-[#D9E0E8]">
+                    <div className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2">Authoritative Sections Cited:</div>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       {ragResponse.cited_sections.map((sec, secIdx) => (
-                        <div key={secIdx} className="p-3 rounded-xl bg-slate-950/70 border border-slate-800 flex items-start space-x-3">
-                          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 font-mono text-xs">
+                        <div key={secIdx} className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8] flex items-start space-x-3">
+                          <div className="p-2 rounded bg-white text-[#163A5F] border border-[#D9E0E8] font-mono text-xs font-bold">
                             §{sec.section_number}
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-white">{sec.statute_code} §{sec.section_number}: {sec.section_title}</div>
+                            <div className="text-xs font-bold text-[#172033]">{sec.statute_code} §{sec.section_number}: {sec.section_title}</div>
                             {sec.punishment && (
-                              <div className="text-[11px] text-slate-400 mt-0.5">{sec.punishment}</div>
+                              <div className="text-[11px] text-[#64748B] mt-0.5">{sec.punishment}</div>
                             )}
                           </div>
                         </div>
@@ -636,26 +635,26 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
 
                 {/* Legacy Concordance Table */}
                 {ragResponse.legacy_concordance && ragResponse.legacy_concordance.length > 0 && (
-                  <div className="pt-3 border-t border-slate-800/80">
-                    <div className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center space-x-1.5">
-                      <ExternalLink className="w-3.5 h-3.5 text-sky-400" />
+                  <div className="pt-3 border-t border-[#D9E0E8]">
+                    <div className="text-xs font-bold text-[#64748B] uppercase tracking-wider mb-2 flex items-center space-x-1.5">
+                      <ExternalLink className="w-3.5 h-3.5 text-[#2563EB]" />
                       <span>Statutory Concordance (New Code ↔ Legacy IPC / CrPC / IEA)</span>
                     </div>
                     <div className="overflow-x-auto">
                       <table className="w-full text-xs text-left">
                         <thead>
-                          <tr className="border-b border-slate-800 text-slate-400 font-mono">
+                          <tr className="border-b border-[#D9E0E8] text-[#64748B] font-mono">
                             <th className="py-2 px-3">New Provision (2023)</th>
                             <th className="py-2 px-3">Legacy Provision (1860 / 1973 / 1872)</th>
                             <th className="py-2 px-3">Subject Title</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-slate-800/50 text-slate-300">
+                        <tbody className="divide-y divide-[#D9E0E8] text-[#172033]">
                           {ragResponse.legacy_concordance.map((conc, cIdx) => (
-                            <tr key={cIdx} className="hover:bg-slate-800/30">
-                              <td className="py-2 px-3 font-semibold text-indigo-300">{conc.new_code}</td>
-                              <td className="py-2 px-3 font-mono text-amber-300">{conc.legacy_code}</td>
-                              <td className="py-2 px-3 text-slate-300">{conc.title}</td>
+                            <tr key={cIdx} className="hover:bg-[#F8FAFC]">
+                              <td className="py-2 px-3 font-semibold text-[#163A5F]">{conc.new_code}</td>
+                              <td className="py-2 px-3 font-mono text-[#B7791F]">{conc.legacy_code}</td>
+                              <td className="py-2 px-3 text-[#172033]">{conc.title}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -668,24 +667,24 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
               {/* RAG Generated 7-Step Chains */}
               {ragResponse.chains && ragResponse.chains.length > 0 && (
                 <div className="space-y-4">
-                  <h3 className="text-sm font-bold text-white flex items-center space-x-2">
-                    <Layers className="w-4 h-4 text-indigo-400" />
+                  <h3 className="text-xs font-bold text-[#172033] uppercase tracking-wider flex items-center space-x-2">
+                    <Layers className="w-4 h-4 text-[#163A5F]" />
                     <span>Mandatory 7-Step Evidence-to-Law Pipelines:</span>
                   </h3>
                   <div className="space-y-3">
                     {ragResponse.chains.map((chain, chainIdx) => (
-                      <div key={chainIdx} className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 space-y-3">
+                      <div key={chainIdx} className="p-4 rounded bg-white border border-[#D9E0E8] space-y-3 shadow-xs">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-indigo-300">{chain.provision} ({chain.law.split(',')[0]})</span>
+                          <span className="text-xs font-bold text-[#163A5F]">{chain.provision} ({chain.law.split(',')[0]})</span>
                           {getStatusBadge(chain.status)}
                         </div>
-                        <div className="text-xs text-slate-300"><span className="font-semibold text-slate-400">Condition:</span> {chain.condition}</div>
-                        <div className="text-xs text-slate-300"><span className="font-semibold text-slate-400">Relevance:</span> {chain.relevance}</div>
+                        <div className="text-xs text-[#172033]"><span className="font-semibold text-[#64748B]">Condition:</span> {chain.condition}</div>
+                        <div className="text-xs text-[#172033]"><span className="font-semibold text-[#64748B]">Relevance:</span> {chain.relevance}</div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs pt-1">
-                          <div className="p-2 rounded-lg bg-amber-950/20 text-amber-200 border border-amber-500/20">
+                          <div className="p-2 rounded bg-amber-50 text-[#B7791F] border border-amber-200">
                             <span className="font-bold">Missing:</span> {chain.missing_information}
                           </div>
-                          <div className="p-2 rounded-lg bg-indigo-950/20 text-indigo-200 border border-indigo-500/20">
+                          <div className="p-2 rounded bg-[#F8FAFC] text-[#163A5F] border border-[#D9E0E8]">
                             <span className="font-bold">Verification:</span> {chain.verification}
                           </div>
                         </div>
@@ -703,16 +702,16 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
       {activeTab === 'explorer' && (
         <div className="space-y-6">
           {/* Search & Filter Header */}
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/90 p-4 rounded-2xl border border-slate-800">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 bg-white p-4 rounded border border-[#D9E0E8]">
             <div className="flex items-center space-x-2">
               {(['ALL', 'BNS', 'BNSS', 'BSA'] as const).map((code) => (
                 <button
                   key={code}
                   onClick={() => setSelectedStatuteFilter(code)}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition ${
+                  className={`px-3 py-1.5 rounded text-xs font-bold transition ${
                     selectedStatuteFilter === code
-                      ? 'bg-indigo-600 text-white shadow-md shadow-indigo-600/30'
-                      : 'bg-slate-800/80 text-slate-300 hover:bg-slate-700'
+                      ? 'bg-[#163A5F] text-white'
+                      : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
                   }`}
                 >
                   {code}
@@ -721,13 +720,13 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
             </div>
 
             <div className="relative w-full sm:w-80">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+              <Search className="w-4 h-4 text-[#64748B] absolute left-3 top-2.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search Section, IPC legacy, Cheating, Summons..."
-                className="w-full pl-9 pr-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+                className="w-full pl-9 pr-3 py-1.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F]"
               />
             </div>
           </div>
@@ -737,20 +736,20 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
             {statutes
               .filter((s) => selectedStatuteFilter === 'ALL' || s.code === selectedStatuteFilter)
               .map((statute) => (
-                <div key={statute.id} className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3">
+                <div key={statute.id} className="p-5 rounded bg-white border border-[#D9E0E8] space-y-3 shadow-xs">
                   <div className="flex items-center justify-between">
-                    <span className="px-2.5 py-1 rounded-lg text-xs font-bold font-mono bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+                    <span className="px-2 py-0.5 rounded text-xs font-bold font-mono bg-[#F8FAFC] text-[#163A5F] border border-[#D9E0E8]">
                       {statute.code} (2023)
                     </span>
-                    <span className="text-xs text-slate-400">{statute.sections_count} gazetted provisions</span>
+                    <span className="text-xs text-[#64748B] font-mono">{statute.sections_count} gazetted provisions</span>
                   </div>
 
-                  <h3 className="text-sm font-bold text-white">{statute.title}</h3>
-                  <div className="text-xs text-slate-400 leading-relaxed">
-                    Replaces: <span className="text-amber-300 font-semibold">{statute.statute_metadata?.replaces || 'Legacy Code'}</span>
+                  <h3 className="text-sm font-bold text-[#172033]">{statute.title}</h3>
+                  <div className="text-xs text-[#64748B] leading-relaxed">
+                    Replaces: <span className="text-[#B7791F] font-semibold">{statute.statute_metadata?.replaces || 'Legacy Code'}</span>
                   </div>
 
-                  <div className="pt-2 text-xs text-slate-500 border-t border-slate-800 flex justify-between">
+                  <div className="pt-2 text-xs text-[#64748B] border-t border-[#D9E0E8] flex justify-between font-mono text-[11px]">
                     <span>Effective: {statute.effective_date}</span>
                     <span>Version: {statute.version}</span>
                   </div>
@@ -759,9 +758,9 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
           </div>
 
           {/* Interactive Authoritative Sections Repository */}
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-white flex items-center space-x-2">
-              <BookOpen className="w-4 h-4 text-indigo-400" />
+          <div className="p-5 rounded bg-white border border-[#D9E0E8] space-y-4 shadow-xs">
+            <h3 className="text-xs font-bold text-[#172033] uppercase tracking-wider flex items-center space-x-2">
+              <BookOpen className="w-4 h-4 text-[#163A5F]" />
               <span>Authoritative Gazetted Catalog & Conditions</span>
             </h3>
 
@@ -802,7 +801,7 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                 .map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800/80 hover:border-indigo-500/40 transition flex items-center justify-between cursor-pointer"
+                    className="p-3.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] hover:border-[#163A5F] transition flex items-center justify-between cursor-pointer shadow-xs"
                     onClick={async () => {
                       try {
                         const sec = await api.getSectionDetails(item.statute, item.sec);
@@ -814,14 +813,14 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
                   >
                     <div>
                       <div className="flex items-center space-x-2">
-                        <span className="font-mono font-bold text-indigo-400 text-xs">{item.statute} §{item.sec}</span>
-                        <span className="text-xs font-semibold text-white">{item.title}</span>
+                        <span className="font-mono font-bold text-[#163A5F] text-xs">{item.statute} §{item.sec}</span>
+                        <span className="text-xs font-bold text-[#172033]">{item.title}</span>
                       </div>
-                      <div className="text-[11px] text-amber-300/90 font-mono mt-0.5">
+                      <div className="text-[11px] text-[#B7791F] font-mono mt-0.5">
                         Legacy Concordance: {item.legacy}
                       </div>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-slate-500" />
+                    <ChevronRight className="w-4 h-4 text-[#64748B]" />
                   </div>
                 ))}
             </div>
@@ -829,59 +828,59 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
 
           {/* Modal / Drawer for Section Details */}
           {activeSection && (
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-              <div className="w-full max-w-2xl rounded-2xl bg-slate-900 border border-slate-800 p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
-                <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-xs">
+              <div className="w-full max-w-2xl rounded bg-white border border-[#D9E0E8] p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+                <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-3">
                   <div>
-                    <span className="text-xs font-mono text-indigo-400">{activeSection.statute_code} SECTION {activeSection.section_number}</span>
-                    <h3 className="text-lg font-bold text-white">{activeSection.section_title}</h3>
+                    <span className="text-xs font-mono text-[#163A5F] font-bold">{activeSection.statute_code} SECTION {activeSection.section_number}</span>
+                    <h3 className="text-base font-bold text-[#172033]">{activeSection.section_title}</h3>
                   </div>
-                  <button onClick={() => setActiveSection(null)} className="p-1 text-slate-400 hover:text-white rounded-lg">
+                  <button onClick={() => setActiveSection(null)} className="p-1 text-[#64748B] hover:text-[#172033] rounded">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
-                  <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400 text-[10px]">Category</div>
-                    <div className="font-bold text-white">{activeSection.category}</div>
+                  <div className="p-2 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                    <div className="text-[#64748B] text-[10px]">Category</div>
+                    <div className="font-bold text-[#172033]">{activeSection.category}</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400 text-[10px]">Offense Type</div>
-                    <div className="font-bold text-white">{activeSection.offense_type || 'N/A'}</div>
+                  <div className="p-2 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                    <div className="text-[#64748B] text-[10px]">Offense Type</div>
+                    <div className="font-bold text-[#172033]">{activeSection.offense_type || 'N/A'}</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400 text-[10px]">Bailable</div>
-                    <div className="font-bold text-white">{activeSection.bailable === true ? 'Yes' : activeSection.bailable === false ? 'No' : 'Procedural'}</div>
+                  <div className="p-2 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                    <div className="text-[#64748B] text-[10px]">Bailable</div>
+                    <div className="font-bold text-[#172033]">{activeSection.bailable === true ? 'Yes' : activeSection.bailable === false ? 'No' : 'Procedural'}</div>
                   </div>
-                  <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                    <div className="text-slate-400 text-[10px]">Legacy Concordance</div>
-                    <div className="font-bold text-amber-300 font-mono">{activeSection.legacy_code_mapping?.act} §{activeSection.legacy_code_mapping?.section}</div>
+                  <div className="p-2 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                    <div className="text-[#64748B] text-[10px]">Legacy Concordance</div>
+                    <div className="font-bold text-[#B7791F] font-mono">{activeSection.legacy_code_mapping?.act} §{activeSection.legacy_code_mapping?.section}</div>
                   </div>
                 </div>
 
                 {activeSection.punishment_text && (
-                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs">
-                    <span className="font-bold text-slate-400 uppercase tracking-wider block mb-1">Punishment / Procedural Power:</span>
-                    <span className="text-slate-200">{activeSection.punishment_text}</span>
+                  <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-xs">
+                    <span className="font-bold text-[#64748B] uppercase tracking-wider block mb-1">Punishment / Procedural Power:</span>
+                    <span className="text-[#172033]">{activeSection.punishment_text}</span>
                   </div>
                 )}
 
                 <div className="space-y-2">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Full Statutory Text:</span>
-                  <div className="text-xs text-slate-300 bg-slate-950 p-3 rounded-xl border border-slate-800 leading-relaxed font-serif">
+                  <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider block">Full Statutory Text:</span>
+                  <div className="text-xs text-[#172033] bg-[#F8FAFC] p-3 rounded border border-[#D9E0E8] leading-relaxed font-serif">
                     {activeSection.full_text}
                   </div>
                 </div>
 
                 {activeSection.conditions && activeSection.conditions.length > 0 && (
                   <div className="space-y-2">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Essential Statutory Conditions / Ingredients:</span>
+                    <span className="text-xs font-bold text-[#64748B] uppercase tracking-wider block">Essential Statutory Conditions / Ingredients:</span>
                     <div className="space-y-1.5">
                       {activeSection.conditions.map((c: any, cIdx: number) => (
-                        <div key={cIdx} className="p-2.5 rounded-lg bg-slate-950 border border-slate-800 text-xs">
-                          <div className="font-semibold text-indigo-300">{c.text}</div>
-                          {c.description && <div className="text-slate-400 mt-0.5">{c.description}</div>}
+                        <div key={cIdx} className="p-2.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-xs">
+                          <div className="font-semibold text-[#163A5F]">{c.text}</div>
+                          {c.description && <div className="text-[#64748B] mt-0.5">{c.description}</div>}
                         </div>
                       ))}
                     </div>
@@ -896,54 +895,54 @@ export const LegalIntelligenceDashboard: React.FC<LegalIntelligenceDashboardProp
       {/* TAB 4: LEGAL KNOWLEDGE GRAPH */}
       {activeTab === 'graph' && (
         <div className="space-y-6">
-          <div className="p-6 rounded-2xl bg-slate-900/90 border border-indigo-500/20 shadow-xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="p-6 rounded bg-white border border-[#D9E0E8] shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-3">
               <div className="flex items-center space-x-2">
-                <GitBranch className="w-5 h-5 text-indigo-400" />
-                <h3 className="font-bold text-white text-base">Indian Legal Knowledge Graph Schema</h3>
+                <GitBranch className="w-5 h-5 text-[#163A5F]" />
+                <h3 className="font-bold text-[#172033] text-sm uppercase tracking-wider">Indian Legal Knowledge Graph Schema</h3>
               </div>
-              <div className="flex items-center space-x-3 text-xs text-slate-400 font-mono">
-                <span>Nodes: <strong className="text-white">{graphData?.total_nodes || 0}</strong></span>
-                <span>Links: <strong className="text-white">{graphData?.total_links || 0}</strong></span>
+              <div className="flex items-center space-x-3 text-xs text-[#64748B] font-mono">
+                <span>Nodes: <strong className="text-[#172033]">{graphData?.total_nodes || 0}</strong></span>
+                <span>Links: <strong className="text-[#172033]">{graphData?.total_links || 0}</strong></span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-400 leading-relaxed">
+            <p className="text-xs text-[#64748B] leading-relaxed">
               Connects substantive offenses under BNS 2023 with investigative procedural powers under BNSS 2023 and evidentiary admissibility requirements under BSA 2023 (e.g. BSA Section 63 Electronic Records Certificate mandate).
             </p>
 
             {/* Graph Node Summary Types */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center text-xs">
-              <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-                <div className="font-bold text-indigo-400 text-sm">3</div>
-                <div className="text-slate-400 text-[11px]">Primary Statutes</div>
+              <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                <div className="font-bold text-[#163A5F] text-sm">3</div>
+                <div className="text-[#64748B] text-[11px]">Primary Statutes</div>
               </div>
-              <div className="p-3 rounded-xl bg-sky-500/10 border border-sky-500/20">
-                <div className="font-bold text-sky-400 text-sm">20</div>
-                <div className="text-slate-400 text-[11px]">Key Provisions</div>
+              <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                <div className="font-bold text-[#2563EB] text-sm">20</div>
+                <div className="text-[#64748B] text-[11px]">Key Provisions</div>
               </div>
-              <div className="p-3 rounded-xl bg-purple-500/10 border border-purple-500/20">
-                <div className="font-bold text-purple-400 text-sm">45+</div>
-                <div className="text-slate-400 text-[11px]">Legal Conditions</div>
+              <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                <div className="font-bold text-[#16805C] text-sm">45+</div>
+                <div className="text-[#64748B] text-[11px]">Legal Conditions</div>
               </div>
-              <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
-                <div className="font-bold text-emerald-400 text-sm">100%</div>
-                <div className="text-slate-400 text-[11px]">Gazetted Grounding</div>
+              <div className="p-3 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
+                <div className="font-bold text-[#16805C] text-sm">100%</div>
+                <div className="text-[#64748B] text-[11px]">Gazetted Grounding</div>
               </div>
             </div>
 
             {/* Visual Node List */}
             {graphData && (
               <div className="pt-2 space-y-2">
-                <div className="text-xs font-bold text-slate-400 uppercase tracking-wider">Indexed Knowledge Nodes:</div>
+                <div className="text-xs font-bold text-[#64748B] uppercase tracking-wider">Indexed Knowledge Nodes:</div>
                 <div className="max-h-72 overflow-y-auto space-y-1.5 pr-2">
                   {graphData.nodes.slice(0, 15).map((node) => (
-                    <div key={node.id} className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800 text-xs flex items-center justify-between">
+                    <div key={node.id} className="p-2.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-xs flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <span className="w-2 h-2 rounded-full bg-indigo-500" />
-                        <span className="text-slate-200 font-medium">{node.label}</span>
+                        <span className="w-2 h-2 rounded-full bg-[#163A5F]" />
+                        <span className="text-[#172033] font-medium">{node.label}</span>
                       </div>
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono">{node.type}</span>
+                      <span className="text-[10px] px-2 py-0.5 rounded bg-white text-[#64748B] border border-[#D9E0E8] font-mono">{node.type}</span>
                     </div>
                   ))}
                 </div>

@@ -33,7 +33,31 @@ def get_db() -> Generator:
 
 
 def init_db() -> None:
-    """Initialize all tables defined in models."""
+    """Initialize all tables defined in models and seed default accounts."""
     # Import all models to ensure they are registered with Base.metadata
     import app.models  # noqa: F401
     Base.metadata.create_all(bind=engine)
+
+    # Auto-migrate missing columns for SQLite if necessary
+    try:
+        from sqlalchemy import text
+        with engine.connect() as conn:
+            # Check audit_logs columns
+            result = conn.execute(text("PRAGMA table_info(audit_logs)"))
+            columns = [row[1] for row in result.fetchall()]
+            if columns and "user_agent" not in columns:
+                conn.execute(text("ALTER TABLE audit_logs ADD COLUMN user_agent VARCHAR(255) DEFAULT 'unknown'"))
+                conn.commit()
+    except Exception as e:
+        print(f"Warning during schema migration: {e}")
+
+    # Seed default institutional users
+    try:
+        from app.services.user_service import UserService
+        db = SessionLocal()
+        UserService.seed_default_users(db)
+        db.close()
+    except Exception as e:
+        print(f"Warning during user seeding: {e}")
+
+

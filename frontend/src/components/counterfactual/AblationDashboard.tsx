@@ -131,31 +131,31 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
     switch (status) {
       case 'ROBUST':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#ECFDF5] text-[#16805C] border border-[#A7F3D0]">
             <ShieldCheck className="w-3.5 h-3.5" /> ROBUST
           </span>
         );
       case 'MODERATELY_DEGRADED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/10 text-amber-400 border border-amber-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#FFFBEB] text-[#B7791F] border border-[#FDE68A]">
             <AlertTriangle className="w-3.5 h-3.5" /> MODERATELY DEGRADED
           </span>
         );
       case 'HIGHLY_FRAGILE':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-orange-500/10 text-orange-400 border border-orange-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA]">
             <TrendingDown className="w-3.5 h-3.5" /> HIGHLY FRAGILE
           </span>
         );
       case 'COLLAPSED':
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-rose-500/10 text-rose-400 border border-rose-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#FEF2F2] text-[#C53030] border border-[#FECACA]">
             <XCircle className="w-3.5 h-3.5" /> COLLAPSED
           </span>
         );
       default:
         return (
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-500/10 text-slate-400 border border-slate-500/30">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold bg-[#F8FAFC] text-[#64748B] border border-[#D9E0E8]">
             {status}
           </span>
         );
@@ -165,35 +165,35 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
   const getScenarioIcon = (type: string) => {
     switch (type) {
       case 'FULL_EVIDENCE':
-        return <Layers className="w-5 h-5 text-indigo-400" />;
+        return <Layers className="w-4 h-4 text-[#163A5F]" />;
       case 'WITHOUT_CDR':
-        return <Radio className="w-5 h-5 text-sky-400" />;
+        return <Radio className="w-4 h-4 text-[#2563EB]" />;
       case 'WITHOUT_LOCATION':
-        return <MapPin className="w-5 h-5 text-amber-400" />;
+        return <MapPin className="w-4 h-4 text-[#B7791F]" />;
       case 'WITHOUT_FINANCIAL':
-        return <CreditCard className="w-5 h-5 text-emerald-400" />;
+        return <CreditCard className="w-4 h-4 text-[#16805C]" />;
       case 'ENTITY_REMOVAL':
-        return <UserMinus className="w-5 h-5 text-rose-400" />;
+        return <UserMinus className="w-4 h-4 text-[#C53030]" />;
       case 'RELATIONSHIP_REMOVAL':
-        return <Link2Off className="w-5 h-5 text-purple-400" />;
+        return <Link2Off className="w-4 h-4 text-[#7E22CE]" />;
       default:
-        return <GitFork className="w-5 h-5 text-slate-400" />;
+        return <GitFork className="w-4 h-4 text-[#64748B]" />;
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Top Banner & Title */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+      <div className="bg-white border border-[#D9E0E8] rounded p-4 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-indigo-400 text-xs font-semibold uppercase tracking-wider mb-1">
+          <div className="flex items-center gap-2 text-[#163A5F] text-xs font-semibold uppercase tracking-wider mb-1">
             <GitFork className="w-4 h-4" />
             Phase 14 — Counterfactual Reasoning
           </div>
-          <h1 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+          <h1 className="text-base font-bold text-[#172033] flex items-center gap-2">
             Evidence Ablation & Sensitivity Sandbox
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-xs text-[#64748B] mt-0.5">
             Evaluate hypothesis fragility by systematically removing CDR, Location, Financials, entities, or communication links.
           </p>
         </div>
@@ -202,34 +202,34 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
           <button
             onClick={() => handleRunComparative()}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium rounded-lg shadow-lg shadow-indigo-500/20 text-sm transition-all disabled:opacity-50"
+            className="btn-primary text-xs flex items-center gap-1.5"
           >
-            {loading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            {loading ? 'Running Ablation Matrix...' : 'Run 4-Way Comparative Ablation'}
+            {loading ? <RefreshCw className="w-3.5 h-3.5 animate-spin" /> : <Sparkles className="w-3.5 h-3.5" />}
+            <span>{loading ? 'Running Ablation Matrix...' : 'Run 4-Way Comparative Ablation'}</span>
           </button>
         </div>
       </div>
 
       {/* Statutory Safeguard Doctrine Notice */}
-      <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3 text-amber-200 text-xs leading-relaxed">
-        <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+      <div className="bg-[#FFFBEB] border border-[#F59E0B] rounded p-3.5 flex items-start gap-2.5 text-[#92400E] text-xs leading-relaxed shadow-xs">
+        <ShieldAlert className="w-4 h-4 text-[#B7791F] shrink-0 mt-0.5" />
         <div>
-          <span className="font-semibold text-amber-300 uppercase tracking-wide mr-1">
+          <span className="font-semibold text-[#92400E] uppercase tracking-wide mr-1">
             Statutory Safeguard (Section 63 Bharatiya Sakshya Adhiniyam 2023):
           </span>
           Counterfactual evidence ablation is an analytical sensitivity test assessing hypothesis fragility, 
           evidentiary dependence, and alternative explanations. 
-          <strong className="text-amber-100 underline decoration-amber-500/50 underline-offset-2 ml-1">
+          <strong className="text-[#78350F] underline ml-1">
             It measures evidentiary robustness and does NOT constitute proof of guilt, liability, or innocence.
           </strong>
         </div>
       </div>
 
       {/* Hypothesis Input Bar */}
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-4 space-y-3">
+      <div className="bg-white border border-[#D9E0E8] rounded p-4 space-y-3 shadow-xs">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
           <div className="md:col-span-2">
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-medium text-[#172033] mb-1">
               Investigative Hypothesis Statement to Stress-Test
             </label>
             <input
@@ -237,11 +237,11 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
               value={hypothesis}
               onChange={(e) => setHypothesis(e.target.value)}
               placeholder="e.g. Target suspect coordinated transnational hawala transfers..."
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-1.5 text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F]"
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-slate-300 mb-1">
+            <label className="block text-xs font-medium text-[#172033] mb-1">
               Target Entity (Optional)
             </label>
             <input
@@ -249,90 +249,90 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
               value={targetEntity}
               onChange={(e) => setTargetEntity(e.target.value)}
               placeholder="e.g. Vikram Sharma"
-              className="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-indigo-500"
+              className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-1.5 text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F]"
             />
           </div>
         </div>
       </div>
 
       {/* Navigation Tabs */}
-      <div className="flex border-b border-slate-800 gap-2">
+      <div className="flex border-b border-[#D9E0E8] gap-2 text-xs">
         <button
           onClick={() => setActiveTab('4way')}
-          className={`px-4 py-2.5 text-xs font-semibold border-b-2 flex items-center gap-2 transition-all ${
+          className={`px-3 py-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all ${
             activeTab === '4way'
-              ? 'border-indigo-500 text-indigo-400 bg-indigo-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F] bg-[#EFF6FF]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <Layers className="w-4 h-4" />
-          4-Way Comparative Matrix
+          <Layers className="w-3.5 h-3.5" />
+          <span>4-Way Comparative Matrix</span>
         </button>
 
         <button
           onClick={() => setActiveTab('sensitivity')}
-          className={`px-4 py-2.5 text-xs font-semibold border-b-2 flex items-center gap-2 transition-all ${
+          className={`px-3 py-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all ${
             activeTab === 'sensitivity'
-              ? 'border-indigo-500 text-indigo-400 bg-indigo-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F] bg-[#EFF6FF]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <Gauge className="w-4 h-4" />
-          Sensitivity & Fragility Gauge
+          <Gauge className="w-3.5 h-3.5" />
+          <span>Sensitivity & Fragility Gauge</span>
         </button>
 
         <button
           onClick={() => setActiveTab('entity_sandbox')}
-          className={`px-4 py-2.5 text-xs font-semibold border-b-2 flex items-center gap-2 transition-all ${
+          className={`px-3 py-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all ${
             activeTab === 'entity_sandbox'
-              ? 'border-indigo-500 text-indigo-400 bg-indigo-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F] bg-[#EFF6FF]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <UserMinus className="w-4 h-4" />
-          Entity Removal Sandbox
+          <UserMinus className="w-3.5 h-3.5" />
+          <span>Entity Removal Sandbox</span>
         </button>
 
         <button
           onClick={() => setActiveTab('relation_sandbox')}
-          className={`px-4 py-2.5 text-xs font-semibold border-b-2 flex items-center gap-2 transition-all ${
+          className={`px-3 py-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all ${
             activeTab === 'relation_sandbox'
-              ? 'border-indigo-500 text-indigo-400 bg-indigo-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F] bg-[#EFF6FF]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <Link2Off className="w-4 h-4" />
-          Relationship Severing Sandbox
+          <Link2Off className="w-3.5 h-3.5" />
+          <span>Relationship Severing Sandbox</span>
         </button>
 
         <button
           onClick={() => setActiveTab('history')}
-          className={`px-4 py-2.5 text-xs font-semibold border-b-2 flex items-center gap-2 transition-all ${
+          className={`px-3 py-2 text-xs font-semibold border-b-2 flex items-center gap-1.5 transition-all ${
             activeTab === 'history'
-              ? 'border-indigo-500 text-indigo-400 bg-indigo-500/5'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F] bg-[#EFF6FF]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <History className="w-4 h-4" />
-          Simulation Runs ({historyList.length})
+          <History className="w-3.5 h-3.5" />
+          <span>Simulation Runs ({historyList.length})</span>
         </button>
       </div>
 
       {error && (
-        <div className="bg-rose-500/10 border border-rose-500/30 rounded-xl p-4 text-rose-300 text-xs flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4 text-rose-400 shrink-0" />
-          {error}
+        <div className="bg-[#FEF2F2] border border-[#FECACA] rounded p-3 text-[#C53030] text-xs flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-[#C53030] shrink-0" />
+          <span>{error}</span>
         </div>
       )}
 
       {/* TAB 1: 4-WAY COMPARATIVE MATRIX */}
       {activeTab === '4way' && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           {!simulationResult && (
-            <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-10 text-center space-y-3">
-              <Layers className="w-12 h-12 text-indigo-400/60 mx-auto animate-pulse" />
-              <h3 className="text-base font-semibold text-slate-200">No Ablation Simulation Run Yet</h3>
-              <p className="text-xs text-slate-400 max-w-lg mx-auto">
+            <div className="bg-white border border-[#D9E0E8] rounded p-10 text-center space-y-3 shadow-xs">
+              <Layers className="w-10 h-10 text-[#94A3B8] mx-auto" />
+              <h3 className="text-sm font-semibold text-[#172033]">No Ablation Simulation Run Yet</h3>
+              <p className="text-xs text-[#64748B] max-w-lg mx-auto">
                 Click &quot;Run 4-Way Comparative Ablation&quot; above to evaluate how the investigative theory holds up 
                 when Call Records, Tower Locations, or Financial transactions are omitted.
               </p>
@@ -342,33 +342,33 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
           {simulationResult && (
             <>
               {/* Summary Bar */}
-              <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-4">
+              <div className="bg-white border border-[#D9E0E8] rounded p-4 flex flex-wrap items-center justify-between gap-4 shadow-xs">
                 <div>
-                  <div className="text-xs text-slate-400">Simulation Target</div>
-                  <div className="text-sm font-semibold text-slate-100">
+                  <div className="text-xs text-[#64748B]">Simulation Target</div>
+                  <div className="text-xs font-semibold text-[#172033]">
                     {simulationResult.target_entity || 'Global Case Topology'}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">Baseline Confidence</div>
-                  <div className="text-sm font-semibold text-emerald-400">
+                  <div className="text-xs text-[#64748B]">Baseline Confidence</div>
+                  <div className="text-xs font-semibold text-[#16805C] font-mono">
                     {(simulationResult.sensitivity_summary.baseline_confidence * 100).toFixed(0)}%
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">Lowest State</div>
-                  <div className="text-sm font-semibold text-amber-400">
+                  <div className="text-xs text-[#64748B]">Lowest State</div>
+                  <div className="text-xs font-semibold text-[#B7791F]">
                     {simulationResult.sensitivity_summary.lowest_confidence_scenario}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">Max Confidence Drop</div>
-                  <div className="text-sm font-semibold text-rose-400">
+                  <div className="text-xs text-[#64748B]">Max Confidence Drop</div>
+                  <div className="text-xs font-semibold text-[#C53030] font-mono">
                     -{(simulationResult.sensitivity_summary.max_confidence_drop * 100).toFixed(0)}%
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs text-slate-400">Survival Status</div>
+                  <div className="text-xs text-[#64748B]">Survival Status</div>
                   <div className="mt-0.5">
                     {getStatusBadge(simulationResult.sensitivity_summary.survival_status)}
                   </div>
@@ -380,51 +380,51 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
                 {simulationResult.scenarios.map((scen, idx) => (
                   <div 
                     key={idx}
-                    className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition-all shadow-lg"
+                    className="bg-white border border-[#D9E0E8] rounded p-4 flex flex-col justify-between hover:border-[#94A3B8] transition-all shadow-xs"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2">
-                          <div className="p-2 rounded-lg bg-slate-800/80 border border-slate-700">
+                          <div className="p-1.5 rounded bg-[#F8FAFC] border border-[#D9E0E8]">
                             {getScenarioIcon(scen.scenario_type)}
                           </div>
                           <div>
-                            <h3 className="text-sm font-semibold text-slate-100 leading-tight">
+                            <h3 className="text-xs font-semibold text-[#172033] leading-tight">
                               {scen.scenario_name}
                             </h3>
-                            <span className="text-[11px] text-slate-400">
+                            <span className="text-[11px] text-[#64748B]">
                               {scen.excluded_elements_count} elements ablated
                             </span>
                           </div>
                         </div>
                       </div>
 
-                      <p className="text-xs text-slate-400 leading-relaxed min-h-[36px]">
+                      <p className="text-xs text-[#64748B] leading-relaxed min-h-[36px]">
                         {scen.description}
                       </p>
 
                       {/* Confidence Meter */}
-                      <div className="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+                      <div className="bg-[#F8FAFC] p-2.5 rounded border border-[#D9E0E8] space-y-1.5">
                         <div className="flex justify-between items-center text-xs">
-                          <span className="text-slate-400">Hypothesis Confidence</span>
-                          <span className="font-bold text-slate-200">
+                          <span className="text-[#64748B]">Hypothesis Confidence</span>
+                          <span className="font-bold text-[#172033] font-mono">
                             {(scen.hypothesis_confidence * 100).toFixed(0)}%
                           </span>
                         </div>
-                        <div className="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                        <div className="w-full bg-[#E2E8F0] rounded-full h-1.5 overflow-hidden">
                           <div 
                             className={`h-full rounded-full ${
                               scen.hypothesis_confidence >= 0.7 
-                                ? 'bg-emerald-500' 
+                                ? 'bg-[#16805C]' 
                                 : scen.hypothesis_confidence >= 0.45 
-                                ? 'bg-amber-500' 
-                                : 'bg-rose-500'
+                                ? 'bg-[#B7791F]' 
+                                : 'bg-[#C53030]'
                             }`}
                             style={{ width: `${Math.min(scen.hypothesis_confidence * 100, 100)}%` }}
                           />
                         </div>
                         {scen.confidence_delta !== 0 && (
-                          <div className="text-[11px] text-rose-400 flex items-center justify-between">
+                          <div className="text-[11px] text-[#C53030] flex items-center justify-between">
                             <span>Confidence Shift:</span>
                             <span className="font-mono">{(scen.confidence_delta * 100).toFixed(0)}%</span>
                           </div>
@@ -432,22 +432,22 @@ export const AblationDashboard: React.FC<AblationDashboardProps> = ({ activeCase
                       </div>
 
                       {/* Metric Deltas */}
-                      <div className="grid grid-cols-2 gap-2 text-[11px] bg-slate-950/60 p-2.5 rounded-lg border border-slate-850">
+                      <div className="grid grid-cols-2 gap-2 text-[11px] bg-[#F8FAFC] p-2 rounded border border-[#D9E0E8]">
                         <div>
-                          <span className="text-slate-500">Nodes:</span>{' '}
-                          <span className="text-slate-300 font-mono">
+                          <span className="text-[#64748B]">Nodes:</span>{' '}
+                          <span className="text-[#172033] font-mono">
                             {scen.metric_deltas.node_count} ({scen.metric_deltas.delta_nodes >= 0 ? '+' : ''}{scen.metric_deltas.delta_nodes})
                           </span>
                         </div>
                         <div>
-                          <span className="text-slate-500">Edges:</span>{' '}
-                          <span className="text-slate-300 font-mono">
+                          <span className="text-[#64748B]">Edges:</span>{' '}
+                          <span className="text-[#172033] font-mono">
                             {scen.metric_deltas.edge_count} ({scen.metric_deltas.delta_edges >= 0 ? '+' : ''}{scen.metric_deltas.delta_edges})
                           </span>
                         </div>
                         <div>
-                          <span className="text-slate-500">Density:</span>{' '}
-                          <span className="text-slate-300 font-mono">
+                          <span className="text-[#64748B]">Density:</span>{' '}
+                          <span className="text-[#172033] font-mono">
                             {scen.metric_deltas.density.toFixed(3)}
                           </span>
                         </div>

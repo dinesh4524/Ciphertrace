@@ -111,25 +111,25 @@ export const InvestigationTimeline: React.FC<InvestigationTimelineProps> = ({ ac
 
   const getCategoryIcon = (cat: TimelineEvent['category']) => {
     switch (cat) {
-      case 'TELECOM': return <Phone className="w-3.5 h-3.5 text-sky-400" />;
-      case 'FINANCIAL': return <CreditCard className="w-3.5 h-3.5 text-amber-400" />;
-      case 'POLICE_ACTION': return <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />;
-      case 'DIGITAL_FORENSICS': return <Smartphone className="w-3.5 h-3.5 text-purple-400" />;
+      case 'TELECOM': return <Phone className="w-3.5 h-3.5 text-[#0369A1]" />;
+      case 'FINANCIAL': return <CreditCard className="w-3.5 h-3.5 text-[#B7791F]" />;
+      case 'POLICE_ACTION': return <ShieldCheck className="w-3.5 h-3.5 text-[#16805C]" />;
+      case 'DIGITAL_FORENSICS': return <Smartphone className="w-3.5 h-3.5 text-[#7C3AED]" />;
     }
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 font-sans">
       {/* Header Bar */}
-      <div className="workstation-panel p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+      <div className="workstation-panel p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-2xs">
         <div>
           <div className="flex items-center gap-2">
-            <h1 className="text-base font-bold text-slate-100 font-mono tracking-wide">
+            <h1 className="text-base font-bold text-[#172033] font-mono tracking-wide">
               FORENSIC INVESTIGATION TIMELINE
             </h1>
             <Badge variant="cyan">Multi-Stream Chronology</Badge>
           </div>
-          <p className="text-[11px] text-slate-400 mt-0.5">
+          <p className="text-[11px] text-[#64748B] mt-0.5">
             Synchronized event stream linking FIR registration, telecom CDR call bursts, banking micro-transfers, and physical seizures.
           </p>
         </div>
@@ -143,7 +143,7 @@ export const InvestigationTimeline: React.FC<InvestigationTimelineProps> = ({ ac
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-slate-800">
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 border-b border-[#E2E8F0]">
         {[
           { id: 'ALL', label: 'All Forensic Streams' },
           { id: 'TELECOM', label: 'Telecom CDR Bursts' },
@@ -156,8 +156,8 @@ export const InvestigationTimeline: React.FC<InvestigationTimelineProps> = ({ ac
             onClick={() => setSelectedCategory(tab.id)}
             className={`px-3 py-1.5 rounded text-xs font-mono transition-colors ${
               selectedCategory === tab.id
-                ? 'bg-sky-950 text-sky-200 border border-sky-600 font-bold'
-                : 'bg-[#0d131f] text-slate-400 hover:text-slate-200 border border-slate-800'
+                ? 'bg-[#163A5F] text-white font-bold'
+                : 'bg-[#FFFFFF] text-[#475569] hover:text-[#172033] border border-[#CBD5E1]'
             }`}
           >
             {tab.label}
@@ -166,51 +166,51 @@ export const InvestigationTimeline: React.FC<InvestigationTimelineProps> = ({ ac
       </div>
 
       {/* Chronological Event Stream */}
-      <div className="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-slate-800">
+      <div className="relative pl-6 space-y-4 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-0.5 before:bg-[#D9E0E8]">
         {filteredEvents.map((evt) => (
           <div key={evt.id} className="relative group">
             {/* Timeline Dot */}
             <div className={`absolute -left-6 top-3 w-3 h-3 rounded-full border-2 ${
               evt.tier === 'observed' 
-                ? 'bg-emerald-500 border-[#080c14]' 
-                : 'bg-sky-500 border-[#080c14]'
+                ? 'bg-[#16805C] border-[#FFFFFF]' 
+                : 'bg-[#2563EB] border-[#FFFFFF]'
             }`} />
 
             {/* Event Card */}
-            <div className="workstation-card rounded-lg p-4 space-y-2.5">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-2">
+            <div className="workstation-card rounded-lg p-4 space-y-2.5 shadow-2xs">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2">
                 <div className="flex items-center gap-2">
-                  <div className="p-1 rounded bg-[#080c14] border border-slate-800">
+                  <div className="p-1 rounded bg-[#F8FAFC] border border-[#E2E8F0]">
                     {getCategoryIcon(evt.category)}
                   </div>
-                  <span className="font-mono text-xs font-bold text-slate-100">
+                  <span className="font-mono text-xs font-bold text-[#172033]">
                     {evt.title}
                   </span>
                   <Badge variant={evt.tier === 'observed' ? 'observed' : 'inferred'} size="xs">
                     {evt.tier.toUpperCase()}
                   </Badge>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] font-mono text-slate-400">
-                  <Clock className="w-3.5 h-3.5 text-slate-500" />
+                <div className="flex items-center gap-2 text-[11px] font-mono text-[#64748B]">
+                  <Clock className="w-3.5 h-3.5 text-[#64748B]" />
                   <span>{evt.timestamp}</span>
                 </div>
               </div>
 
-              <p className="text-xs text-slate-300 font-sans leading-relaxed">
+              <p className="text-xs text-[#334155] font-sans leading-relaxed">
                 {evt.description}
               </p>
 
               {/* Actors and Evidence Citations */}
-              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-800/80 text-[11px] font-mono">
-                <div className="flex items-center gap-2 text-slate-400">
-                  <span className="text-slate-500">ACTORS:</span>
-                  <span className="text-slate-300">{evt.actors.join(' ↔ ')}</span>
+              <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-[#E2E8F0] text-[11px] font-mono">
+                <div className="flex items-center gap-2 text-[#64748B]">
+                  <span>ACTORS:</span>
+                  <span className="text-[#172033] font-semibold">{evt.actors.join(' ↔ ')}</span>
                 </div>
 
-                <div className="flex items-center gap-3 text-slate-400">
-                  <span className="text-slate-500">REF: <span className="text-sky-400">{evt.evidenceRef}</span></span>
-                  <span className="text-slate-500 font-mono text-[10px]">
-                    SHA-256: <span className="text-emerald-400">{evt.hash.substring(0, 12)}...</span>
+                <div className="flex items-center gap-3 text-[#64748B]">
+                  <span>REF: <span className="text-[#163A5F] font-bold">{evt.evidenceRef}</span></span>
+                  <span className="font-mono text-[10px]">
+                    SHA-256: <span className="text-[#16805C] font-semibold">{evt.hash.substring(0, 12)}...</span>
                   </span>
                 </div>
               </div>

@@ -3,249 +3,284 @@
 @tailwind utilities;
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
+  --bg-main: #F5F7FA;
+  --surface: #FFFFFF;
+  --text-primary: #172033;
+  --text-secondary: #64748B;
+  --border-color: #D9E0E8;
+  --primary-accent: #163A5F;
+  --interactive-blue: #2563EB;
+  --color-verified: #16805C;
+  --color-review: #B7791F;
+  --color-critical: #C53030;
 }
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #070a10;
-  color: #e2e8f0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
-  letter-spacing: -0.01em;
+  background-color: #F5F7FA;
+  color: #172033;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  letter-spacing: -0.011em;
+  -webkit-font-smoothing: antialiased;
 }
 
+/* Monospace restricted strictly to technical forensic identifiers */
 code, kbd, samp, pre, .font-mono {
   font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
 }
 
-/* Custom Workstation Scrollbars */
+/* Restrained Institutional Scrollbars */
 ::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 6px;
+  height: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #080c14;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 2px;
+  background: #CBD5E1;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94A3B8;
 }
 
-/* Professional Workstation Containers & Cards */
+/* Institutional Workstation Containers */
 .workstation-panel {
-  background: #0b0f19;
-  border: 1px solid #1e293b;
+  background: #FFFFFF;
+  border: 1px solid #D9E0E8;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
 }
 
 .workstation-card {
-  background: #0d131f;
-  border: 1px solid #1e293b;
-  transition: border-color 0.15s ease-in-out;
+  background: #FFFFFF;
+  border: 1px solid #D9E0E8;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+  transition: border-color 0.12s ease-in-out, box-shadow 0.12s ease-in-out;
 }
 
 .workstation-card:hover {
-  border-color: #334155;
+  border-color: #CBD5E1;
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.workstation-card-highlight {
-  background: #101726;
-  border: 1px solid #0284c7;
-}
-
-/* Rectangular Action Buttons (Investigator Workstation Standards) */
-.btn-rect-primary {
+/* Standard Rectangular Action Buttons */
+.btn-primary, .btn-rect-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.45rem 0.9rem;
-  background-color: #0369a1;
-  color: #f0f9ff;
-  border: 1px solid #0284c7;
+  background-color: #163A5F;
+  color: #FFFFFF;
+  border: 1px solid #0F2742;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.025em;
-  transition: all 0.12s ease-in-out;
   cursor: pointer;
+  transition: all 0.12s ease;
 }
-.btn-rect-primary:hover:not(:disabled) {
-  background-color: #0284c7;
-  border-color: #38bdf8;
-  color: #ffffff;
+.btn-primary:hover:not(:disabled), .btn-rect-primary:hover:not(:disabled) {
+  background-color: #0E2640;
+  border-color: #081726;
 }
-.btn-rect-primary:disabled {
+.btn-primary:disabled, .btn-rect-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-rect-secondary {
+.btn-secondary, .btn-rect-secondary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.45rem 0.9rem;
-  background-color: #131a29;
-  color: #cbd5e1;
-  border: 1px solid #334155;
+  background-color: #F8FAFC;
+  color: #1E293B;
+  border: 1px solid #CBD5E1;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 500;
-  letter-spacing: 0.025em;
-  transition: all 0.12s ease-in-out;
   cursor: pointer;
+  transition: all 0.12s ease;
 }
-.btn-rect-secondary:hover:not(:disabled) {
-  background-color: #1e293b;
-  border-color: #475569;
-  color: #f8fafc;
+.btn-secondary:hover:not(:disabled), .btn-rect-secondary:hover:not(:disabled) {
+  background-color: #E2E8F0;
+  border-color: #94A3B8;
+  color: #0F172A;
 }
-.btn-rect-secondary:disabled {
+.btn-secondary:disabled, .btn-rect-secondary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-rect-danger {
+.btn-danger, .btn-rect-danger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.45rem 0.9rem;
-  background-color: #881337;
-  color: #ffe4e6;
-  border: 1px solid #be123c;
+  background-color: #FEE2E2;
+  color: #991B1B;
+  border: 1px solid #F87171;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 600;
-  letter-spacing: 0.025em;
-  transition: all 0.12s ease-in-out;
   cursor: pointer;
+  transition: all 0.12s ease;
 }
-.btn-rect-danger:hover:not(:disabled) {
-  background-color: #9f1239;
-  border-color: #f43f5e;
+.btn-danger:hover:not(:disabled), .btn-rect-danger:hover:not(:disabled) {
+  background-color: #FCA5A5;
 }
-.btn-rect-danger:disabled {
+.btn-danger:disabled, .btn-rect-danger:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
-.btn-rect-ghost {
+.btn-ghost, .btn-rect-ghost {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.35rem;
-  padding: 0.35rem 0.7rem;
+  padding: 0.4rem 0.7rem;
   background-color: transparent;
-  color: #94a3b8;
+  color: #475569;
   border: 1px solid transparent;
   border-radius: 4px;
   font-size: 0.75rem;
   font-weight: 500;
-  transition: all 0.12s ease-in-out;
   cursor: pointer;
+  transition: all 0.12s ease;
 }
-.btn-rect-ghost:hover:not(:disabled) {
-  background-color: #1e293b;
-  color: #f1f5f9;
-  border-color: #334155;
+.btn-ghost:hover:not(:disabled), .btn-rect-ghost:hover:not(:disabled) {
+  background-color: #F1F5F9;
+  color: #0F172A;
+  border-color: #E2E8F0;
 }
 
-/* 4-Tier Semantic Relationship Styles */
+/* Light Semantic Badges */
+.semantic-verified {
+  background-color: #ECFDF5;
+  border: 1px solid #16805C;
+  color: #16805C;
+}
+
+.semantic-review {
+  background-color: #FFFBEB;
+  border: 1px solid #B7791F;
+  color: #B7791F;
+}
+
+.semantic-critical {
+  background-color: #FEF2F2;
+  border: 1px solid #C53030;
+  color: #C53030;
+}
+
+.semantic-info {
+  background-color: #EFF6FF;
+  border: 1px solid #2563EB;
+  color: #2563EB;
+}
+
+.semantic-inactive {
+  background-color: #F1F5F9;
+  border: 1px solid #CBD5E1;
+  color: #64748B;
+}
+
+/* 4-Tier Semantic Relationship Styles (Light Canvas) */
 .badge-observed {
-  background-color: rgba(6, 78, 59, 0.4);
-  border: 1px solid #059669;
-  color: #34d399;
+  background-color: #ECFDF5;
+  border: 1px solid #16805C;
+  color: #16805C;
 }
 
 .badge-inferred {
-  background-color: rgba(12, 74, 110, 0.4);
-  border: 1px dashed #0284c7;
-  color: #38bdf8;
+  background-color: #EFF6FF;
+  border: 1px dashed #2563EB;
+  color: #2563EB;
 }
 
 .badge-predicted {
-  background-color: rgba(120, 53, 15, 0.4);
-  border: 1px dotted #d97706;
-  color: #fbbf24;
+  background-color: #FFFBEB;
+  border: 1px dotted #B7791F;
+  color: #B7791F;
 }
 
 .badge-contested {
-  background-color: rgba(136, 19, 55, 0.4);
-  border: 1px dashed #e11d48;
-  color: #fb7185;
+  background-color: #FEF2F2;
+  border: 1px dashed #C53030;
+  color: #C53030;
 }
 
-/* 5-Level AI Provenance & Epistemic Tags */
-.tag-evidence {
-  font-size: 9px;
+/* 5-Level Epistemic Distinction (Light Workstation) */
+.tag-epistemic-evidence {
+  font-size: 10px;
   font-family: 'Fira Code', monospace;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
-  background-color: #064e3b;
-  border: 1px solid #10b981;
-  color: #a7f3d0;
+  background-color: #ECFDF5;
+  border: 1px solid #16805C;
+  color: #16805C;
 }
 
-.tag-inference {
-  font-size: 9px;
+.tag-epistemic-inference {
+  font-size: 10px;
   font-family: 'Fira Code', monospace;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
-  background-color: #0c4a6e;
-  border: 1px solid #0284c7;
-  color: #bae6fd;
+  background-color: #EFF6FF;
+  border: 1px solid #2563EB;
+  color: #2563EB;
 }
 
-.tag-prediction {
-  font-size: 9px;
+.tag-epistemic-prediction {
+  font-size: 10px;
   font-family: 'Fira Code', monospace;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
-  background-color: #78350f;
-  border: 1px solid #d97706;
-  color: #fde68a;
+  background-color: #FFFBEB;
+  border: 1px solid #B7791F;
+  color: #B7791F;
 }
 
-.tag-uncertainty {
-  font-size: 9px;
+.tag-epistemic-uncertainty {
+  font-size: 10px;
   font-family: 'Fira Code', monospace;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
-  background-color: #4c1d95;
-  border: 1px solid #7c3aed;
-  color: #ddd6fe;
+  background-color: #F5F3FF;
+  border: 1px solid #7C3AED;
+  color: #6D28D9;
 }
 
-.tag-verified {
-  font-size: 9px;
+.tag-epistemic-verified {
+  font-size: 10px;
   font-family: 'Fira Code', monospace;
   font-weight: 700;
   text-transform: uppercase;
   padding: 2px 6px;
   border-radius: 3px;
-  background-color: #14532d;
-  border: 1px solid #22c55e;
-  color: #86efac;
+  background-color: #ECFDF5;
+  border: 1px solid #059669;
+  color: #047857;
 }
 
-/* Institutional Tables */
+/* Workstation Data Tables */
 .workstation-table {
   width: 100%;
   border-collapse: collapse;
@@ -253,23 +288,237 @@ code, kbd, samp, pre, .font-mono {
 }
 
 .workstation-table th {
-  background-color: #0b0f19;
-  color: #94a3b8;
-  font-family: 'Fira Code', monospace;
+  background-color: #F8FAFC;
+  color: #475569;
   font-size: 0.6875rem;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #1e293b;
+  letter-spacing: 0.04em;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #D9E0E8;
   text-align: left;
 }
 
 .workstation-table td {
-  padding: 0.5rem 0.75rem;
-  border-bottom: 1px solid #131c2e;
-  color: #cbd5e1;
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #E2E8F0;
+  color: #172033;
 }
 
 .workstation-table tr:hover td {
-  background-color: #0f172a;
+  background-color: #F8FAFC;
 }
+
+/* ==========================================================================
+   3D & ANIMATION SYSTEM (Light Institutional Theme)
+   ========================================================================== */
+
+/* Perspective & 3D Space */
+.perspective-600 {
+  perspective: 600px;
+}
+.perspective-1000 {
+  perspective: 1000px;
+}
+.perspective-1500 {
+  perspective: 1500px;
+}
+.perspective-2000 {
+  perspective: 2000px;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+}
+
+/* 3D Depth Offsets */
+.translate-z-0 {
+  transform: translateZ(0px);
+}
+.translate-z-8 {
+  transform: translateZ(8px);
+}
+.translate-z-15 {
+  transform: translateZ(15px);
+}
+.translate-z-25 {
+  transform: translateZ(25px);
+}
+.translate-z-35 {
+  transform: translateZ(35px);
+}
+.translate-z-50 {
+  transform: translateZ(50px);
+}
+.-translate-z-20 {
+  transform: translateZ(-20px);
+}
+
+/* 3D Isometric Presets */
+.isometric-view {
+  transform: rotateX(12deg) rotateY(-12deg) rotateZ(2deg);
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.5s ease;
+  box-shadow: -15px 25px 50px -12px rgba(22, 58, 95, 0.18), 0 0 0 1px #CBD5E1;
+}
+
+.isometric-view:hover {
+  transform: rotateX(6deg) rotateY(-6deg) rotateZ(1deg) translateY(-4px);
+  box-shadow: -20px 35px 60px -15px rgba(22, 58, 95, 0.22), 0 0 0 1px #94A3B8;
+}
+
+/* Interactive 3D Card Hover */
+.card-3d-interactive {
+  transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease, border-color 0.2s ease;
+}
+.card-3d-interactive:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 12px 24px -6px rgba(22, 58, 95, 0.1), 0 4px 6px -2px rgba(22, 58, 95, 0.05);
+  border-color: #CBD5E1;
+}
+
+/* Keyframe Animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translateY(0px) translateZ(35px);
+  }
+  50% {
+    transform: translateY(-8px) translateZ(45px);
+  }
+}
+
+@keyframes float-medium {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-6px) rotate(1deg);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+
+@keyframes pulse-radar {
+  0% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(0.9);
+    opacity: 0.8;
+  }
+}
+
+@keyframes radar-sweep {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes beam-slide {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%);
+    opacity: 0;
+  }
+}
+
+@keyframes edge-packet-flow {
+  0% {
+    stroke-dashoffset: 40;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes spin-cube-3d {
+  0% {
+    transform: rotateX(-15deg) rotateY(0deg);
+  }
+  50% {
+    transform: rotateX(15deg) rotateY(180deg);
+  }
+  100% {
+    transform: rotateX(-15deg) rotateY(360deg);
+  }
+}
+
+@keyframes beacon-ping {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  75%, 100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+/* Animation Utility Classes */
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 3.5s ease-in-out infinite;
+}
+
+.animate-float-reverse {
+  animation: float-reverse 4s ease-in-out infinite;
+}
+
+.animate-radar-sweep {
+  animation: radar-sweep 4s linear infinite;
+  transform-origin: center center;
+}
+
+.animate-radar-pulse {
+  animation: pulse-radar 2.5s ease-in-out infinite;
+}
+
+.animate-spin-cube {
+  animation: spin-cube-3d 18s linear infinite;
+  transform-style: preserve-3d;
+}
+
+.animate-beacon-ping {
+  animation: beacon-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-edge-flow {
+  stroke-dasharray: 6, 6;
+  animation: edge-packet-flow 1.5s linear infinite;
+}
+
+/* 3D Cube Faces Utility */
+.cube-face-front  { transform: translateZ(50px); }
+.cube-face-back   { transform: rotateY(180deg) translateZ(50px); }
+.cube-face-right  { transform: rotateY(90deg) translateZ(50px); }
+.cube-face-left   { transform: rotateY(-90deg) translateZ(50px); }
+.cube-face-top    { transform: rotateX(90deg) translateZ(50px); }
+.cube-face-bottom { transform: rotateX(-90deg) translateZ(50px); }
+

@@ -250,15 +250,15 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
   const getArchetypeBadgeColor = (archetype: string) => {
     switch (archetype) {
       case 'KINGPIN_INFLUENCER':
-        return 'bg-purple-900/60 text-purple-300 border border-purple-500/50';
+        return 'bg-[#EFF6FF] text-[#163A5F] border border-[#BFDBFE]';
       case 'COMMUNICATION_BROKER':
-        return 'bg-amber-900/60 text-amber-300 border border-amber-500/50';
+        return 'bg-[#FFFBEB] text-[#B7791F] border border-[#FDE68A]';
       case 'OPERATIONAL_HUB':
-        return 'bg-cyan-900/60 text-cyan-300 border border-cyan-500/50';
+        return 'bg-[#EFF6FF] text-[#2563EB] border border-[#BFDBFE]';
       case 'SYNDICATE_OPERATIVE':
-        return 'bg-emerald-900/60 text-emerald-300 border border-emerald-500/50';
+        return 'bg-[#ECFDF5] text-[#16805C] border border-[#A7F3D0]';
       default:
-        return 'bg-slate-800 text-slate-300 border border-slate-700';
+        return 'bg-[#F8FAFC] text-[#64748B] border border-[#D9E0E8]';
     }
   };
 
@@ -284,23 +284,23 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* MANDATORY JUDICIAL NON-CULPABILITY NOTICE (BSA 2023) */}
-      <div className="p-4 bg-gradient-to-r from-amber-950/80 via-slate-900 to-amber-950/80 border-2 border-amber-500/60 rounded-xl shadow-xl flex items-start space-x-3">
-        <Scale className="w-6 h-6 text-amber-400 shrink-0 mt-0.5" />
+      <div className="p-4 bg-[#FFFBEB] border border-[#F59E0B] rounded flex items-start space-x-3 shadow-xs">
+        <Scale className="w-5 h-5 text-[#B7791F] shrink-0 mt-0.5" />
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <h4 className="text-xs font-bold text-amber-300 uppercase tracking-wider font-mono">
+            <h4 className="text-xs font-bold text-[#92400E] uppercase tracking-wider">
               Judicial Admissibility Notice: Network Centrality ≠ Criminal Guilt
             </h4>
-            <span className="px-2 py-0.2 bg-amber-900/80 text-amber-200 border border-amber-600 rounded text-[9px] font-bold">
+            <span className="px-2 py-0.5 bg-[#FEF3C7] text-[#92400E] border border-[#F59E0B] rounded text-[10px] font-bold">
               Sec 63 BSA 2023
             </span>
           </div>
-          <p className="text-xs text-slate-300 leading-relaxed">
+          <p className="text-xs text-[#78350F] leading-relaxed">
             Network analytics metrics (Degree, Betweenness, Closeness, Eigenvector, PageRank, k-Core) measure 
-            <strong className="text-white"> structural communication flow and topological mediation</strong>. 
-            They <strong className="text-amber-200 underline">do NOT establish legal culpability, criminal conspiracy, or intent</strong>. 
+            <strong className="text-[#92400E]"> structural communication flow and topological mediation</strong>. 
+            They <strong className="text-[#B7791F] underline">do NOT establish legal culpability, criminal conspiracy, or intent</strong>. 
             Legitimate commercial business owners, nodal bank branch officers, telecom routing gateways, public service dispatchers, 
             and victimized courier mules naturally exhibit high centrality. All algorithmic findings must be substantiated with independent primary evidence.
           </p>
@@ -308,29 +308,28 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
       </div>
 
       {/* Header Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="bg-white border border-[#D9E0E8] rounded p-5 shadow-xs relative overflow-hidden">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div>
             <div className="flex items-center space-x-3 mb-1">
-              <span className="p-2 bg-purple-950/80 border border-purple-800/60 rounded-lg text-purple-400">
-                <Network className="w-6 h-6 animate-pulse" />
+              <span className="p-2 bg-[#EFF6FF] border border-[#BFDBFE] rounded text-[#163A5F]">
+                <Network className="w-5 h-5" />
               </span>
               <div>
-                <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-2">
-                  Advanced Criminal Network Analytics & Graph Theory
+                <h1 className="text-lg font-bold text-[#172033] tracking-tight flex items-center gap-2">
+                  Network Analytics & Graph Topology
                 </h1>
-                <p className="text-sm text-slate-400">
+                <p className="text-xs text-[#64748B]">
                   Centralities, k-core shells, clustering coefficients, community detection, and topological structural analysis
                 </p>
               </div>
             </div>
           </div>
 
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <button
               onClick={() => setIsGlossaryModalOpen(true)}
-              className="flex items-center space-x-2 px-3.5 py-2 bg-purple-950 hover:bg-purple-900 border border-purple-700 text-purple-200 rounded-lg text-xs font-semibold transition"
+              className="btn-secondary text-xs flex items-center gap-1.5"
             >
               <HelpCircle className="w-3.5 h-3.5" />
               <span>Metric Meanings & Legal Caveats</span>
@@ -338,7 +337,7 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
             <button
               onClick={fetchAllAnalytics}
               disabled={loading}
-              className="flex items-center space-x-2 px-3 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-semibold text-slate-200 transition"
+              className="btn-primary text-xs flex items-center gap-1.5"
             >
               <RotateCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
               <span>Re-Scan Topology</span>
@@ -347,59 +346,59 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
         </div>
 
         {/* Global Metric Indicators */}
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mt-6 pt-6 border-t border-slate-800/80">
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Network Density</span>
-            <div className="text-lg font-bold text-white mt-0.5 font-mono">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mt-4 pt-4 border-t border-[#D9E0E8]">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Network Density</span>
+            <div className="text-base font-bold text-[#172033] mt-0.5 font-mono">
               {structuralOverview ? (structuralOverview.density * 100).toFixed(1) + '%' : '0.0%'}
             </div>
-            <div className="text-[10px] text-purple-400 mt-0.5">{structuralOverview?.total_edges ?? 0} active links</div>
+            <div className="text-[10px] text-[#163A5F] mt-0.5">{structuralOverview?.total_edges ?? 0} active links</div>
           </div>
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Clustering Transitivity</span>
-            <div className="text-lg font-bold text-cyan-400 mt-0.5 font-mono">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Clustering Transitivity</span>
+            <div className="text-base font-bold text-[#2563EB] mt-0.5 font-mono">
               {structuralOverview ? (structuralOverview.transitivity * 100).toFixed(1) + '%' : '0.0%'}
             </div>
-            <div className="text-[10px] text-slate-400 mt-0.5">Triadic Closure Ratio</div>
+            <div className="text-[10px] text-[#64748B] mt-0.5">Triadic Closure Ratio</div>
           </div>
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Max k-Core Nucleus</span>
-            <div className="text-lg font-bold text-amber-400 mt-0.5 font-mono">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Max k-Core Nucleus</span>
+            <div className="text-base font-bold text-[#B7791F] mt-0.5 font-mono">
               k = {kCoreData?.max_core ?? 0}
             </div>
-            <div className="text-[10px] text-amber-400 mt-0.5">{kCoreData?.total_shells ?? 0} concentric shells</div>
+            <div className="text-[10px] text-[#B7791F] mt-0.5">{kCoreData?.total_shells ?? 0} concentric shells</div>
           </div>
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Syndicate Cells</span>
-            <div className="text-lg font-bold text-emerald-400 mt-0.5 font-mono">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Syndicate Cells</span>
+            <div className="text-base font-bold text-[#16805C] mt-0.5 font-mono">
               {communities?.total_communities ?? 0}
             </div>
-            <div className="text-[10px] text-emerald-400 mt-0.5">Q = {communities?.modularity.toFixed(3) ?? '0.000'}</div>
+            <div className="text-[10px] text-[#16805C] mt-0.5">Q = {communities?.modularity.toFixed(3) ?? '0.000'}</div>
           </div>
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Critical Bridges</span>
-            <div className="text-lg font-bold text-rose-400 mt-0.5 font-mono">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Critical Bridges</span>
+            <div className="text-base font-bold text-[#C53030] mt-0.5 font-mono">
               {structuralOverview?.critical_bridges_count ?? 0}
             </div>
-            <div className="text-[10px] text-rose-400 mt-0.5">Single Cut-off Edges</div>
+            <div className="text-[10px] text-[#C53030] mt-0.5">Single Cut-off Edges</div>
           </div>
-          <div className="bg-slate-950/60 border border-slate-800 rounded-lg p-3">
-            <span className="text-[11px] text-slate-400 font-medium">Clean-Slate Recruits</span>
-            <div className="text-lg font-bold text-amber-400 mt-0.5 font-mono">
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-2.5">
+            <span className="text-[11px] text-[#64748B] font-medium">Clean-Slate Recruits</span>
+            <div className="text-base font-bold text-[#B7791F] mt-0.5 font-mono">
               {temporalIntel?.clean_slate_anomalies.length ?? 0}
             </div>
-            <div className="text-[10px] text-amber-400 mt-0.5">Zero Prior Record Mules</div>
+            <div className="text-[10px] text-[#B7791F] mt-0.5">Zero Prior Record Mules</div>
           </div>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center space-x-2 mt-6 overflow-x-auto pb-1">
+        <div className="flex items-center gap-1.5 mt-4 overflow-x-auto pb-1 text-xs">
           <button
             onClick={() => setActiveTab('KEY_PLAYERS')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'KEY_PLAYERS'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <Crown className="w-3.5 h-3.5" />
@@ -407,10 +406,10 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
           </button>
           <button
             onClick={() => setActiveTab('K_CORE')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'K_CORE'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <Layers className="w-3.5 h-3.5" />
@@ -418,10 +417,10 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
           </button>
           <button
             onClick={() => setActiveTab('COMMUNITIES')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'COMMUNITIES'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <Users className="w-3.5 h-3.5" />
@@ -429,10 +428,10 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
           </button>
           <button
             onClick={() => setActiveTab('PATHFINDING')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'PATHFINDING'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <Route className="w-3.5 h-3.5" />
@@ -440,21 +439,21 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
           </button>
           <button
             onClick={() => setActiveTab('STRUCTURAL')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'STRUCTURAL'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <Activity className="w-3.5 h-3.5" />
-            <span>Network Density & Structure</span>
+            <span>Network Density</span>
           </button>
           <button
             onClick={() => setActiveTab('ANOMALIES')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'ANOMALIES'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
             <AlertTriangle className="w-3.5 h-3.5" />
@@ -462,36 +461,36 @@ export const GraphAnalyticsDashboard: React.FC<GraphAnalyticsDashboardProps> = (
           </button>
           <button
             onClick={() => setActiveTab('HIDDEN_LINKS')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'HIDDEN_LINKS'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>Hidden-Link ML Radar ({mlHiddenLinks?.total_predicted_links ?? 0})</span>
+            <Sparkles className="w-3.5 h-3.5 text-[#B7791F]" />
+            <span>Hidden-Link Radar ({mlHiddenLinks?.total_predicted_links ?? 0})</span>
           </button>
           <button
             onClick={() => setActiveTab('TEMPORAL')}
-            className={`flex items-center space-x-2 px-3.5 py-2 rounded-lg text-xs font-semibold transition ${
+            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded text-xs font-semibold transition ${
               activeTab === 'TEMPORAL'
-                ? 'bg-purple-600 text-white shadow-lg shadow-purple-600/30'
-                : 'bg-slate-800/60 text-slate-400 hover:bg-slate-800 hover:text-white'
+                ? 'bg-[#163A5F] text-white shadow-xs'
+                : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
             }`}
           >
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <Clock className="w-3.5 h-3.5" />
             <span>Temporal & Clean-Slate ({temporalIntel?.clean_slate_anomalies.length ?? 0})</span>
           </button>
         </div>
       </div>
 
       {reviewSuccessMsg && (
-        <div className="p-3 bg-emerald-950/80 border border-emerald-800 text-emerald-300 rounded-lg text-xs flex items-center justify-between">
-          <span className="flex items-center gap-2">
+        <div className="p-3 bg-[#ECFDF5] border border-[#16805C] text-[#16805C] rounded text-xs flex items-center justify-between shadow-xs">
+          <span className="flex items-center gap-2 font-medium">
             <CheckCircle2 className="w-4 h-4" />
             {reviewSuccessMsg}
           </span>
-          <button onClick={() => setReviewSuccessMsg(null)} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={() => setReviewSuccessMsg(null)} className="text-[#16805C] hover:text-[#065F46] font-bold">✕</button>
         </div>
       )}
 

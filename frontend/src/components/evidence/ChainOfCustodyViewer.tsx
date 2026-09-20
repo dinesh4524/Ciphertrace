@@ -36,21 +36,21 @@ export const ChainOfCustodyViewer: React.FC<ChainOfCustodyViewerProps> = ({ acti
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl cyber-glass border border-slate-800">
+    <div className="space-y-4">
+      <div className="bg-white border border-[#D9E0E8] p-4 rounded flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 shadow-xs">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-white tracking-wide">Immutable Audit Trail</h1>
-            <Badge variant="emerald">Cryptographic Chain of Custody</Badge>
+            <h1 className="text-base font-bold text-[#172033] tracking-tight">Immutable Audit Trail</h1>
+            <Badge variant="verified">Cryptographic Chain of Custody</Badge>
           </div>
-          <p className="text-xs text-slate-400 max-w-3xl">
+          <p className="text-xs text-[#64748B] max-w-3xl">
             Append-only tamper-evident evidentiary ledger. Every access, ingestion, verification, and transformation
             event is cryptographically sealed with a SHA-256 state digest.
           </p>
         </div>
         <button
           onClick={fetchLogs}
-          className="flex items-center gap-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono rounded-xl transition-all"
+          className="btn-secondary text-xs flex items-center gap-1.5"
         >
           <RotateCw className="w-3.5 h-3.5" />
           <span>Refresh Ledger</span>
@@ -58,36 +58,36 @@ export const ChainOfCustodyViewer: React.FC<ChainOfCustodyViewerProps> = ({ acti
       </div>
 
       {loading ? (
-        <div className="p-12 text-center text-xs font-mono text-slate-500">
+        <div className="p-12 text-center text-xs text-[#64748B]">
           Fetching cryptographic audit ledger...
         </div>
       ) : logs.length === 0 ? (
-        <div className="p-12 text-center cyber-glass rounded-2xl border border-slate-800 space-y-3">
-          <History className="w-10 h-10 text-slate-600 mx-auto" />
-          <p className="text-sm text-slate-300 font-medium">No audit events recorded yet</p>
-          <p className="text-xs text-slate-500 max-w-md mx-auto">
+        <div className="p-12 text-center bg-white rounded border border-[#D9E0E8] space-y-2 shadow-xs">
+          <History className="w-8 h-8 text-[#94A3B8] mx-auto" />
+          <p className="text-xs text-[#172033] font-medium">No audit events recorded yet</p>
+          <p className="text-xs text-[#64748B] max-w-md mx-auto">
             Audit logs are automatically generated whenever cases are registered or evidence is ingested.
           </p>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-2.5">
           {logs.map((log) => (
             <div
               key={log.id}
-              className="p-4 rounded-xl cyber-glass-card border border-slate-800/80 space-y-2.5 font-mono text-xs"
+              className="p-4 rounded bg-white border border-[#D9E0E8] hover:border-[#94A3B8] transition-colors space-y-2 text-xs shadow-xs"
             >
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                   {getActionBadge(log.action_type)}
-                  <span className="text-slate-300 font-semibold">{log.resource_type}</span>
+                  <span className="text-[#172033] font-semibold">{log.resource_type}</span>
                 </div>
-                <div className="flex items-center gap-3 text-slate-500 text-[11px]">
-                  <span className="flex items-center gap-1">
+                <div className="flex items-center gap-3 text-[#64748B] text-[11px]">
+                  <span className="flex items-center gap-1 font-mono">
                     <Clock className="w-3 h-3" />
                     {new Date(log.timestamp).toLocaleString()}
                   </span>
-                  <span className="flex items-center gap-1 text-slate-400">
-                    <User className="w-3 h-3" />
+                  <span className="flex items-center gap-1 text-[#172033]">
+                    <User className="w-3 h-3 text-[#64748B]" />
                     {log.operator_id} ({log.operator_role})
                   </span>
                 </div>
@@ -95,17 +95,17 @@ export const ChainOfCustodyViewer: React.FC<ChainOfCustodyViewerProps> = ({ acti
 
               {/* Details JSON */}
               {log.details_json && Object.keys(log.details_json).length > 0 && (
-                <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-900 text-slate-400 text-[11px] overflow-x-auto">
+                <div className="p-2.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[#172033] text-xs overflow-x-auto font-mono">
                   <pre className="whitespace-pre-wrap">{JSON.stringify(log.details_json, null, 2)}</pre>
                 </div>
               )}
 
               {/* Cryptographic Entry Hash */}
               {log.entry_hash_sha256 && (
-                <div className="flex items-center gap-1.5 text-[10px] text-slate-500 truncate pt-1 border-t border-slate-900">
-                  <Lock className="w-3 h-3 text-cyan-400 flex-shrink-0" />
-                  <span>Entry Digest:</span>
-                  <span className="text-cyan-400/80 truncate select-all">{log.entry_hash_sha256}</span>
+                <div className="flex items-center gap-1.5 text-[11px] text-[#64748B] truncate pt-1 border-t border-[#D9E0E8]">
+                  <Lock className="w-3 h-3 text-[#163A5F] flex-shrink-0" />
+                  <span className="font-semibold">Entry Digest:</span>
+                  <span className="text-[#163A5F] font-mono truncate select-all">{log.entry_hash_sha256}</span>
                 </div>
               )}
             </div>

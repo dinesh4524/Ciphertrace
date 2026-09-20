@@ -1,4 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-  <path d="m9 12 2 2 4-4"></path>
+<svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M50 8 L86 22 V52 C86 72 70 88 50 94 C30 88 14 72 14 52 V22 L50 8 Z" fill="#163A5F" stroke="#0E2640" stroke-width="3" stroke-linejoin="round"/>
+  <polygon points="50,22 75,36 75,64 50,78 25,64 25,36" fill="#0F2844" stroke="#2563EB" stroke-width="2" stroke-dasharray="4 2"/>
+  <line x1="50" y1="22" x2="50" y2="50" stroke="#16805C" stroke-width="3"/>
+  <line x1="25" y1="36" x2="50" y2="50" stroke="#16805C" stroke-width="3"/>
+  <line x1="75" y1="36" x2="50" y2="50" stroke="#16805C" stroke-width="3"/>
+  <line x1="25" y1="64" x2="50" y2="50" stroke="#2563EB" stroke-width="2.5" stroke-dasharray="3 2"/>
+  <line x1="75" y1="64" x2="50" y2="50" stroke="#2563EB" stroke-width="2.5" stroke-dasharray="3 2"/>
+  <line x1="50" y1="78" x2="50" y2="50" stroke="#B7791F" stroke-width="2.5" stroke-dasharray="2 2"/>
+  <circle cx="50" cy="50" r="7" fill="#FFFFFF" stroke="#16805C" stroke-width="3"/>
+  <circle cx="50" cy="50" r="3" fill="#163A5F"/>
+  <circle cx="50" cy="22" r="5" fill="#16805C" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="75" cy="36" r="4.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="75" cy="64" r="4.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="50" cy="78" r="5" fill="#B7791F" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="25" cy="64" r="4.5" fill="#2563EB" stroke="#FFFFFF" stroke-width="1.5"/>
+  <circle cx="25" cy="36" r="4.5" fill="#16805C" stroke="#FFFFFF" stroke-width="1.5"/>
 </svg>

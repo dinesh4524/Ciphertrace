@@ -154,5 +154,14 @@ class UserService:
                 u = UserService.create_user(db, u_in, operator_id="SYSTEM_BOOTSTRAP")
                 seeded.append(u)
             else:
+                existing.hashed_password = get_password_hash(acc["password"])
+                existing.is_active = True
+                existing.role = acc["role"].value if isinstance(acc["role"], Role) else acc["role"]
+                existing.full_name = acc["full_name"]
+                existing.badge_number = acc["badge_number"]
+                existing.department = acc["department"]
+                existing.designation = acc["designation"]
+                db.commit()
+                db.refresh(existing)
                 seeded.append(existing)
         return seeded

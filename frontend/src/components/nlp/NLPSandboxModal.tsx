@@ -54,38 +54,38 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="w-full max-w-4xl bg-[#0b1329] border border-purple-500/40 rounded-2xl shadow-2xl overflow-hidden cyber-glow-cyan flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+      <div className="w-full max-w-4xl bg-white border border-[#D9E0E8] rounded shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="p-5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between">
+        <div className="p-4 bg-[#F8FAFC] border-b border-[#D9E0E8] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-purple-950/80 border border-purple-700/50 text-purple-400">
+            <div className="p-2 rounded bg-white border border-[#D9E0E8] text-[#163A5F]">
               <Sparkles className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-base font-bold text-white">Live NLP Intelligence & Entity Extraction Sandbox</h2>
-              <p className="text-xs text-slate-400 font-mono">
+              <h2 className="text-sm font-bold text-[#172033]">Live NLP Intelligence & Entity Extraction Sandbox</h2>
+              <p className="text-xs text-[#64748B] font-mono">
                 Real-time regex & heuristic NER testing for Indian Police documents, FIRs, and interrogation memos.
               </p>
             </div>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-slate-800">
+          <button onClick={onClose} className="text-[#64748B] hover:text-[#172033] p-1.5 rounded hover:bg-[#F1F5F9]">
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Workspace Body */}
-        <div className="p-6 overflow-y-auto space-y-5 text-xs flex-1">
+        <div className="p-6 overflow-y-auto space-y-5 text-xs flex-1 bg-white">
           {/* Input Textarea & Controls */}
           <div className="space-y-2 font-mono">
             <div className="flex items-center justify-between">
-              <label className="text-slate-400 text-xs font-semibold flex items-center gap-1.5">
-                <Terminal className="w-3.5 h-3.5 text-purple-400" />
+              <label className="text-[#172033] text-xs font-semibold flex items-center gap-1.5">
+                <Terminal className="w-3.5 h-3.5 text-[#163A5F]" />
                 Raw Investigative Text / FIR Statement
               </label>
               <button
                 onClick={() => setInputText(SAMPLE_SYNTHETIC_INTERROGATION)}
-                className="text-[11px] text-purple-400 hover:text-purple-300 underline"
+                className="text-[11px] text-[#2563EB] hover:text-[#163A5F] underline"
               >
                 Reset to Synthetic FIR
               </button>
@@ -94,16 +94,16 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               rows={6}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 text-slate-200 font-mono text-xs focus:border-purple-500 focus:outline-none"
+              className="w-full bg-[#F8FAFC] border border-[#D9E0E8] rounded p-3 text-[#172033] font-mono text-xs focus:border-[#163A5F] focus:outline-none"
               placeholder="Paste raw police statement, FIR text, or interrogation memo..."
             />
             <div className="flex justify-end">
               <button
                 onClick={handleExtract}
                 disabled={loading || !inputText.trim()}
-                className="px-5 py-2.5 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white rounded-xl font-semibold flex items-center gap-2 shadow-lg shadow-purple-900/40 transition-all"
+                className="btn-primary text-xs flex items-center gap-2"
               >
-                <Play className="w-4 h-4 fill-white" />
+                <Play className="w-3.5 h-3.5 fill-white" />
                 <span>{loading ? 'Processing Document...' : 'Run Extraction Pipeline'}</span>
               </button>
             </div>
@@ -111,37 +111,37 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
 
           {/* Results Display */}
           {result && (
-            <div className="space-y-4 pt-3 border-t border-slate-800">
+            <div className="space-y-4 pt-3 border-t border-[#D9E0E8]">
               {/* Language & Hinglish Diagnostics */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono">
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                  <span className="text-slate-500 text-[11px]">Detected Language</span>
-                  <div className="text-purple-300 font-bold">{result.language_info.primary_language}</div>
+                <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1">
+                  <span className="text-[#64748B] text-[11px]">Detected Language</span>
+                  <div className="text-[#163A5F] font-bold">{result.language_info.primary_language}</div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                  <span className="text-slate-500 text-[11px]">Hinglish Police Lexicon</span>
-                  <div className={`font-bold ${result.language_info.is_hinglish ? 'text-emerald-400' : 'text-slate-400'}`}>
+                <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1">
+                  <span className="text-[#64748B] text-[11px]">Hinglish Police Lexicon</span>
+                  <div className={`font-bold ${result.language_info.is_hinglish ? 'text-[#16805C]' : 'text-[#64748B]'}`}>
                     {result.language_info.is_hinglish ? 'YES (Indian Police Vocabulary)' : 'STANDARD'}
                   </div>
                 </div>
 
-                <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
-                  <span className="text-slate-500 text-[11px]">Matched Keywords</span>
-                  <div className="text-cyan-300 truncate">
+                <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1">
+                  <span className="text-[#64748B] text-[11px]">Matched Keywords</span>
+                  <div className="text-[#2563EB] truncate font-semibold">
                     {result.language_info.matched_legal_keywords?.join(', ') || 'None'}
                   </div>
                 </div>
               </div>
 
               {/* Tab Navigation */}
-              <div className="flex border-b border-slate-800 gap-6 text-xs font-mono">
+              <div className="flex border-b border-[#D9E0E8] gap-6 text-xs font-mono">
                 <button
                   onClick={() => setActiveTab('ENTITIES')}
                   className={`pb-2 font-semibold transition-all border-b-2 ${
                     activeTab === 'ENTITIES'
-                      ? 'text-purple-400 border-purple-400'
-                      : 'text-slate-400 border-transparent hover:text-slate-200'
+                      ? 'text-[#163A5F] border-[#163A5F]'
+                      : 'text-[#64748B] border-transparent hover:text-[#172033]'
                   }`}
                 >
                   Extracted Entities ({result.entities_count})
@@ -150,8 +150,8 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
                   onClick={() => setActiveTab('RELATIONSHIPS')}
                   className={`pb-2 font-semibold transition-all border-b-2 ${
                     activeTab === 'RELATIONSHIPS'
-                      ? 'text-purple-400 border-purple-400'
-                      : 'text-slate-400 border-transparent hover:text-slate-200'
+                      ? 'text-[#163A5F] border-[#163A5F]'
+                      : 'text-[#64748B] border-transparent hover:text-[#172033]'
                   }`}
                 >
                   Extracted Links ({result.relationships_count})
@@ -162,20 +162,20 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
               {activeTab === 'ENTITIES' && (
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto pr-1">
                   {result.entities.map((ent, idx) => (
-                    <div key={idx} className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1 font-mono text-xs">
+                    <div key={idx} className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1 font-mono text-xs">
                       <div className="flex items-center justify-between">
-                        <span className="px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-[10px] text-cyan-300 font-bold">
+                        <span className="px-2 py-0.5 rounded bg-white border border-[#D9E0E8] text-[10px] text-[#2563EB] font-bold">
                           {ent.entity_type}
                         </span>
-                        <span className="text-emerald-400 text-[10px]">
+                        <span className="text-[#16805C] font-semibold text-[10px]">
                           {(ent.confidence * 100).toFixed(0)}% Conf
                         </span>
                       </div>
-                      <div className="text-white font-bold">{ent.normalized_value}</div>
+                      <div className="text-[#172033] font-bold">{ent.normalized_value}</div>
                       {ent.raw_value !== ent.normalized_value && (
-                        <div className="text-[10px] text-slate-500">Raw: {ent.raw_value}</div>
+                        <div className="text-[10px] text-[#64748B]">Raw: {ent.raw_value}</div>
                       )}
-                      <div className="text-[10px] text-slate-400 line-clamp-1 italic bg-slate-900/50 p-1 rounded">
+                      <div className="text-[10px] text-[#64748B] line-clamp-1 italic bg-white p-1 rounded border border-[#D9E0E8]">
                         {ent.context_snippet}
                       </div>
                     </div>
@@ -186,16 +186,16 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
               {activeTab === 'RELATIONSHIPS' && (
                 <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
                   {result.relationships.map((rel, idx) => (
-                    <div key={idx} className="p-3 bg-slate-950 rounded-xl border border-slate-800 flex items-center justify-between font-mono text-xs">
+                    <div key={idx} className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] flex items-center justify-between font-mono text-xs">
                       <div className="flex items-center gap-2">
-                        <span className="text-slate-200 font-bold">{rel.source_value}</span>
-                        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-indigo-950 border border-indigo-800 text-[10px] text-indigo-300">
+                        <span className="text-[#172033] font-bold">{rel.source_value}</span>
+                        <div className="flex items-center gap-1 px-2 py-0.5 rounded bg-white border border-[#D9E0E8] text-[10px] text-[#163A5F]">
                           <span>{rel.relationship_type}</span>
                           <ArrowRight className="w-3 h-3" />
                         </div>
-                        <span className="text-slate-200 font-bold">{rel.target_value}</span>
+                        <span className="text-[#172033] font-bold">{rel.target_value}</span>
                       </div>
-                      <span className="text-emerald-400 text-[10px]">{(rel.confidence * 100).toFixed(0)}%</span>
+                      <span className="text-[#16805C] font-semibold text-[10px]">{(rel.confidence * 100).toFixed(0)}%</span>
                     </div>
                   ))}
                 </div>
@@ -205,10 +205,10 @@ export const NLPSandboxModal: React.FC<NLPSandboxModalProps> = ({ onClose }) => 
         </div>
 
         {/* Footer */}
-        <div className="p-4 bg-slate-900/90 border-t border-slate-800 flex justify-end">
+        <div className="p-3 bg-[#F8FAFC] border-t border-[#D9E0E8] flex justify-end">
           <button
             onClick={onClose}
-            className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono rounded-xl"
+            className="btn-secondary text-xs"
           >
             Close Sandbox
           </button>

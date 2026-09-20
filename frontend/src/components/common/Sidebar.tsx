@@ -1,47 +1,51 @@
 import React from 'react';
 import { 
-  BarChart3,
+  LayoutDashboard,
   FolderLock, 
-  BookOpen,
-  UploadCloud, 
   FileCheck2, 
-  History, 
-  Cpu, 
+  UserCheck, 
+  Clock, 
+  Network, 
+  Layers, 
+  Route, 
+  Search, 
   Scale, 
-  Sparkles,
-  Network,
-  GitMerge,
-  Route,
-  GitFork,
-  Zap,
-  Gavel,
-  Clock,
-  UserCheck,
-  Shield,
-  Layers
+  CheckSquare, 
+  Gavel, 
+  FileText, 
+  History, 
+  Users, 
+  Cpu,
+  LogOut,
+  Shield
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { Role } from '../../types';
 
 export type TabType = 
-  | 'sih-demo'
   | 'dashboard' 
   | 'cases' 
-  | 'ledger' 
-  | 'ingestion' 
+  | 'ledger'
   | 'evidence' 
+  | 'ingestion'
   | 'entities'
   | 'timeline' 
-  | 'relationships' 
-  | 'resolution'
   | 'graph'
+  | 'relationships' 
   | 'analytics'
+  | 'search'
   | 'rag'
   | 'graphrag'
+  | 'hypotheses'
   | 'reasoning'
   | 'counterfactual'
   | 'priority'
+  | 'resolution'
   | 'legal'
+  | 'reports'
+  | 'sih-demo'
   | 'audit' 
+  | 'users'
   | 'health';
 
 interface SidebarProps {
@@ -50,220 +54,219 @@ interface SidebarProps {
   evidenceCount?: number;
   entitiesCount?: number;
   hasActiveCase?: boolean;
+  onLogout?: () => void;
+}
+
+interface NavItem {
+  id: TabType;
+  label: string;
+  icon: any;
+  badge?: string | null;
+  activeFor: string[];
+  allowedRoles?: Role[];
+}
+
+interface NavSection {
+  title: string;
+  items: NavItem[];
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({ 
   currentTab, 
   setCurrentTab, 
   evidenceCount = 0,
-  hasActiveCase = false 
+  hasActiveCase = false,
+  onLogout
 }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, logout } = useAuth();
+  const userRole = currentUser?.role || 'INVESTIGATOR';
 
-  const navSections = [
+  const allNavSections: NavSection[] = [
     {
-      title: 'Operational Command',
+      title: 'WORKSPACE',
       items: [
         {
-          id: 'sih-demo' as const,
-          label: 'SIH Mission Control',
-          icon: Sparkles,
-          badge: 'DEMO',
-          highlight: true
+          id: 'dashboard',
+          label: 'Dashboard',
+          icon: LayoutDashboard,
+          activeFor: ['dashboard'],
+          allowedRoles: ['INVESTIGATOR', 'SENIOR_INVESTIGATOR', 'LEGAL_ANALYST', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'dashboard' as const,
-          label: 'Command Dashboard',
-          icon: BarChart3,
-          badge: null,
-          highlight: false
-        },
-        {
-          id: 'cases' as const,
-          label: 'Case Registry & RBAC',
+          id: 'cases',
+          label: 'Cases',
           icon: FolderLock,
-          badge: null,
-          highlight: false
+          activeFor: ['cases', 'ledger'],
+          allowedRoles: ['INVESTIGATOR', 'SENIOR_INVESTIGATOR', 'LEGAL_ANALYST', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'ledger' as const,
-          label: 'Case Detail Ledger',
-          icon: BookOpen,
-          badge: hasActiveCase ? 'Active' : null,
-          highlight: false
-        },
-      ]
-    },
-    {
-      title: 'Evidence & Forensics',
-      items: [
-        {
-          id: 'ingestion' as const,
-          label: 'Multi-Modal Ingest',
-          icon: UploadCloud,
-          badge: null,
-          highlight: false
-        },
-        {
-          id: 'evidence' as const,
-          label: 'Evidence Locker & Custody',
+          id: 'evidence',
+          label: 'Evidence',
           icon: FileCheck2,
           badge: evidenceCount > 0 ? evidenceCount.toString() : null,
-          highlight: false
+          activeFor: ['evidence', 'ingestion'],
+          allowedRoles: ['INVESTIGATOR', 'FORENSIC_ANALYST', 'SENIOR_INVESTIGATOR', 'LEGAL_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'entities' as const,
-          label: 'Entity-360 Dossier',
+          id: 'entities',
+          label: 'Entities',
           icon: UserCheck,
-          badge: 'NER/360',
-          highlight: false
+          activeFor: ['entities'],
+          allowedRoles: ['INVESTIGATOR', 'FORENSIC_ANALYST', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'timeline' as const,
-          label: 'Forensic Timeline',
+          id: 'timeline',
+          label: 'Timeline',
           icon: Clock,
-          badge: 'Time',
-          highlight: false
+          activeFor: ['timeline'],
+          allowedRoles: ['INVESTIGATOR', 'FORENSIC_ANALYST', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'relationships' as const,
-          label: 'Relationship Matrix',
+          id: 'graph',
+          label: 'Network',
+          icon: Network,
+          activeFor: ['graph'],
+          allowedRoles: ['INVESTIGATOR', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
+        },
+      ]
+    },
+    {
+      title: 'ANALYSIS',
+      items: [
+        {
+          id: 'relationships',
+          label: 'Relationships',
           icon: Layers,
-          badge: null,
-          highlight: false
+          activeFor: ['relationships'],
+          allowedRoles: ['INVESTIGATOR', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'resolution' as const,
-          label: 'Entity Resolution Hub',
-          icon: GitMerge,
-          badge: 'ER',
-          highlight: false
-        },
-      ]
-    },
-    {
-      title: 'Network Intelligence',
-      items: [
-        {
-          id: 'graph' as const,
-          label: 'Network Graph Workstation',
-          icon: Network,
-          badge: '4-Tier',
-          highlight: false
-        },
-        {
-          id: 'analytics' as const,
-          label: 'Graph ML & Anomalies',
+          id: 'analytics',
+          label: 'Patterns & Anomalies',
           icon: Route,
-          badge: null,
-          highlight: false
+          activeFor: ['analytics'],
+          allowedRoles: ['INVESTIGATOR', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'rag' as const,
-          label: 'Document RAG & Search',
-          icon: BookOpen,
-          badge: null,
-          highlight: false
+          id: 'search',
+          label: 'Search & Analysis',
+          icon: Search,
+          activeFor: ['search', 'rag', 'graphrag'],
+          allowedRoles: ['INVESTIGATOR', 'INTELLIGENCE_ANALYST', 'LEGAL_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'graphrag' as const,
-          label: 'GraphRAG Intelligence',
-          icon: Network,
-          badge: 'Hybrid',
-          highlight: false
-        },
-      ]
-    },
-    {
-      title: 'Reasoning & Legal AI',
-      items: [
-        {
-          id: 'reasoning' as const,
-          label: 'Multi-Perspective AI',
+          id: 'hypotheses',
+          label: 'Hypotheses',
           icon: Scale,
-          badge: 'Consensus',
-          highlight: false
-        },
-        {
-          id: 'counterfactual' as const,
-          label: 'Counterfactual Ablation',
-          icon: GitFork,
-          badge: null,
-          highlight: false
-        },
-        {
-          id: 'priority' as const,
-          label: 'Priority & Next Actions',
-          icon: Zap,
-          badge: 'NBA',
-          highlight: false
-        },
-        {
-          id: 'legal' as const,
-          label: 'Indian Legal AI (BNS/BSA)',
-          icon: Gavel,
-          badge: 'Sec 63',
-          highlight: false
+          activeFor: ['hypotheses', 'reasoning', 'counterfactual', 'priority'],
+          allowedRoles: ['INVESTIGATOR', 'LEGAL_ANALYST', 'SENIOR_INVESTIGATOR', 'INTELLIGENCE_ANALYST', 'SYSTEM_ADMINISTRATOR']
         },
       ]
     },
     {
-      title: 'Assurance & System',
+      title: 'REVIEW',
       items: [
         {
-          id: 'audit' as const,
-          label: 'Audit Trail (SHA-256)',
-          icon: History,
-          badge: 'Merkle',
-          highlight: false
+          id: 'resolution',
+          label: 'Pending Reviews',
+          icon: CheckSquare,
+          activeFor: ['resolution'],
+          allowedRoles: ['INVESTIGATOR', 'FORENSIC_ANALYST', 'SENIOR_INVESTIGATOR', 'SYSTEM_ADMINISTRATOR']
         },
         {
-          id: 'health' as const,
-          label: 'System Infrastructure',
+          id: 'legal',
+          label: 'Legal Reference',
+          icon: Gavel,
+          activeFor: ['legal'],
+          allowedRoles: ['LEGAL_ANALYST', 'SENIOR_INVESTIGATOR', 'SYSTEM_ADMINISTRATOR']
+        },
+        {
+          id: 'reports',
+          label: 'Reports',
+          icon: FileText,
+          activeFor: ['reports', 'sih-demo'],
+          allowedRoles: ['INVESTIGATOR', 'SENIOR_INVESTIGATOR', 'LEGAL_ANALYST', 'SYSTEM_ADMINISTRATOR']
+        },
+      ]
+    },
+    {
+      title: 'SYSTEM',
+      items: [
+        {
+          id: 'audit',
+          label: 'Audit Trail',
+          icon: History,
+          activeFor: ['audit'],
+          allowedRoles: ['SENIOR_INVESTIGATOR', 'FORENSIC_ANALYST', 'SYSTEM_ADMINISTRATOR', 'INVESTIGATOR']
+        },
+        {
+          id: 'users',
+          label: 'Users & Access',
+          icon: Users,
+          activeFor: ['users'],
+          allowedRoles: ['SENIOR_INVESTIGATOR', 'SYSTEM_ADMINISTRATOR']
+        },
+        {
+          id: 'health',
+          label: 'System Information',
           icon: Cpu,
-          badge: 'Live',
-          highlight: false
+          activeFor: ['health'],
+          allowedRoles: ['SYSTEM_ADMINISTRATOR', 'FORENSIC_ANALYST', 'INVESTIGATOR', 'SENIOR_INVESTIGATOR', 'LEGAL_ANALYST', 'INTELLIGENCE_ANALYST']
         },
       ]
     }
   ];
 
+  // Filter sections and items based on active user's role permissions
+  const filteredNavSections = allNavSections.map(sec => ({
+    ...sec,
+    items: sec.items.filter(item => {
+      if (!item.allowedRoles) return true;
+      if (currentUser?.is_superuser || userRole === 'SYSTEM_ADMINISTRATOR') return true;
+      return item.allowedRoles.includes(userRole as Role);
+    })
+  })).filter(sec => sec.items.length > 0);
+
+  const handleLogoutClick = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
+  };
+
   return (
-    <aside className="w-64 border-r border-slate-800 bg-[#080c14] flex flex-col justify-between p-3.5 h-[calc(100vh-3.5rem)] select-none">
-      <div className="space-y-4 overflow-y-auto pr-1">
-        {navSections.map((sec, idx) => (
+    <aside className="w-56 border-r border-[#D9E0E8] bg-[#FFFFFF] flex flex-col justify-between p-3 select-none">
+      <div className="space-y-4 overflow-y-auto">
+        {filteredNavSections.map((sec, idx) => (
           <div key={idx} className="space-y-1">
-            <div className="px-2.5 pb-1 text-[10px] font-mono uppercase tracking-wider text-slate-500 font-bold">
+            <div className="px-2.5 pb-1 text-[10px] font-semibold tracking-wider text-[#64748B] font-mono">
               {sec.title}
             </div>
             <nav className="space-y-0.5">
               {sec.items.map((item) => {
                 const Icon = item.icon;
-                const isActive = currentTab === item.id;
+                const isActive = item.activeFor.includes(currentTab);
                 return (
                   <button
                     key={item.id}
                     onClick={() => setCurrentTab(item.id)}
-                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium transition-all ${
+                    className={`w-full flex items-center justify-between px-2.5 py-1.5 rounded text-xs font-medium transition-colors ${
                       isActive
-                        ? 'bg-sky-950 text-sky-200 border border-sky-600 font-semibold'
-                        : item.highlight
-                        ? 'bg-sky-950/40 text-sky-300 border border-sky-900/60 hover:bg-sky-950/70'
-                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/80 border border-transparent'
+                        ? 'bg-[#163A5F] text-white font-semibold shadow-sm'
+                        : 'text-[#334155] hover:text-[#0F172A] hover:bg-[#F1F5F9]'
                     }`}
                   >
                     <div className="flex items-center gap-2 truncate">
-                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive || item.highlight ? 'text-sky-400' : 'text-slate-400'}`} />
+                      <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-white' : 'text-[#64748B]'}`} />
                       <span className="truncate">{item.label}</span>
                     </div>
                     {item.badge && (
                       <span
-                        className={`text-[9px] font-mono px-1 py-0.2 rounded font-bold ${
-                          item.highlight
-                            ? 'bg-sky-900 text-sky-200 border border-sky-600'
-                            : isActive
-                            ? 'bg-sky-900 text-sky-200 border border-sky-700'
-                            : 'bg-slate-800 text-slate-400 border border-slate-700'
+                        className={`text-[9px] font-mono px-1.5 py-0.2 rounded font-bold ${
+                          isActive
+                            ? 'bg-[#0E2640] text-white'
+                            : 'bg-[#E2E8F0] text-[#334155]'
                         }`}
                       >
                         {item.badge}
@@ -277,15 +280,29 @@ export const Sidebar: React.FC<SidebarProps> = ({
         ))}
       </div>
 
-      {/* Active User Footer Info */}
-      <div className="p-2.5 rounded bg-[#0d131f] border border-slate-800 text-slate-400 space-y-1 text-xs">
-        <div className="flex items-center justify-between text-[10px] font-mono">
-          <span className="text-slate-500 uppercase">Station / Division</span>
-          <span className="text-sky-400 font-bold">CYBER CRIME PS</span>
+      {/* Active User Footer Info & Logout */}
+      <div className="space-y-2 pt-2 border-t border-[#D9E0E8]">
+        <div className="p-2.5 rounded bg-[#F8FAFC] border border-[#E2E8F0] space-y-1 text-xs font-mono">
+          <div className="flex items-center justify-between text-[10px] text-[#64748B]">
+            <span>STATION</span>
+            <span className="text-[#172033] font-medium">Cyber Crime PS</span>
+          </div>
+          <div className="text-[11px] text-[#163A5F] font-bold truncate">
+            {currentUser?.full_name || 'Insp Rajesh Sharma'}
+          </div>
+          <div className="text-[9px] text-[#64748B] truncate">
+            Role: {currentUser?.role || 'INVESTIGATOR'}
+          </div>
         </div>
-        <div className="text-[10px] text-slate-400 truncate font-mono">
-          IO: {currentUser?.full_name || 'Insp Rajesh Sharma'}
-        </div>
+
+        <button
+          onClick={handleLogoutClick}
+          className="w-full flex items-center justify-center gap-2 px-2.5 py-1.5 rounded bg-[#F8FAFC] hover:bg-[#FEE2E2] text-[#64748B] hover:text-[#991B1B] border border-[#CBD5E1] hover:border-[#F87171] text-xs font-mono transition-colors"
+          title="Sign out of current institutional session"
+        >
+          <LogOut className="w-3.5 h-3.5" />
+          <span>Sign Out</span>
+        </button>
       </div>
     </aside>
   );

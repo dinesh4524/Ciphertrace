@@ -109,19 +109,19 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-6 rounded-2xl cyber-glass border border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-white tracking-wide">Extracted Intelligence & Entity Fabric</h1>
-            <span className="text-[11px] font-mono text-purple-400 bg-purple-950 px-2 py-0.5 rounded border border-purple-800">
-              {entities.length} Extracted Entities Grounded
+            <h1 className="text-base font-bold text-[#172033] tracking-tight">Extracted Intelligence & Entity Fabric</h1>
+            <span className="text-[11px] font-mono font-semibold text-[#163A5F] bg-[#F8FAFC] px-2 py-0.5 rounded border border-[#D9E0E8]">
+              {entities.length} Grounded Entities
             </span>
           </div>
-          <p className="text-xs text-slate-400 max-w-3xl">
+          <p className="text-xs text-[#64748B] max-w-3xl">
             Named entities parsed from FIRs, Interrogation transcripts, CDR dumps, and hawala records.
             Every entity retains exact character offset grounding linking directly to the source evidence.
           </p>
         </div>
         <button
           onClick={fetchEntities}
-          className="flex items-center gap-2 px-3.5 py-2 bg-slate-900 hover:bg-slate-800 border border-slate-700 text-slate-300 text-xs font-mono rounded-xl transition-all"
+          className="btn-secondary text-xs flex items-center gap-2"
         >
           <RotateCw className="w-3.5 h-3.5" />
           <span>Refresh Graph</span>
@@ -130,17 +130,17 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
 
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
-        <div className="flex items-center gap-2 bg-slate-900/80 border border-slate-800 rounded-xl px-3 py-2 flex-1 max-w-md">
-          <Search className="w-4 h-4 text-slate-500" />
+        <div className="flex items-center gap-2 bg-white border border-[#D9E0E8] rounded px-3 py-2 flex-1 max-w-md">
+          <Search className="w-4 h-4 text-[#64748B]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search persons, IMEIs, UPIs, vehicles, sections..."
-            className="bg-transparent border-none outline-none text-xs text-slate-200 placeholder-slate-500 w-full font-mono"
+            className="bg-transparent border-none outline-none text-xs text-[#172033] placeholder-[#94A3B8] w-full font-mono"
           />
           {searchQuery && (
-            <button onClick={() => setSearchQuery('')} className="text-slate-500 hover:text-white text-xs">
+            <button onClick={() => setSearchQuery('')} className="text-[#64748B] hover:text-[#172033] text-xs">
               &times;
             </button>
           )}
@@ -152,10 +152,10 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
             <button
               key={cat.id}
               onClick={() => setSelectedType(cat.id)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono whitespace-nowrap transition-all flex items-center gap-1.5 ${
+              className={`px-3 py-1.5 rounded text-xs font-mono whitespace-nowrap transition-all flex items-center gap-1.5 ${
                 selectedType === cat.id
-                  ? 'bg-purple-600 text-white shadow-lg shadow-purple-900/50'
-                  : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 border border-slate-800'
+                  ? 'bg-[#163A5F] text-white font-bold'
+                  : 'bg-white text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
               }`}
             >
               <span>{cat.label}</span>
@@ -166,14 +166,14 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
 
       {/* Entities Grid */}
       {loading ? (
-        <div className="p-12 text-center text-xs font-mono text-slate-500">
+        <div className="p-12 text-center text-xs font-mono text-[#64748B]">
           Loading grounded entities from Evidence Fabric...
         </div>
       ) : filteredEntities.length === 0 ? (
-        <div className="p-12 text-center cyber-glass rounded-2xl border border-slate-800 space-y-3">
-          <Sparkles className="w-10 h-10 text-slate-600 mx-auto" />
-          <p className="text-sm text-slate-300 font-medium">No entities extracted matching criteria</p>
-          <p className="text-xs text-slate-500 max-w-md mx-auto">
+        <div className="p-12 text-center bg-white rounded border border-[#D9E0E8] space-y-3">
+          <Sparkles className="w-8 h-8 text-[#64748B] mx-auto" />
+          <p className="text-sm text-[#172033] font-medium">No entities extracted matching criteria</p>
+          <p className="text-xs text-[#64748B] max-w-md mx-auto">
             Go to the Evidence Locker and click &ldquo;Extract Intelligence / Run NLP&rdquo; on ingested documents.
           </p>
         </div>
@@ -183,37 +183,37 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
             <div
               key={ent.id}
               onClick={() => setSelectedEntity(ent)}
-              className="p-4 rounded-xl cyber-glass-card border border-slate-800/80 hover:border-purple-500/50 transition-all cursor-pointer space-y-3 flex flex-col justify-between"
+              className="p-4 rounded bg-white border border-[#D9E0E8] hover:border-[#163A5F] shadow-xs transition-all cursor-pointer space-y-3 flex flex-col justify-between"
             >
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-[11px] font-semibold text-slate-200">
+                  <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[11px] font-semibold text-[#163A5F]">
                     {getEntityIcon(ent.entity_type)}
                     <span>{ent.entity_type}</span>
                   </div>
-                  <span className="text-[11px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-900">
+                  <span className="text-[11px] font-mono text-[#16805C] bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 font-semibold">
                     {(ent.confidence * 100).toFixed(0)}% Conf
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-bold text-sm text-slate-100 truncate">{ent.normalized_value}</h3>
+                  <h3 className="font-bold text-xs text-[#172033] truncate">{ent.normalized_value}</h3>
                   {ent.raw_value !== ent.normalized_value && (
-                    <p className="text-[11px] text-slate-500 font-mono truncate">Raw: {ent.raw_value}</p>
+                    <p className="text-[11px] text-[#64748B] font-mono truncate">Raw: {ent.raw_value}</p>
                   )}
                 </div>
 
                 {/* Grounding Context Snippet */}
                 {ent.context_snippet && (
-                  <div className="p-2.5 rounded-lg bg-slate-950/90 border border-slate-900 text-[11px] text-slate-400 font-mono line-clamp-2">
+                  <div className="p-2.5 rounded bg-[#F8FAFC] border border-[#D9E0E8] text-[11px] text-[#172033] font-mono line-clamp-2">
                     {ent.context_snippet}
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center justify-between text-[10px] font-mono text-slate-500 pt-2 border-t border-slate-800/60">
+              <div className="flex items-center justify-between text-[10px] font-mono text-[#64748B] pt-2 border-t border-[#D9E0E8]">
                 <span className="truncate">Method: {ent.extraction_method}</span>
-                <span className="text-cyan-400 flex items-center gap-1">
+                <span className="text-[#2563EB] flex items-center gap-1">
                   Offsets: [{ent.char_start}:{ent.char_end}]
                 </span>
               </div>
@@ -224,50 +224,50 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
 
       {/* Entity Grounding Detail Modal */}
       {selectedEntity && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-          <div className="w-full max-w-lg bg-[#0b1329] border border-purple-500/40 rounded-2xl shadow-2xl overflow-hidden cyber-glow-cyan p-6 space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xs p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-lg bg-white border border-[#D9E0E8] rounded shadow-2xl overflow-hidden p-6 space-y-4">
+            <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-3">
               <div className="flex items-center gap-2">
                 {getEntityIcon(selectedEntity.entity_type)}
-                <span className="font-bold text-white text-sm">Entity Grounding Details</span>
+                <span className="font-bold text-[#172033] text-sm">Entity Grounding Details</span>
               </div>
-              <button onClick={() => setSelectedEntity(null)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setSelectedEntity(null)} className="text-[#64748B] hover:text-[#172033]">
                 &times;
               </button>
             </div>
 
             <div className="space-y-3 font-mono text-xs">
-              <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 space-y-1.5">
+              <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-1.5">
                 <div>
-                  <span className="text-slate-500">Normalized Value: </span>
-                  <span className="text-purple-300 font-bold">{selectedEntity.normalized_value}</span>
+                  <span className="text-[#64748B]">Normalized Value: </span>
+                  <span className="text-[#163A5F] font-bold">{selectedEntity.normalized_value}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Raw Mention: </span>
-                  <span className="text-slate-200">{selectedEntity.raw_value}</span>
+                  <span className="text-[#64748B]">Raw Mention: </span>
+                  <span className="text-[#172033]">{selectedEntity.raw_value}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Entity Classification: </span>
-                  <span className="text-cyan-400">{selectedEntity.entity_type}</span>
+                  <span className="text-[#64748B]">Entity Classification: </span>
+                  <span className="text-[#2563EB] font-semibold">{selectedEntity.entity_type}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Extraction Confidence: </span>
-                  <span className="text-emerald-400 font-bold">{(selectedEntity.confidence * 100).toFixed(1)}%</span>
+                  <span className="text-[#64748B]">Extraction Confidence: </span>
+                  <span className="text-[#16805C] font-bold">{(selectedEntity.confidence * 100).toFixed(1)}%</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Extraction Method: </span>
-                  <span className="text-slate-300">{selectedEntity.extraction_method}</span>
+                  <span className="text-[#64748B]">Extraction Method: </span>
+                  <span className="text-[#172033]">{selectedEntity.extraction_method}</span>
                 </div>
                 <div>
-                  <span className="text-slate-500">Character Spans: </span>
-                  <span className="text-cyan-300">Offset {selectedEntity.char_start} to {selectedEntity.char_end}</span>
+                  <span className="text-[#64748B]">Character Spans: </span>
+                  <span className="text-[#2563EB]">Offset {selectedEntity.char_start} to {selectedEntity.char_end}</span>
                 </div>
               </div>
 
               {selectedEntity.context_snippet && (
                 <div className="space-y-1">
-                  <span className="text-slate-400 font-bold text-[11px]">Evidentiary Context Grounding:</span>
-                  <div className="p-3 bg-slate-950 rounded-xl border border-slate-800 text-slate-300 text-xs leading-relaxed">
+                  <span className="text-[#172033] font-bold text-[11px]">Evidentiary Context Grounding:</span>
+                  <div className="p-3 bg-[#F8FAFC] rounded border border-[#D9E0E8] text-[#172033] text-xs leading-relaxed">
                     {selectedEntity.context_snippet}
                   </div>
                 </div>
@@ -277,7 +277,7 @@ export const EntityExplorer: React.FC<EntityExplorerProps> = ({ activeCase }) =>
             <div className="flex justify-end pt-2">
               <button
                 onClick={() => setSelectedEntity(null)}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono rounded-xl"
+                className="btn-secondary text-xs"
               >
                 Close
               </button>

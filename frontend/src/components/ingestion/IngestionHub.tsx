@@ -140,10 +140,10 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
 
   if (!activeCase) {
     return (
-      <div className="p-12 text-center cyber-glass rounded-2xl border border-slate-800 space-y-3">
-        <Database className="w-10 h-10 text-slate-600 mx-auto" />
-        <p className="text-sm text-slate-300 font-medium">No Case Selected</p>
-        <p className="text-xs text-slate-500 max-w-md mx-auto">
+      <div className="p-12 text-center bg-white rounded border border-[#D9E0E8] space-y-2 shadow-xs">
+        <Database className="w-8 h-8 text-[#94A3B8] mx-auto" />
+        <p className="text-xs text-[#172033] font-medium">No Case Selected</p>
+        <p className="text-xs text-[#64748B] max-w-md mx-auto">
           Please select or register a case from the Case Registry before ingesting evidence.
         </p>
       </div>
@@ -151,15 +151,15 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Sub-nav tabs */}
-      <div className="flex border-b border-slate-800 gap-4">
+      <div className="flex border-b border-[#D9E0E8] gap-4 text-xs">
         <button
           onClick={() => setActiveTab('upload')}
-          className={`pb-3 text-xs font-semibold font-mono tracking-wider transition-colors border-b-2 flex items-center gap-2 ${
+          className={`pb-2.5 font-semibold transition-colors border-b-2 flex items-center gap-1.5 ${
             activeTab === 'upload'
-              ? 'border-cyan-400 text-cyan-300'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
           <UploadCloud className="w-4 h-4" />
@@ -167,10 +167,10 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
         </button>
         <button
           onClick={() => setActiveTab('interrogation')}
-          className={`pb-3 text-xs font-semibold font-mono tracking-wider transition-colors border-b-2 flex items-center gap-2 ${
+          className={`pb-2.5 font-semibold transition-colors border-b-2 flex items-center gap-1.5 ${
             activeTab === 'interrogation'
-              ? 'border-cyan-400 text-cyan-300'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
           <MessageSquareText className="w-4 h-4" />
@@ -178,27 +178,27 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
         </button>
         <button
           onClick={() => setActiveTab('demo')}
-          className={`pb-3 text-xs font-semibold font-mono tracking-wider transition-colors border-b-2 flex items-center gap-2 ${
+          className={`pb-2.5 font-semibold transition-colors border-b-2 flex items-center gap-1.5 ${
             activeTab === 'demo'
-              ? 'border-cyan-400 text-cyan-300'
-              : 'border-transparent text-slate-400 hover:text-slate-200'
+              ? 'border-[#163A5F] text-[#163A5F]'
+              : 'border-transparent text-[#64748B] hover:text-[#172033]'
           }`}
         >
-          <Sparkles className="w-4 h-4 text-cyan-400" />
+          <Sparkles className="w-4 h-4 text-[#163A5F]" />
           <span>Synthetic / Demo Injector</span>
         </button>
       </div>
 
       {successMsg && (
-        <div className="p-3 rounded-lg bg-emerald-950/40 border border-emerald-800 text-emerald-300 text-xs flex items-center gap-2 font-mono">
-          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+        <div className="p-3 rounded bg-[#ECFDF5] border border-[#16805C] text-[#16805C] text-xs flex items-center gap-2 shadow-xs font-medium">
+          <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-[#16805C]" />
           <span>{successMsg}</span>
         </div>
       )}
 
       {errorMsg && (
-        <div className="p-3 rounded-lg bg-rose-950/40 border border-rose-800 text-rose-300 text-xs flex items-center gap-2">
-          <AlertCircle className="w-4 h-4 flex-shrink-0 text-rose-400" />
+        <div className="p-3 rounded bg-[#FEF2F2] border border-[#FECACA] text-[#C53030] text-xs flex items-center gap-2 shadow-xs font-medium">
+          <AlertCircle className="w-4 h-4 flex-shrink-0 text-[#C53030]" />
           <span>{errorMsg}</span>
         </div>
       )}
@@ -208,33 +208,33 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
       )}
 
       {activeTab === 'interrogation' && (
-        <div className="p-6 rounded-2xl cyber-glass border border-slate-800 space-y-4">
+        <div className="p-5 rounded bg-white border border-[#D9E0E8] space-y-4 shadow-xs">
           <div>
-            <h2 className="text-base font-semibold text-white">Record Interrogation or Witness Statement</h2>
-            <p className="text-xs text-slate-400">
+            <h2 className="text-base font-bold text-[#172033]">Record Interrogation or Witness Statement</h2>
+            <p className="text-xs text-[#64748B]">
               Preserves verbatim statements, admissions, and named co-conspirators in the evidentiary fabric.
             </p>
           </div>
 
-          <form onSubmit={handleInterrogationSubmit} className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <form onSubmit={handleInterrogationSubmit} className="space-y-3">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Suspect / Witness Name</label>
+                <label className="block text-xs font-medium text-[#172033] mb-1">Suspect / Witness Name</label>
                 <input
                   type="text"
                   value={suspectName}
                   onChange={(e) => setSuspectName(e.target.value)}
                   placeholder="e.g., Tariq Ahmed @ Tiger"
-                  className="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-1.5 text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F]"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Role in Case</label>
+                <label className="block text-xs font-medium text-[#172033] mb-1">Role in Case</label>
                 <select
                   value={roleInCase}
                   onChange={(e) => setRoleInCase(e.target.value)}
-                  className="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-1.5 text-xs text-[#172033] focus:outline-none focus:border-[#163A5F]"
                 >
                   <option value="SUSPECT">Suspect / Accused</option>
                   <option value="CO_ACCUSED">Co-Accused</option>
@@ -243,24 +243,24 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
                 </select>
               </div>
               <div>
-                <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Interrogating Officer</label>
+                <label className="block text-xs font-medium text-[#172033] mb-1">Interrogating Officer</label>
                 <input
                   type="text"
                   value={interrogator}
                   onChange={(e) => setInterrogator(e.target.value)}
-                  className="w-full bg-slate-900/90 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+                  className="w-full bg-white border border-[#D9E0E8] rounded px-3 py-1.5 text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none focus:border-[#163A5F]"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-mono uppercase text-slate-400 mb-1">Verbatim Statement / Transcript</label>
+              <label className="block text-xs font-medium text-[#172033] mb-1">Verbatim Statement / Transcript</label>
               <textarea
                 rows={6}
                 value={transcript}
                 onChange={(e) => setTranscript(e.target.value)}
                 placeholder="Enter suspect disclosure, admitted bank accounts, phone numbers used, and meeting locations..."
-                className="w-full bg-slate-900/90 border border-slate-700 rounded-lg p-3 text-xs font-mono text-slate-200 focus:outline-none focus:border-cyan-500 resize-none"
+                className="w-full bg-white border border-[#D9E0E8] rounded p-3 text-xs text-[#172033] focus:outline-none focus:border-[#163A5F] resize-none font-mono"
                 required
               />
             </div>
@@ -269,7 +269,7 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
               <button
                 type="submit"
                 disabled={loading}
-                className="px-6 py-2 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-semibold text-xs rounded-xl shadow-lg cyber-glow-cyan"
+                className="btn-primary text-xs"
               >
                 {loading ? 'Anchoring...' : 'Anchor Statement to Fabric'}
               </button>
@@ -279,72 +279,72 @@ SBI-44332211,AXIS-88776655,State Bank of India,Axis Bank,125000.00,NEFT,UTR20260
       )}
 
       {activeTab === 'demo' && (
-        <div className="p-6 rounded-2xl cyber-glass border border-slate-800 space-y-4">
+        <div className="p-5 rounded bg-white border border-[#D9E0E8] space-y-4 shadow-xs">
           <div>
             <div className="flex items-center gap-2">
-              <Sparkles className="w-5 h-5 text-cyan-400" />
-              <h2 className="text-base font-semibold text-white">1-Click Synthetic Demo Dataset Injector</h2>
+              <Sparkles className="w-4 h-4 text-[#163A5F]" />
+              <h2 className="text-base font-bold text-[#172033]">1-Click Synthetic Demo Dataset Injector</h2>
             </div>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs text-[#64748B] mt-0.5">
               Inject realistic multi-source synthetic criminal intelligence data into Case{' '}
-              <span className="font-mono text-cyan-300 font-semibold">{activeCase.case_number}</span> to test
+              <span className="font-mono text-[#163A5F] font-semibold">{activeCase.case_number}</span> to test
               parsers, SHA-256 cryptographic verification, and the Evidence Fabric.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
-            <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3 flex flex-col justify-between">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 pt-2">
+            <div className="p-4 rounded bg-[#F8FAFC] border border-[#D9E0E8] space-y-3 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 text-cyan-400 text-xs font-semibold mb-1">
+                <div className="flex items-center gap-2 text-[#2563EB] text-xs font-semibold mb-1">
                   <PhoneCall className="w-4 h-4" />
                   <span>Delhi CDR Swarm (4 Calls)</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-xs text-[#64748B]">
                   Call records with IMEIs, IMSIs, cell tower IDs, and Delhi/Noida/Gurgaon coordinates.
                 </p>
               </div>
               <button
                 onClick={() => handleLoadDemoDataset('cdr')}
                 disabled={loading}
-                className="w-full py-2 bg-cyan-950 hover:bg-cyan-900 border border-cyan-800 text-cyan-300 text-xs font-mono rounded-lg transition-colors"
+                className="btn-secondary text-xs w-full"
               >
                 Inject CDR Dataset
               </button>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3 flex flex-col justify-between">
+            <div className="p-4 rounded bg-[#F8FAFC] border border-[#D9E0E8] space-y-3 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 text-emerald-400 text-xs font-semibold mb-1">
+                <div className="flex items-center gap-2 text-[#16805C] text-xs font-semibold mb-1">
                   <Landmark className="w-4 h-4" />
                   <span>Mule & Hawala Flow (3 Txns)</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-xs text-[#64748B]">
                   Bank transaction records showing multi-hop layering between HDFC, SBI, and Axis mule accounts.
                 </p>
               </div>
               <button
                 onClick={() => handleLoadDemoDataset('financial')}
                 disabled={loading}
-                className="w-full py-2 bg-emerald-950 hover:bg-emerald-900 border border-emerald-800 text-emerald-300 text-xs font-mono rounded-lg transition-colors"
+                className="btn-secondary text-xs w-full"
               >
                 Inject Banking Ledger
               </button>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/70 border border-slate-800 space-y-3 flex flex-col justify-between">
+            <div className="p-4 rounded bg-[#F8FAFC] border border-[#D9E0E8] space-y-3 flex flex-col justify-between">
               <div>
-                <div className="flex items-center gap-2 text-blue-400 text-xs font-semibold mb-1">
+                <div className="flex items-center gap-2 text-[#163A5F] text-xs font-semibold mb-1">
                   <FileText className="w-4 h-4" />
                   <span>BNS / IT Act FIR JSON</span>
                 </div>
-                <p className="text-[11px] text-slate-400">
+                <p className="text-xs text-[#64748B]">
                   Structured FIR document invoking BNS Section 318(4) [Cheating] & 111 [Organized Crime].
                 </p>
               </div>
               <button
                 onClick={() => handleLoadDemoDataset('fir')}
                 disabled={loading}
-                className="w-full py-2 bg-blue-950 hover:bg-blue-900 border border-blue-800 text-blue-300 text-xs font-mono rounded-lg transition-colors"
+                className="btn-secondary text-xs w-full"
               >
                 Inject FIR Document
               </button>

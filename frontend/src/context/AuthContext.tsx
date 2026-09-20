@@ -22,8 +22,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchProfile = async (authToken?: string) => {
     const activeToken = authToken || token;
     if (!activeToken) {
-      // Auto login with default investigator persona if no token saved
-      await switchPersona('investigator_sharma');
+      setLoading(false);
       return;
     }
     try {
@@ -34,11 +33,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const data = await res.json();
         setCurrentUser(data.data);
       } else {
-        // Token invalid, fall back to default persona
-        await switchPersona('investigator_sharma');
+        // Token invalid, clear it
+        localStorage.removeItem('ciphertrace_token');
+        setToken(null);
+        setCurrentUser(null);
       }
     } catch (err) {
       console.error('Failed to fetch user profile:', err);
+      localStorage.removeItem('ciphertrace_token');
+      setToken(null);
+      setCurrentUser(null);
     } finally {
       setLoading(false);
     }

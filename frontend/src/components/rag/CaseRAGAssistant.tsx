@@ -111,30 +111,30 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
   return (
     <div className="space-y-6">
       {/* SECTION 1: HEADER & STATUTORY COMPLIANCE BANNER */}
-      <div className="bg-gradient-to-r from-purple-950/70 via-slate-900 to-indigo-950/70 border border-purple-500/40 rounded-2xl p-6 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-[#FFFFFF] border border-[#D9E0E8] rounded p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div className="space-y-1.5">
           <div className="flex items-center space-x-2.5">
-            <Bot className="w-6 h-6 text-purple-400" />
-            <h2 className="text-lg font-bold text-white tracking-tight">
-              Case-Aware Evidentiary RAG Assistant
+            <Bot className="w-5 h-5 text-[#163A5F]" />
+            <h2 className="text-base font-bold text-[#172033] tracking-tight">
+              Case-Aware Evidentiary Inquiry Assistant
             </h2>
-            <span className="px-2.5 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-950 text-purple-300 border border-purple-700">
+            <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-[#F8FAFC] text-[#16805C] border border-[#D9E0E8]">
               BSA 2023 SEC 63
             </span>
           </div>
-          <p className="text-xs text-slate-300 max-w-3xl leading-relaxed">
-            Autonomous forensic retrieval augmented generation strictly isolated to <strong className="text-white">{activeCase.case_number}</strong>.
+          <p className="text-xs text-[#64748B] max-w-3xl leading-relaxed">
+            Forensic retrieval augmented generation strictly isolated to <strong className="text-[#172033] font-semibold">{activeCase.case_number}</strong>.
             All responses are synthesized from cryptographically verified case transcripts, FIRs, and seizure ledgers with direct evidentiary citations.
           </p>
         </div>
 
         {/* Index Action & Telemetry */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
-          <div className="bg-slate-950/80 border border-slate-800 rounded-xl px-3.5 py-2 text-right">
-            <span className="text-[10px] text-slate-400 block font-mono">Vector Embeddings</span>
+          <div className="bg-[#F8FAFC] border border-[#D9E0E8] rounded px-3.5 py-2 text-right">
+            <span className="text-[10px] text-[#64748B] block font-mono uppercase font-bold">Vector Embeddings</span>
             <div className="flex items-center justify-end space-x-1.5">
-              <Database className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-sm font-bold text-cyan-400 font-mono">
+              <Database className="w-3.5 h-3.5 text-[#2563EB]" />
+              <span className="text-sm font-bold text-[#172033] font-mono">
                 {stats?.total_chunks ?? 0} Chunks
               </span>
             </div>
@@ -143,7 +143,7 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
           <button
             onClick={handleIndexDocuments}
             disabled={indexing}
-            className="flex items-center space-x-2 px-4 py-2.5 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-xl text-xs font-bold transition shadow-lg shadow-purple-600/30"
+            className="btn-primary text-xs flex items-center space-x-2"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${indexing ? 'animate-spin' : ''}`} />
             <span>{indexing ? 'Indexing Evidence...' : 'Re-Index Evidence'}</span>
@@ -152,43 +152,43 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
       </div>
 
       {indexMsg && (
-        <div className="p-3.5 bg-emerald-950/80 border border-emerald-800 text-emerald-300 rounded-xl text-xs flex items-center justify-between shadow-lg">
+        <div className="p-3.5 bg-[#F8FAFC] border border-[#16805C] text-[#16805C] rounded text-xs flex items-center justify-between">
           <span className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4" />
             {indexMsg}
           </span>
-          <button onClick={() => setIndexMsg(null)} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={() => setIndexMsg(null)} className="text-[#64748B] hover:text-[#172033]">✕</button>
         </div>
       )}
 
       {error && (
-        <div className="p-3.5 bg-rose-950/80 border border-rose-800 text-rose-300 rounded-xl text-xs flex items-center justify-between shadow-lg">
+        <div className="p-3.5 bg-rose-50 border border-rose-200 text-[#C53030] rounded text-xs flex items-center justify-between">
           <span className="flex items-center gap-2">
             <AlertTriangle className="w-4 h-4" />
             {error}
           </span>
-          <button onClick={() => setError(null)} className="text-slate-400 hover:text-white">✕</button>
+          <button onClick={() => setError(null)} className="text-[#64748B] hover:text-[#172033]">✕</button>
         </div>
       )}
 
       {/* SECTION 2: SEARCH CONSOLE & FORENSIC CHIPS */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-4">
+      <div className="bg-white border border-[#D9E0E8] rounded p-5 shadow-xs space-y-4">
         <form 
           onSubmit={(e) => { e.preventDefault(); handleExecuteQuery(); }}
           className="relative flex items-center"
         >
-          <Search className="w-5 h-5 text-slate-400 absolute left-4" />
+          <Search className="w-4 h-4 text-[#64748B] absolute left-3.5" />
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ask an investigative inquiry across case transcripts, FIRs, and bank ledgers..."
-            className="w-full bg-slate-950 border border-slate-700 focus:border-purple-500 rounded-xl pl-12 pr-28 py-3.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-purple-500 shadow-inner"
+            className="w-full bg-[#F8FAFC] border border-[#D9E0E8] focus:border-[#163A5F] rounded pl-10 pr-24 py-2.5 text-xs text-[#172033] placeholder-[#94A3B8] focus:outline-none"
           />
           <button
             type="submit"
             disabled={loading || !query.trim()}
-            className="absolute right-2 px-4 py-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 disabled:opacity-50 text-white rounded-lg text-xs font-bold transition flex items-center space-x-1.5 shadow-md"
+            className="absolute right-1.5 btn-primary text-xs py-1.5 px-3 flex items-center space-x-1.5"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>{loading ? 'Analyzing...' : 'Inquire'}</span>
@@ -198,16 +198,16 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
         {/* Filters & Parameter Ribbon */}
         <div className="flex flex-wrap items-center justify-between gap-3 pt-1 text-xs">
           <div className="flex items-center space-x-2">
-            <span className="text-slate-400 font-medium">Source Scope:</span>
+            <span className="text-[#64748B] font-medium text-xs">Source Scope:</span>
             {['ALL', 'INTERROGATION', 'FIR', 'PDF_DOCUMENT', 'CASE_NOTE'].map((st) => (
               <button
                 key={st}
                 type="button"
                 onClick={() => setSourceTypeFilter(st)}
-                className={`px-2.5 py-1 rounded-lg text-[11px] font-mono transition ${
+                className={`px-2.5 py-1 rounded text-[11px] font-mono transition ${
                   sourceTypeFilter === st
-                    ? 'bg-purple-600 text-white font-bold'
-                    : 'bg-slate-800 text-slate-400 hover:text-white'
+                    ? 'bg-[#163A5F] text-white font-bold'
+                    : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
                 }`}
               >
                 {st}
@@ -216,14 +216,14 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
           </div>
 
           <div className="flex items-center space-x-2">
-            <span className="text-slate-400">Depth (Top-K):</span>
+            <span className="text-[#64748B] text-xs">Depth (Top-K):</span>
             {[3, 5, 10].map((k) => (
               <button
                 key={k}
                 type="button"
                 onClick={() => setTopK(k)}
-                className={`px-2 py-0.5 rounded text-[11px] font-mono transition ${
-                  topK === k ? 'bg-indigo-600 text-white font-bold' : 'bg-slate-800 text-slate-400 hover:text-white'
+                className={`px-2.5 py-0.5 rounded text-[11px] font-mono transition ${
+                  topK === k ? 'bg-[#163A5F] text-white font-bold' : 'bg-[#F8FAFC] text-[#64748B] hover:text-[#172033] border border-[#D9E0E8]'
                 }`}
               >
                 {k}
@@ -233,17 +233,17 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
         </div>
 
         {/* Quick Suggestion Chips */}
-        <div className="pt-2 border-t border-slate-800/80">
-          <span className="text-[11px] text-slate-500 block mb-2 font-mono">Suggested Forensic Questions:</span>
+        <div className="pt-2 border-t border-[#D9E0E8]">
+          <span className="text-[11px] text-[#64748B] block mb-2 font-mono uppercase font-bold">Suggested Forensic Inquiries:</span>
           <div className="flex flex-wrap gap-2">
             {quickQueries.map((qq, idx) => (
               <button
                 key={idx}
                 onClick={() => { setQuery(qq); handleExecuteQuery(qq); }}
-                className="text-left text-xs bg-slate-950 hover:bg-slate-800 text-slate-300 hover:text-purple-300 border border-slate-800 rounded-lg px-3 py-1.5 transition flex items-center space-x-1.5"
+                className="text-left text-xs bg-[#F8FAFC] hover:bg-[#F1F5F9] text-[#172033] border border-[#D9E0E8] rounded px-3 py-1.5 transition flex items-center space-x-1.5"
               >
                 <span>{qq}</span>
-                <ArrowRight className="w-3 h-3 opacity-50" />
+                <ArrowRight className="w-3 h-3 text-[#64748B]" />
               </button>
             ))}
           </div>
@@ -253,20 +253,20 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
       {/* SECTION 3: GROUNDED SYNTHESIS & CITATIONS PANEL */}
       {ragResult && (
         <div className="space-y-6">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
+          <div className="bg-white border border-[#D9E0E8] rounded p-6 shadow-xs space-y-5">
             {/* Header: Grounding Status & Confidence Meter */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-800 pb-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#D9E0E8] pb-4">
               <div className="flex items-center space-x-2.5">
-                <ShieldCheck className="w-5 h-5 text-emerald-400" />
-                <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                <ShieldCheck className="w-4 h-4 text-[#16805C]" />
+                <h3 className="text-xs font-bold text-[#172033] uppercase tracking-wider">
                   Grounded Evidentiary Synthesis
                 </h3>
                 <span className={`px-2.5 py-0.5 rounded text-[10px] font-mono font-bold ${
                   ragResult.grounding_status === 'FULLY_GROUNDED'
-                    ? 'bg-emerald-950 text-emerald-300 border border-emerald-700'
+                    ? 'bg-emerald-50 text-[#16805C] border border-emerald-200'
                     : ragResult.grounding_status === 'PARTIALLY_GROUNDED'
-                    ? 'bg-amber-950 text-amber-300 border border-amber-700'
-                    : 'bg-rose-950 text-rose-300 border border-rose-700'
+                    ? 'bg-amber-50 text-[#B7791F] border border-amber-200'
+                    : 'bg-rose-50 text-[#C53030] border border-rose-200'
                 }`}>
                   {ragResult.grounding_status}
                 </span>
@@ -274,14 +274,14 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
 
               <div className="flex items-center space-x-4">
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 font-mono block">Grounding Confidence</span>
-                  <span className="text-sm font-bold text-emerald-400 font-mono">
+                  <span className="text-[10px] text-[#64748B] font-mono block">Grounding Confidence</span>
+                  <span className="text-sm font-bold text-[#16805C] font-mono">
                     {(ragResult.confidence_score * 100).toFixed(0)}%
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[10px] text-slate-400 font-mono block">Citations</span>
-                  <span className="text-sm font-bold text-purple-400 font-mono">
+                  <span className="text-[10px] text-[#64748B] font-mono block">Citations</span>
+                  <span className="text-sm font-bold text-[#2563EB] font-mono">
                     {ragResult.citations.length} Sources
                   </span>
                 </div>
@@ -289,7 +289,7 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
             </div>
 
             {/* Grounded Narrative Response */}
-            <div className="p-5 bg-slate-950 rounded-xl border border-slate-800/80 leading-relaxed text-slate-200 text-sm space-y-3">
+            <div className="p-4 bg-[#F8FAFC] rounded border border-[#D9E0E8] leading-relaxed text-[#172033] text-xs space-y-2.5 font-sans">
               {ragResult.answer.split('\n\n').map((paragraph, pIdx) => (
                 <p key={pIdx} className="leading-relaxed">
                   {paragraph}
@@ -298,26 +298,26 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
             </div>
 
             {/* Statutory Compliance Footer */}
-            <div className="p-3 bg-purple-950/30 border border-purple-900/60 rounded-xl flex items-start space-x-2 text-xs text-purple-300/90 leading-relaxed">
-              <Scale className="w-4 h-4 text-purple-400 shrink-0 mt-0.5" />
-              <span>{ragResult.statutory_safeguard}</span>
+            <div className="p-3 bg-[#F8FAFC] border border-[#D9E0E8] rounded flex items-start space-x-2 text-xs text-[#163A5F] leading-relaxed">
+              <Scale className="w-4 h-4 text-[#163A5F] shrink-0 mt-0.5" />
+              <span className="text-[11px]">{ragResult.statutory_safeguard}</span>
             </div>
           </div>
 
           {/* SECTION 4: PRIMARY EVIDENCE CITATIONS */}
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+          <div className="bg-white border border-[#D9E0E8] rounded p-6 shadow-xs space-y-4">
+            <div className="flex items-center justify-between border-b border-[#D9E0E8] pb-3">
               <div className="flex items-center space-x-2">
-                <Quote className="w-4 h-4 text-purple-400" />
-                <h4 className="text-xs font-bold text-white uppercase tracking-wider">
+                <Quote className="w-4 h-4 text-[#163A5F]" />
+                <h4 className="text-xs font-bold text-[#172033] uppercase tracking-wider">
                   Verified Source Citations ({ragResult.citations.length})
                 </h4>
               </div>
-              <span className="text-[11px] text-slate-400 font-mono">Section 63 BSA Admissible Records</span>
+              <span className="text-[11px] text-[#64748B] font-mono">Section 63 BSA Admissible Records</span>
             </div>
 
             {ragResult.citations.length === 0 ? (
-              <div className="p-6 text-center text-slate-500 text-xs">
+              <div className="p-6 text-center text-[#64748B] text-xs">
                 No citations available for this inquiry.
               </div>
             ) : (
@@ -326,29 +326,29 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
                   <div
                     key={cit.citation_id}
                     onClick={() => setSelectedCitation(cit)}
-                    className="bg-slate-950 border border-slate-800 hover:border-purple-500/60 rounded-xl p-4 cursor-pointer transition shadow-md hover:shadow-purple-900/20 space-y-2.5 group"
+                    className="bg-[#F8FAFC] border border-[#D9E0E8] hover:border-[#163A5F] rounded p-4 cursor-pointer transition shadow-xs space-y-2 group"
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-purple-950 text-purple-300 border border-purple-800">
+                        <span className="px-2 py-0.5 rounded text-[10px] font-mono font-bold bg-white text-[#163A5F] border border-[#D9E0E8]">
                           {cit.citation_id}
                         </span>
-                        <span className="text-xs font-bold text-white font-mono">
+                        <span className="text-xs font-bold text-[#172033] font-mono">
                           {cit.evidence_code || 'CASE_EVIDENCE'}
                         </span>
                       </div>
-                      <span className="text-[10px] text-emerald-400 font-mono">
+                      <span className="text-[10px] text-[#16805C] font-bold font-mono">
                         {(cit.relevance_score * 100).toFixed(1)}% match
                       </span>
                     </div>
 
-                    <p className="text-xs text-slate-300 italic line-clamp-3 bg-slate-900/60 p-2.5 rounded-lg border border-slate-800/80">
+                    <p className="text-xs text-[#172033] italic line-clamp-3 bg-white p-2.5 rounded border border-[#D9E0E8]">
                       "{cit.exact_quote}"
                     </p>
 
-                    <div className="flex items-center justify-between text-[10px] text-slate-500 pt-1">
-                      <span className="font-mono">{cit.source_type}</span>
-                      <span className="flex items-center space-x-1 text-purple-400 group-hover:text-purple-300 font-semibold">
+                    <div className="flex items-center justify-between text-[10px] text-[#64748B] pt-1 font-mono">
+                      <span>{cit.source_type}</span>
+                      <span className="flex items-center space-x-1 text-[#2563EB] group-hover:text-[#163A5F] font-semibold">
                         <span>Inspect Excerpt</span>
                         <ExternalLink className="w-3 h-3" />
                       </span>
@@ -361,13 +361,13 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
 
           {/* SECTION 5: AUDITABLE CHUNKS ACCORDION */}
           {ragResult.chunks && ragResult.chunks.length > 0 && (
-            <div className="bg-slate-900 border border-slate-800 rounded-2xl p-5 shadow-xl space-y-3">
+            <div className="bg-white border border-[#D9E0E8] rounded p-5 shadow-xs space-y-3">
               <button
                 onClick={() => setShowChunks(!showChunks)}
-                className="w-full flex items-center justify-between text-xs font-bold text-slate-300 hover:text-white transition"
+                className="w-full flex items-center justify-between text-xs font-bold text-[#172033] hover:text-[#163A5F] transition"
               >
                 <div className="flex items-center space-x-2">
-                  <Layers className="w-4 h-4 text-cyan-400" />
+                  <Layers className="w-4 h-4 text-[#2563EB]" />
                   <span>Auditable Vector Chunks ({ragResult.chunks.length})</span>
                 </div>
                 {showChunks ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -376,17 +376,17 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
               {showChunks && (
                 <div className="space-y-3 pt-2">
                   {ragResult.chunks.map((chk, idx) => (
-                    <div key={idx} className="bg-slate-950 border border-slate-800 rounded-xl p-3.5 space-y-2 text-xs">
+                    <div key={idx} className="bg-[#F8FAFC] border border-[#D9E0E8] rounded p-3.5 space-y-2 text-xs">
                       <div className="flex items-center justify-between text-[11px] font-mono">
-                        <span className="text-purple-300 font-bold">
+                        <span className="text-[#163A5F] font-bold">
                           Chunk #{chk.chunk_index + 1} ({chk.source_type})
                         </span>
-                        <div className="space-x-3 text-slate-400">
+                        <div className="space-x-3 text-[#64748B]">
                           <span>Dense: {(chk.similarity_score * 100).toFixed(1)}%</span>
-                          <span className="text-emerald-400 font-bold">Rerank: {(chk.rerank_score * 100).toFixed(1)}%</span>
+                          <span className="text-[#16805C] font-bold">Rerank: {(chk.rerank_score * 100).toFixed(1)}%</span>
                         </div>
                       </div>
-                      <p className="text-slate-300 text-xs font-mono whitespace-pre-wrap leading-relaxed">
+                      <p className="text-[#172033] text-xs font-mono whitespace-pre-wrap leading-relaxed bg-white p-2.5 rounded border border-[#D9E0E8]">
                         {chk.content}
                       </p>
                     </div>
@@ -400,59 +400,59 @@ export const CaseRAGAssistant: React.FC<CaseRAGAssistantProps> = ({ activeCase }
 
       {/* CITATION DETAIL MODAL */}
       {selectedCitation && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden space-y-4">
-            <div className="p-5 border-b border-slate-800 flex items-start justify-between bg-slate-950/80">
+        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white border border-[#D9E0E8] rounded w-full max-w-lg shadow-2xl overflow-hidden space-y-4">
+            <div className="p-4 border-b border-[#D9E0E8] flex items-start justify-between bg-[#F8FAFC]">
               <div>
-                <div className="flex items-center space-x-2 text-xs font-mono text-purple-400 font-bold mb-1">
+                <div className="flex items-center space-x-2 text-xs font-mono text-[#163A5F] font-bold mb-1">
                   <Quote className="w-4 h-4" />
                   <span>PRIMARY EVIDENCE CITATION</span>
                 </div>
-                <h3 className="text-base font-bold text-white">
+                <h3 className="text-sm font-bold text-[#172033]">
                   {selectedCitation.citation_id}: {selectedCitation.evidence_code}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedCitation(null)}
-                className="text-slate-400 hover:text-white text-lg p-1"
+                className="text-[#64748B] hover:text-[#172033] text-base p-1"
               >
                 ✕
               </button>
             </div>
 
-            <div className="px-6 py-2 space-y-4 text-xs">
-              <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-                <span className="text-[10px] text-slate-500 uppercase font-mono block">Verbatim Extracted Passage</span>
-                <p className="text-slate-200 italic leading-relaxed text-sm font-serif">
+            <div className="px-5 py-2 space-y-4 text-xs">
+              <div className="p-3.5 bg-[#F8FAFC] rounded border border-[#D9E0E8] space-y-2">
+                <span className="text-[10px] text-[#64748B] uppercase font-mono font-bold block">Verbatim Extracted Passage</span>
+                <p className="text-[#172033] italic leading-relaxed text-xs font-serif bg-white p-3 rounded border border-[#D9E0E8]">
                   "{selectedCitation.exact_quote}"
                 </p>
               </div>
 
               <div className="grid grid-cols-2 gap-2 font-mono text-[11px]">
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                  <span className="text-slate-500 block">Source Format</span>
-                  <span className="text-white font-bold">{selectedCitation.source_type}</span>
+                <div className="bg-[#F8FAFC] p-2.5 rounded border border-[#D9E0E8]">
+                  <span className="text-[#64748B] block text-[10px]">Source Format</span>
+                  <span className="text-[#172033] font-bold">{selectedCitation.source_type}</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800">
-                  <span className="text-slate-500 block">Relevance Match</span>
-                  <span className="text-emerald-400 font-bold">{(selectedCitation.relevance_score * 100).toFixed(1)}%</span>
+                <div className="bg-[#F8FAFC] p-2.5 rounded border border-[#D9E0E8]">
+                  <span className="text-[#64748B] block text-[10px]">Relevance Match</span>
+                  <span className="text-[#16805C] font-bold">{(selectedCitation.relevance_score * 100).toFixed(1)}%</span>
                 </div>
-                <div className="bg-slate-950 p-2.5 rounded-lg border border-slate-800 col-span-2">
-                  <span className="text-slate-500 block">Document Source File</span>
-                  <span className="text-purple-300 font-bold truncate block">{selectedCitation.file_name}</span>
+                <div className="bg-[#F8FAFC] p-2.5 rounded border border-[#D9E0E8] col-span-2">
+                  <span className="text-[#64748B] block text-[10px]">Document Source File</span>
+                  <span className="text-[#163A5F] font-bold truncate block">{selectedCitation.file_name}</span>
                 </div>
               </div>
 
-              <div className="p-3 bg-purple-950/30 border border-purple-900/50 rounded-xl text-[11px] text-purple-300">
+              <div className="p-3 bg-[#F8FAFC] border border-[#D9E0E8] rounded text-[11px] text-[#163A5F]">
                 <strong>Chain of Custody Notice: </strong>
                 This excerpt is cryptographically anchored to evidence item {selectedCitation.evidence_id}.
               </div>
             </div>
 
-            <div className="p-4 border-t border-slate-800 bg-slate-950 flex justify-end">
+            <div className="p-3 border-t border-[#D9E0E8] bg-[#F8FAFC] flex justify-end">
               <button
                 onClick={() => setSelectedCitation(null)}
-                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition"
+                className="btn-secondary text-xs"
               >
                 Dismiss
               </button>

@@ -4,14 +4,15 @@ import {
   Lock, 
   ChevronDown, 
   LogOut,
-  ShieldAlert,
-  FileCheck2,
-  Scale,
-  Info,
+  ShieldAlert, 
+  FileCheck2, 
+  Scale, 
+  Info, 
   Layers
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Badge } from './Badge';
+import { Logo } from './Logo';
 import { AILimitationsModal } from './AILimitationsModal';
 import { SecurityArchitectureModal } from './SecurityArchitectureModal';
 import { LegalPrivacyTermsModal } from './LegalPrivacyTermsModal';
@@ -20,14 +21,16 @@ interface HeaderProps {
   activeCaseNumber?: string;
   activeCaseTitle?: string;
   onOpenCaseSelector?: () => void;
+  onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   activeCaseNumber, 
   activeCaseTitle,
-  onOpenCaseSelector 
+  onOpenCaseSelector,
+  onLogout
 }) => {
-  const { currentUser, switchPersona } = useAuth();
+  const { currentUser, switchPersona, logout } = useAuth();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   
   // Modals state
@@ -55,46 +58,44 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleLogoutClick = () => {
+    if (onLogout) {
+      onLogout();
+    } else {
+      logout();
+    }
+  };
+
   return (
     <>
-      <header className="h-14 border-b border-slate-800 bg-[#0a0e17] px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 select-none">
+      <header className="h-14 border-b border-[#D9E0E8] bg-[#FFFFFF] px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 select-none shadow-sm">
         {/* Left: System Branding & Active Case Context */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded bg-sky-950/80 border border-sky-600 flex items-center justify-center text-sky-400">
-              <Shield className="w-4 h-4" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono font-bold tracking-wider text-sm text-slate-100">
-                  CIPHERTRACE X
-                </span>
-                <span className="text-[9px] uppercase font-mono px-1.5 py-0.2 rounded bg-slate-800 border border-slate-700 text-slate-300 font-bold">
-                  LEA WORKSTATION
-                </span>
-              </div>
-              <p className="text-[10px] text-slate-400 font-mono">Criminal Intelligence & Investigation Platform</p>
-            </div>
-          </div>
+          <Logo size="sm" subtitle="Investigation Intelligence Platform" />
 
           {/* Active Investigation Breadcrumb */}
           {activeCaseNumber ? (
-            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-slate-800">
-              <span className="text-[10px] text-slate-500 font-mono uppercase">CASE:</span>
+            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-[#D9E0E8]">
+              <span className="text-[10px] text-[#64748B] font-mono uppercase">CASE:</span>
               <button
                 onClick={onOpenCaseSelector}
-                className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-slate-900 border border-slate-700 text-xs font-mono text-sky-300 hover:border-sky-600 transition-colors"
-                title="Click to view or switch case"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F8FAFC] border border-[#CBD5E1] text-xs font-mono text-[#163A5F] font-bold hover:bg-[#F1F5F9] transition-colors"
+                title="Click to switch or view case"
               >
                 <span>{activeCaseNumber}</span>
-                <span className="text-slate-500 text-[10px] max-w-[180px] truncate font-sans">
+                <span className="text-[#64748B] text-[10px] max-w-[200px] truncate font-sans font-normal">
                   — {activeCaseTitle}
                 </span>
               </button>
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-slate-800 text-xs text-slate-500 font-mono">
-              <span>NO ACTIVE CASE SELECTED</span>
+            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-[#D9E0E8] text-xs text-[#64748B] font-mono">
+              <button
+                onClick={onOpenCaseSelector}
+                className="text-[#2563EB] hover:underline"
+              >
+                SELECT ACTIVE CASE
+              </button>
             </div>
           )}
         </div>
@@ -102,31 +103,31 @@ export const Header: React.FC<HeaderProps> = ({
         {/* Right: Institutional Actions, Compliance Indicators & RBAC Persona */}
         <div className="flex items-center gap-3">
           {/* Quick Institutional Modals */}
-          <div className="hidden lg:flex items-center gap-1.5 border-r border-slate-800 pr-3">
+          <div className="hidden lg:flex items-center gap-1.5 border-r border-[#D9E0E8] pr-3">
             <button
               onClick={() => setIsLimitationsOpen(true)}
-              className="btn-rect-ghost text-[11px] text-amber-300 hover:text-amber-200"
+              className="btn-rect-ghost text-[11px] text-[#B7791F] hover:text-[#92400E]"
               title="View AI Evidentiary Limitations & Section 63 BSA compliance disclosure"
             >
-              <ShieldAlert className="w-3.5 h-3.5 text-amber-400" />
+              <ShieldAlert className="w-3.5 h-3.5 text-[#B7791F]" />
               <span>AI Limitations</span>
             </button>
 
             <button
               onClick={() => setIsSecurityOpen(true)}
-              className="btn-rect-ghost text-[11px] text-sky-300 hover:text-sky-200"
+              className="btn-rect-ghost text-[11px] text-[#163A5F] hover:text-[#0E2640]"
               title="View SHA-256 Chain of Custody & Security Architecture"
             >
-              <Lock className="w-3.5 h-3.5 text-sky-400" />
+              <Lock className="w-3.5 h-3.5 text-[#163A5F]" />
               <span>Sec 63 BSA</span>
             </button>
 
             <button
               onClick={() => setIsPrivacyOpen(true)}
-              className="btn-rect-ghost text-[11px] text-slate-300 hover:text-slate-200"
+              className="btn-rect-ghost text-[11px] text-[#16805C] hover:text-[#065F46]"
               title="View DPDP Data Privacy Policy & Terms"
             >
-              <Scale className="w-3.5 h-3.5 text-emerald-400" />
+              <Scale className="w-3.5 h-3.5 text-[#16805C]" />
               <span>Legal Policy</span>
             </button>
           </div>
@@ -135,15 +136,15 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="relative">
             <button
               onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2.5 px-2.5 py-1 rounded bg-[#0f1624] hover:bg-slate-800 border border-slate-700 transition-all text-left"
+              className="flex items-center gap-2.5 px-2.5 py-1 rounded bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] transition-all text-left"
             >
-              <div className="w-6 h-6 rounded bg-sky-900 border border-sky-600 flex items-center justify-center text-[10px] font-bold text-sky-200 font-mono">
+              <div className="w-6 h-6 rounded bg-[#163A5F] flex items-center justify-center text-[10px] font-bold text-white font-mono">
                 {currentUser?.full_name?.substring(0, 2).toUpperCase() || 'IO'}
               </div>
               <div className="hidden sm:block">
                 <div className="flex items-center gap-1">
-                  <span className="text-xs font-semibold text-slate-200">{currentUser?.full_name || 'Officer'}</span>
-                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                  <span className="text-xs font-semibold text-[#172033]">{currentUser?.full_name || 'Officer'}</span>
+                  <ChevronDown className="w-3 h-3 text-[#64748B]" />
                 </div>
               </div>
               <Badge variant={getRoleBadgeVariant(currentUser?.role || 'INVESTIGATOR')}>
@@ -153,10 +154,10 @@ export const Header: React.FC<HeaderProps> = ({
 
             {/* Persona Switcher Dropdown */}
             {dropdownOpen && (
-              <div className="absolute right-0 mt-1.5 w-72 bg-[#0c121e] border border-slate-700 rounded shadow-xl p-2 z-50 space-y-1">
-                <div className="px-2 py-1.5 text-[10px] font-mono text-slate-400 uppercase tracking-wider border-b border-slate-800 flex items-center justify-between">
-                  <span>Switch Investigation Role (RBAC)</span>
-                  <Shield className="w-3 h-3 text-sky-400" />
+              <div className="absolute right-0 mt-1.5 w-72 bg-[#FFFFFF] border border-[#D9E0E8] rounded shadow-lg p-2 z-50 space-y-1">
+                <div className="px-2 py-1.5 text-[10px] font-mono text-[#64748B] uppercase tracking-wider border-b border-[#E2E8F0] flex items-center justify-between">
+                  <span>Switch Role (RBAC)</span>
+                  <Shield className="w-3 h-3 text-[#163A5F]" />
                 </div>
                 <div className="space-y-1 py-1 max-h-72 overflow-y-auto">
                   {personas.map((p) => (
@@ -168,13 +169,13 @@ export const Header: React.FC<HeaderProps> = ({
                       }}
                       className={`w-full text-left p-2 rounded text-xs flex items-center justify-between transition-colors ${
                         currentUser?.username === p.username
-                          ? 'bg-sky-950/80 border border-sky-700 text-sky-200'
-                          : 'text-slate-300 hover:bg-slate-800/80 border border-transparent'
+                          ? 'bg-[#EFF6FF] border border-[#2563EB] text-[#1E40AF]'
+                          : 'text-[#334155] hover:bg-[#F8FAFC] border border-transparent'
                       }`}
                     >
                       <div>
-                        <div className="font-semibold text-xs">{p.name}</div>
-                        <div className="text-[10px] text-slate-500 font-mono">{p.label}</div>
+                        <div className="font-semibold text-xs text-[#172033]">{p.name}</div>
+                        <div className="text-[10px] text-[#64748B] font-mono">{p.label}</div>
                       </div>
                       <Badge variant={getRoleBadgeVariant(p.role)}>
                         {p.role.split('_')[0]}
@@ -185,6 +186,15 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             )}
           </div>
+
+          {/* Quick Sign Out */}
+          <button
+            onClick={handleLogoutClick}
+            className="p-1.5 rounded bg-[#F8FAFC] hover:bg-[#FEE2E2] text-[#64748B] hover:text-[#991B1B] border border-[#CBD5E1] hover:border-[#F87171] transition-colors"
+            title="Sign Out"
+          >
+            <LogOut className="w-4 h-4" />
+          </button>
         </div>
       </header>
 
