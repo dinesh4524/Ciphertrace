@@ -1,0 +1,224 @@
+====================================================================================================
+CIPHERTRACE X — COMPLETE SYSTEM ARCHITECTURE & PROJECT SPECIFICATION
+Automated Law Enforcement & Criminal Network Intelligence Workstation
+====================================================================================================
+
+1. EXECUTIVE OVERVIEW
+----------------------------------------------------------------------------------------------------
+CIPHERTRACE X is a criminal network intelligence and investigation platform engineered 
+specifically for Indian Law Enforcement Agencies (State Police Cyber Cells, Central Intelligence 
+Agencies, CFSL Forensic Labs, and Public Prosecutors). 
+
+The platform transforms raw multi-modal evidentiary artifacts (First Information Reports, Telecom 
+Call Detail Records, Banking & UPI Transaction Ledgers, Interrogation Transcripts, Seizure Panchnamas, 
+and Digital Forensic Extractions) into an interactive, mathematically sound, court-admissible criminal 
+knowledge graph with automated GraphRAG reasoning, multi-perspective hypothesis evaluation, and 
+statutory legal chargesheet generation under the Bharatiya Nyaya Sanhita (BNS) 2023 and Section 63 
+of the Bharatiya Sakshya Adhiniyam (BSA) 2023.
+
+
+2. CORE PHILOSOPHY & WORKSTATION DESIGN DIRECTIVES
+----------------------------------------------------------------------------------------------------
+- "Don't make it look like an AI website. Make it look like the software that an investigator would actually use."
+- ZERO decorative marketing fluff: No purple neon gradients, pill buttons, fake counters, fake reviews, or 3D cards.
+- Restrained High-Contrast Workstation Theme: Deep slate/charcoal tones (#070a10, #080c14, #0d131f, #1e293b).
+- Rectangular Ergonomic Controls: High-density layouts, clear loading/empty/error states, tabular grids.
+- 4-Tier Semantic Relationship Taxonomy:
+    1. OBSERVED  [Emerald Solid Line]: Direct physical/forensic evidence (CDR call, bank transfer, seized hardware).
+    2. INFERRED  [Sky Blue Dashed Line]: Deterministic analytical link (shared address, co-location, co-travel).
+    3. PREDICTED [Amber Dotted Line]: Machine Learning probabilistic inference with confidence percentage.
+    4. CONTESTED [Rose Alert Hashed Line]: Disputed link flagged for judicial / defense scrutiny.
+- 5-Level AI Epistemic Distinction:
+    [EVIDENCE]    -> Grounded factual artifact with byte-offset citations and SHA-256 hash.
+    [INFERENCE]   -> Deductive logical chain derived from multiple corroborating facts.
+    [PREDICTION]  -> Probabilistic graph ML link classification with explicit confidence threshold.
+    [UNCERTAINTY] -> Missing data disclosures, telecom coverage gaps, and potential spoofing warnings.
+    [HUMAN VERIFIED] -> Sworn Investigating Officer (IO) attestation and override audit stamp.
+
+
+3. COMPLETE TECHNOLOGY STACK
+----------------------------------------------------------------------------------------------------
+
+A. BACKEND ARCHITECTURE & DATA PROCESSING
+- Language & Runtime: Python 3.13 (AsyncIO / Native Concurrency)
+- Web Framework: FastAPI (High-performance ASGI, OpenAPI 3.0 / Swagger UI)
+- Relational ORM: SQLAlchemy 2.0 (Async Engine & Query Builder)
+- Data Modeling & Serialization: Pydantic v2 (Strict typing, regex validation, schema enforcement)
+- Authentication & Security: python-jose (JWT), passlib (Argon2 / PBKDF2), HMAC-SHA256, Merkle Trees
+- Network Science & Graph Algorithms: NetworkX (Louvain Community Detection, Betweenness, PageRank, Cut-Vertices)
+- Machine Learning & Vector Math: NumPy, Scikit-learn (Logistic Regression / Cosine Similarity / Adamic-Adar / Jaccard Link Prediction)
+- Test Framework: Pytest 9.1, pytest-asyncio, Faker (112 / 112 automated unit & integration tests)
+
+B. FRONTEND WORKSTATION & USER INTERFACE
+- Framework & Language: React 18.2 + TypeScript 5.2
+- Bundler & Build Tool: Vite 5.4 (Sub-second HMR, optimized production rollup)
+- Styling & Layout: Tailwind CSS 3.4 (Custom workstation design tokens, high-contrast borders)
+- Icons: Lucide React (Standard law-enforcement and analytical iconography)
+- Interactive Graph Visualizer: Cytoscape & SVG Force-Directed Coordinate Projection Engine
+- Typography: Inter (UI), Fira Code / JetBrains Mono (Forensic metadata, SHA-256 hashes, timestamps)
+
+C. DATA STORAGE, GRAPH & VECTOR INFRASTRUCTURE
+- Primary Relational Database: PostgreSQL 16 (Case metadata, RBAC, evidence custody ledger)
+- Vector Store: pgvector extension (Cosine similarity embeddings for case narratives and legal sections)
+- Graph Database Engine: Neo4j 5.18 Community (Bolt Protocol, APOC & Graph Data Science plugin)
+- Caching & Queue: Redis 7.2 (Async background worker queues and session caching)
+- Local Fallback Store: In-memory vector store and SQLite engine for lightweight air-gapped demo portability
+
+D. DEVOPS, SECURITY & CONTAINERIZATION
+- Containerization: Docker & Docker Compose (Multi-container production stack)
+- Web Server: Nginx (Alpine Linux reverse proxy)
+- Air-Gap Readiness: Zero cloud dependencies, 100% on-premises data sovereignty
+
+
+4. 19-STAGE END-TO-END INVESTIGATION WORKFLOW
+----------------------------------------------------------------------------------------------------
+
+Stage 01: Create Case Registry
+  - Initializes official police case record with FIR number, jurisdiction, priority (Critical/High/Medium/Low),
+    crime classification, and Role-Based Access Control (RBAC) officer assignments.
+
+Stage 02: Multi-Modal Evidence Fabric Ingest
+  - Ingests raw data streams: FIR JSON/text, Telecom CDR CSVs, Bank Ledgers, Forensic Device extractions.
+  - Automatically computes immutable SHA-256 cryptographic hashes and records acquisition provenance.
+
+Stage 03: Extract Entities (LEA NER + Pattern Extraction)
+  - Extracts Persons, Aliases, Phone Numbers, Devices (IMEI/IMSI), Bank Accounts, UPI IDs, Crypto Wallets,
+    Vehicles, Locations, and Legal Sections with character byte-offset grounding.
+
+Stage 04: Resolve Entities & Alias Disambiguation
+  - Applies Jaro-Winkler, Soundex, and Double-Metaphone phonetic string matching to cluster aliases.
+  - Implements Human-in-the-Loop (HITL) review: uncertain matches require recorded IO approval before merging.
+
+Stage 05: Build Criminal Knowledge Graph
+  - Projects all entities, calls, money transfers, co-locations, and transactions into a Neo4j property graph.
+
+Stage 06: Visualize 4-Tier Network Topology
+  - Renders the interactive criminal network graph with explicit visual semantics: Observed (Solid), 
+    Inferred (Dashed), Predicted (Dotted), and Contested (Hashed).
+
+Stage 07: Detect Communities & Syndicate Clusters
+  - Executes the Louvain / Leiden modularity optimization algorithm to isolate sub-cells, mule rings,
+    and command hierarchies within the syndicate.
+
+Stage 08: Identify Bridge Nodes & Cut Vertices
+  - Calculates Betweenness Centrality to pinpoint critical Hawala middlemen, corrupt facilitators, and
+    communication gateways connecting disparate criminal factions.
+
+Stage 09: Predict Hidden Links (Graph ML)
+  - Evaluates topological proximity (Resource Allocation, Jaccard Index, Preferential Attachment) to uncover
+    clandestine relationships not directly visible in captured logs.
+
+Stage 10: Detect Temporal & Mule Account Anomalies
+  - Analyzes high-frequency CDR burst swarms, sudden velocity spikes, rapid fund fragmentation (layering),
+    and immediate ATM cash extraction drain patterns.
+
+Stage 11: GraphRAG Evidence Retrieval & Semantic Citations
+  - Combines vector embeddings with multi-hop graph traversals to provide grounded answers to investigator
+    queries with exact evidence pointers.
+
+Stage 12: Multi-Perspective Reasoning & Consensus Synthesis
+  - Scrutinizes investigative hypotheses across 6 independent viewpoints: Lead IO, Forensic Specialist,
+    Legal Prosecutor, Defense Alternative Theory, Suspect Exculpatory View, and Common-Sense Coherence.
+
+Stage 13: Counterfactual Evidence Ablation Testing
+  - Systematically removes specific evidence items to simulate "What if this phone log is ruled inadmissible?"
+    and tests if the remaining evidence still establishes the criminal nexus beyond reasonable doubt.
+
+Stage 14: Investigative Priority Scoring
+  - Synthesizes flight risk, asset dissipation velocity, weapon/cyber threat index, and evidentiary maturity
+    into an actionable 0-100 numerical lead priority score.
+
+Stage 15: Next Best Action (NBA) Directives
+  - Generates concrete, chronological operational directives for field officers (e.g. "Freeze Bank Account X 
+    under Section 106 BNSS", "Subpoena Tower CDR for Cell Node Y").
+
+Stage 16: Indian Legal Intelligence (BNS 2023 & BSA 2023)
+  - Maps factual evidence directly against statutory ingredients of the Bharatiya Nyaya Sanhita (e.g. BNS 318(4) 
+    for cheating, BNS 111 for organized crime syndicate activity) with proof checklist validation.
+
+Stage 17: Human Challenge & IO Override Controls
+  - Allows investigating officers to challenge or override any AI inference, node categorization, or link, 
+    preserving defense dispute logs in the audit ledger.
+
+Stage 18: Cryptographic SHA-256 Merkle Chain & Section 63 BSA Certificate
+  - Seals all evidence, extraction logs, and graph mutations into an immutable Merkle tree.
+  - Generates a court-admissible electronic record certificate satisfying Section 63 BSA / 65B IEA.
+
+Stage 19: Police Investigation Dossier & Final Chargesheet Report
+  - Compiles a complete, formatted judicial document featuring executive summaries, key player dossiers,
+    Louvain community breakdown, financial flowcharts, legal charges, and blockchain verification seals.
+
+
+5. STATUTORY LEGAL FRAMEWORK (INDIAN CRIMINAL JURISPRUDENCE)
+----------------------------------------------------------------------------------------------------
+- Bharatiya Nyaya Sanhita (BNS), 2023: Replaces IPC 1860; automated concordance for criminal conspiracy, 
+  cheating, cyber fraud, and organized syndicate operations.
+- Bharatiya Nagarik Suraksha Sanhita (BNSS), 2023: Replaces CrPC 1973; governs search, seizure, property 
+  attachment, and arrest procedures.
+- Section 63, Bharatiya Sakshya Adhiniyam (BSA), 2023 (formerly Section 65B IEA 1872):
+  Mandates automated cryptographic checksum generation, device serial logging, forensic extraction tool
+  documentation, and officer attestation for all digital evidence presented before the Court of Session.
+- Digital Personal Data Protection (DPDP) Act, 2023: Enforces strict LEA statutory purpose limitation and
+  tamper-evident access auditing.
+
+
+6. HIGH-IMPACT SIH DEMONSTRATION DATASET
+----------------------------------------------------------------------------------------------------
+The platform includes a rich, multi-modal demonstration case:
+"Case SIH-2026-X771: Operation ShadowHawala (Cyber Siphoning & Dubai Hawala Syndicate)"
+- Total Loss: INR 8,40,00,000 (8.40 Crores)
+- Data Artifacts Included:
+    1. FIR No. 2026-CYB-0084 (Cyber Crime PS, Cyberabad) — Primary complaint of spoofed netbanking fraud.
+    2. Seizure Memo 2026-SEIZ-002 — Raid panchnama recovering 16-channel SIM boxes, burner phones, ATM cards.
+    3. Telecom CDR Stream (100+ calls) — High-velocity burst logs between kingpin, handlers, and Dubai gateway.
+    4. Financial Ledger (200+ txns) — Layer 1 micro-structuring, mule dispersion, RTGS outward flows, ATM drains.
+    5. Interrogation Transcript — Confession of arrested mule handler disclosing aliases and Telegram drop tokens.
+    6. Digital Forensics JSON — Cellebrite physical dump of Telegram "Hawala Express VIP" group and crypto wallets.
+
+
+7. HOW TO EXECUTE AND TEST THE PLATFORM
+----------------------------------------------------------------------------------------------------
+
+A. RUNNING LOCALLY (WINDOWS POWERSHELL)
+
+Step 1: Start Backend Server
+  cd c:\projects\Ciphertrace\backend
+  ..\.venv\Scripts\python.exe run_server.py
+  -> Backend API: http://localhost:8000
+  -> Swagger Docs: http://localhost:8000/docs
+
+Step 2: Start Frontend Workstation
+  cd c:\projects\Ciphertrace\frontend
+  npm run dev
+  -> Frontend UI: http://localhost:5173
+
+B. RUNNING VIA DOCKER (FULL MULTI-CONTAINER STACK)
+  cd c:\projects\Ciphertrace\docker
+  docker compose up --build -d
+  -> Frontend: http://localhost:3000
+  -> Backend:  http://localhost:8000/docs
+  -> Neo4j:    http://localhost:7474 (neo4j / ciphertrace_neo4j_password_2026)
+
+C. RUNNING AUTOMATED TEST SUITE (112 TESTS)
+  c:\projects\Ciphertrace\.venv\Scripts\python.exe -m pytest backend/tests/ -v
+
+D. EXECUTING THE 1-CLICK SIH LIVE DEMO
+  1. Open http://localhost:5173 in browser.
+  2. Navigate to "SIH Mission Control" (default tab).
+  3. Click "Run 1-Click SIH Pipeline".
+  4. Inspect the 19 live pipeline stages and export the final Court Dossier.
+
+
+8. PRE-CONFIGURED RBAC OFFICER PERSONAS
+----------------------------------------------------------------------------------------------------
+- Insp Rajesh Sharma       [INVESTIGATOR]           -> Lead Field Investigating Officer
+- ACP Surender Verma       [SENIOR_INVESTIGATOR]    -> Supervisory Reviewer & Approver
+- Adv Priya Iyer           [LEGAL_ANALYST]          -> Public Prosecutor & Statutory Lead
+- Dr. Anand Deshmukh       [FORENSIC_ANALYST]       -> CFSL Digital Forensic Expert
+- Kiran Patel              [INTELLIGENCE_ANALYST]   -> CIB Pattern & Hawala Analyst
+- System Administrator     [SYSTEM_ADMINISTRATOR]   -> Security & Audit Administrator
+
+
+====================================================================================================
+END OF SYSTEM SPECIFICATION — CIPHERTRACE X (BUILD 2026.09)
+====================================================================================================
