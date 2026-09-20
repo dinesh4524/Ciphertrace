@@ -1,0 +1,25 @@
+{
+  "captured_at": "2026-09-20T07:11:41.943178+00:00",
+  "python_version": "3.13.12 (tags/v3.13.12:1cbe481, Feb  3 2026, 18:22:25) [MSC v.1944 64 bit (AMD64)]",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "random_seed": 42,
+  "packages": {
+    "mlflow": "3.16.1",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "numpy": "2.5.3",
+    "pandas": "3.0.5",
+    "networkx": "3.6.1",
+    "pydantic": "2.13.5",
+    "fastapi": "0.141.1",
+    "sqlalchemy": "2.0.54",
+    "cryptography": "50.0.1",
+    "evidently": "0.7.23"
+  },
+  "numpy_config": {
+    "version": "2.5.3",
+    "blas": "unknown"
+  },
+  "sklearn_version": "1.9.1",
+  "scipy_version": "1.18.1"
+}

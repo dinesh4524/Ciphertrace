@@ -1,0 +1,17 @@
+FIRST INFORMATION REPORT (Under Section 173 BNSS 2023)
+FIR No: FIR/2026/CYBER-HYD/0078
+Police Station: Cyber Crime Police Station, Gachibowli
+District: Cyberabad Commissionerate, State: Telangana
+
+1. Details of Occurrence:
+Date/Time of Offence: Between 01-03-2026 09:00 to 05-03-2026 18:00 hrs
+Place of Occurrence: Virtual Space / Multiple ATM hubs in Hyderabad and Bangalore
+
+2. Acts & Statutory Sections Invoked:
+u/s 318(4) BNS, u/s 319(2) BNS, u/s 111(2) BNS (Organised Cyber Crime), and Section 66C & 66D IT Act 2000.
+
+3. Complainant / Informant:
+Sri Vikram Rao, Cyber Security Officer, FinTech Nexus Technologies Ltd, Hyderabad.
+
+4. Brief Facts of the Case:
+On receipt of written complaint from informant regarding unauthorized API breaches and simultaneous siphon of customer funds into 14 distinct mule bank accounts. Technical investigation reveals that accused persons were utilizing automated SIM boxes with over 64 SIM cards (active IMEIs: 864321045678901, 864321045678902) to intercept OTP tokens and execute automated IMPS/UPI transfers. Immediate forensic seizure of server access logs and telecom tower dumps initiated.

@@ -1,0 +1,24 @@
+INTERROGATION RECORD / VOLUNTARY CONFESSION MEMO
+RECORDED UNDER SECTION 23 BHARATIYA SAKSHYA ADHINIYAM (BSA) / SECTION 27 IEA
+--------------------------------------------------------------------------------
+Case: Crime No. 771/2026 Cyber Crime PS, Cyberabad Commissionerate
+Date: 16-August-2026 | Time: 11:00 Hours
+Subject / Accused: Suresh Patel s/o Mohan Patel, Age 32, R/o Ahmedabad
+Interrogator: Inspector Rajiv Sharma (IO-7492), Cyber Crime Special Cell
+
+EXAMINATION & DISCLOSURE:
+Q1. State your role in the fund transfers executed on 12-August-2026.
+Ans: I work under the instructions of Vikram Sharma, who is known in the syndicate by the alias 'Vicky'. Vicky coordinates operations from Pune and Dubai. My role was to receive ATM cards and banking SIMs from Rohan Verma in Hyderabad, make rapid cash withdrawals at ATMs, and hand over the cash to hawala couriers near Shamshabad Airport.
+
+Q2. Who provides the mule bank accounts and SIM boxes?
+Ans: Rohan Verma recruits college students and small traders around Secunderabad and Madhapur to open bank accounts in ICICI, HDFC, and SBI. He pays them INR 15,000 per account and keeps the netbanking credentials and debit cards. The SIM boxes are imported via grey channels and operated by Vicky's technical team using spoofed IMEI numbers.
+
+Q3. How is the money sent abroad?
+Ans: Once the money enters AXIS-MULE-773104 and secondary accounts, Vicky instructs Tariq Mehmood in Dubai (+971501234567) over Telegram channel 'DUBAI SETTLEMENT'. Tariq settles the amount via gold consignment invoices and USDT crypto transfers to wallet 0x71C...8821.
+
+Q4. Can you identify Vicky's real contact numbers and locations?
+Ans: Yes. Vikram Sharma uses phone number +919876543210 and alternate number +917766554433. He stays at Clover Highlands, NIBM Road, Pune when in India.
+
+Signed: Suresh Patel (Accused)
+Recorded by: Inspector Rajiv Sharma (IO-7492)
+Witnessed by: Sub-Inspector M. Kulkarni

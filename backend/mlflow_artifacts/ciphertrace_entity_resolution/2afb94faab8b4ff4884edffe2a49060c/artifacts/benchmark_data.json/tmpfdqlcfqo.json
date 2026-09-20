@@ -1,0 +1,556 @@
+{
+  "predictions": [
+    {
+      "source_id": "E0",
+      "target_id": "E1",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E2",
+      "target_id": "E3",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E4",
+      "target_id": "E5",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E6",
+      "target_id": "E7",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E8",
+      "target_id": "E9",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E10",
+      "target_id": "E11",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E12",
+      "target_id": "E13",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E14",
+      "target_id": "E15",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E16",
+      "target_id": "E17",
+      "is_match": true,
+      "confidence_score": 0.95
+    },
+    {
+      "source_id": "E18",
+      "target_id": "E19",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E20",
+      "target_id": "E21",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E22",
+      "target_id": "E23",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E24",
+      "target_id": "E25",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E26",
+      "target_id": "E27",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E28",
+      "target_id": "E29",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E30",
+      "target_id": "E31",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E32",
+      "target_id": "E33",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E34",
+      "target_id": "E35",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E36",
+      "target_id": "E37",
+      "is_match": true,
+      "confidence_score": 1.0
+    },
+    {
+      "source_id": "E38",
+      "target_id": "E39",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E40",
+      "target_id": "E41",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E42",
+      "target_id": "E43",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E44",
+      "target_id": "E45",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E46",
+      "target_id": "E47",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "E48",
+      "target_id": "E49",
+      "is_match": true,
+      "confidence_score": 0.92
+    },
+    {
+      "source_id": "N0",
+      "target_id": "N1",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N2",
+      "target_id": "N3",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N4",
+      "target_id": "N5",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N6",
+      "target_id": "N7",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N8",
+      "target_id": "N9",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N10",
+      "target_id": "N11",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N12",
+      "target_id": "N13",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N14",
+      "target_id": "N15",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N16",
+      "target_id": "N17",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N18",
+      "target_id": "N19",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N20",
+      "target_id": "N21",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N22",
+      "target_id": "N23",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N24",
+      "target_id": "N25",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N26",
+      "target_id": "N27",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N28",
+      "target_id": "N29",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N30",
+      "target_id": "N31",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N32",
+      "target_id": "N33",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N34",
+      "target_id": "N35",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N36",
+      "target_id": "N37",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N38",
+      "target_id": "N39",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N40",
+      "target_id": "N41",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N42",
+      "target_id": "N43",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N44",
+      "target_id": "N45",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N46",
+      "target_id": "N47",
+      "is_match": false,
+      "confidence_score": 0.0
+    },
+    {
+      "source_id": "N48",
+      "target_id": "N49",
+      "is_match": false,
+      "confidence_score": 0.0
+    }
+  ],
+  "ground_truth": [
+    {
+      "source_id": "E0",
+      "target_id": "E1",
+      "is_match": true
+    },
+    {
+      "source_id": "E2",
+      "target_id": "E3",
+      "is_match": true
+    },
+    {
+      "source_id": "E4",
+      "target_id": "E5",
+      "is_match": true
+    },
+    {
+      "source_id": "E6",
+      "target_id": "E7",
+      "is_match": true
+    },
+    {
+      "source_id": "E8",
+      "target_id": "E9",
+      "is_match": true
+    },
+    {
+      "source_id": "E10",
+      "target_id": "E11",
+      "is_match": true
+    },
+    {
+      "source_id": "E12",
+      "target_id": "E13",
+      "is_match": true
+    },
+    {
+      "source_id": "E14",
+      "target_id": "E15",
+      "is_match": true
+    },
+    {
+      "source_id": "E16",
+      "target_id": "E17",
+      "is_match": true
+    },
+    {
+      "source_id": "E18",
+      "target_id": "E19",
+      "is_match": true
+    },
+    {
+      "source_id": "E20",
+      "target_id": "E21",
+      "is_match": true
+    },
+    {
+      "source_id": "E22",
+      "target_id": "E23",
+      "is_match": true
+    },
+    {
+      "source_id": "E24",
+      "target_id": "E25",
+      "is_match": true
+    },
+    {
+      "source_id": "E26",
+      "target_id": "E27",
+      "is_match": true
+    },
+    {
+      "source_id": "E28",
+      "target_id": "E29",
+      "is_match": true
+    },
+    {
+      "source_id": "E30",
+      "target_id": "E31",
+      "is_match": true
+    },
+    {
+      "source_id": "E32",
+      "target_id": "E33",
+      "is_match": true
+    },
+    {
+      "source_id": "E34",
+      "target_id": "E35",
+      "is_match": true
+    },
+    {
+      "source_id": "E36",
+      "target_id": "E37",
+      "is_match": true
+    },
+    {
+      "source_id": "E38",
+      "target_id": "E39",
+      "is_match": true
+    },
+    {
+      "source_id": "E40",
+      "target_id": "E41",
+      "is_match": true
+    },
+    {
+      "source_id": "E42",
+      "target_id": "E43",
+      "is_match": true
+    },
+    {
+      "source_id": "E44",
+      "target_id": "E45",
+      "is_match": true
+    },
+    {
+      "source_id": "E46",
+      "target_id": "E47",
+      "is_match": true
+    },
+    {
+      "source_id": "E48",
+      "target_id": "E49",
+      "is_match": true
+    },
+    {
+      "source_id": "N0",
+      "target_id": "N1",
+      "is_match": false
+    },
+    {
+      "source_id": "N2",
+      "target_id": "N3",
+      "is_match": false
+    },
+    {
+      "source_id": "N4",
+      "target_id": "N5",
+      "is_match": false
+    },
+    {
+      "source_id": "N6",
+      "target_id": "N7",
+      "is_match": false
+    },
+    {
+      "source_id": "N8",
+      "target_id": "N9",
+      "is_match": false
+    },
+    {
+      "source_id": "N10",
+      "target_id": "N11",
+      "is_match": false
+    },
+    {
+      "source_id": "N12",
+      "target_id": "N13",
+      "is_match": false
+    },
+    {
+      "source_id": "N14",
+      "target_id": "N15",
+      "is_match": false
+    },
+    {
+      "source_id": "N16",
+      "target_id": "N17",
+      "is_match": false
+    },
+    {
+      "source_id": "N18",
+      "target_id": "N19",
+      "is_match": false
+    },
+    {
+      "source_id": "N20",
+      "target_id": "N21",
+      "is_match": false
+    },
+    {
+      "source_id": "N22",
+      "target_id": "N23",
+      "is_match": false
+    },
+    {
+      "source_id": "N24",
+      "target_id": "N25",
+      "is_match": false
+    },
+    {
+      "source_id": "N26",
+      "target_id": "N27",
+      "is_match": false
+    },
+    {
+      "source_id": "N28",
+      "target_id": "N29",
+      "is_match": false
+    },
+    {
+      "source_id": "N30",
+      "target_id": "N31",
+      "is_match": false
+    },
+    {
+      "source_id": "N32",
+      "target_id": "N33",
+      "is_match": false
+    },
+    {
+      "source_id": "N34",
+      "target_id": "N35",
+      "is_match": false
+    },
+    {
+      "source_id": "N36",
+      "target_id": "N37",
+      "is_match": false
+    },
+    {
+      "source_id": "N38",
+      "target_id": "N39",
+      "is_match": false
+    },
+    {
+      "source_id": "N40",
+      "target_id": "N41",
+      "is_match": false
+    },
+    {
+      "source_id": "N42",
+      "target_id": "N43",
+      "is_match": false
+    },
+    {
+      "source_id": "N44",
+      "target_id": "N45",
+      "is_match": false
+    },
+    {
+      "source_id": "N46",
+      "target_id": "N47",
+      "is_match": false
+    },
+    {
+      "source_id": "N48",
+      "target_id": "N49",
+      "is_match": false
+    }
+  ]
+}

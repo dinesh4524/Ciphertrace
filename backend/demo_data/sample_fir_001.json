@@ -1,0 +1,27 @@
+{
+  "fir_number": "FIR/2026/CYBER-DEL/0142",
+  "police_station": "Special Cyber Cell, Mandir Marg",
+  "district": "New Delhi District",
+  "state": "Delhi",
+  "sections_invoked": [
+    "BNS Section 318(4) [Cheating]",
+    "BNS Section 111 [Organised Crime Syndicate]",
+    "BNS Section 61(2) [Criminal Conspiracy]",
+    "IT Act 2000 Section 66D [Cheating by Personation using Computer Resource]",
+    "IT Act 2000 Section 43 [Data Theft]"
+  ],
+  "incident_date": "2026-03-08 11:30:00",
+  "filing_date": "2026-03-09 10:15:00",
+  "complainant_details": {
+    "name": "Rajiv Mehra",
+    "designation": "Director of Treasury",
+    "organization": "Apex Logistics Infrastructure Ltd",
+    "contact": "+919810011223"
+  },
+  "accused_named": [
+    "Unknown Operatives posing as Chief Financial Officer",
+    "Beneficiary Account Holder: Imran Khan @ Billu",
+    "Controller Alias: Phantom_Ops_99"
+  ],
+  "informant_narrative": "The complainant states that on 08.03.2026 at about 11:30 AM, an email was received from spoofed domain instructing an urgent treasury transfer of Rs 2.5 Crores towards a Singapore container bond. Upon verification, it was found that the beneficiary accounts belonged to multiple shell mule accounts registered across State Bank of India, HDFC Bank and Kotak Mahindra Bank in Jamtara, Mewat and Delhi. Subsequent communication traces indicated coordinating WhatsApp calls from virtual numbers (+919876543210 and +919811122233)."
+}

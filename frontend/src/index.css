@@ -1,0 +1,275 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #070a10;
+  color: #e2e8f0;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  letter-spacing: -0.01em;
+}
+
+code, kbd, samp, pre, .font-mono {
+  font-family: 'Fira Code', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* Custom Workstation Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: #080c14;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Professional Workstation Containers & Cards */
+.workstation-panel {
+  background: #0b0f19;
+  border: 1px solid #1e293b;
+}
+
+.workstation-card {
+  background: #0d131f;
+  border: 1px solid #1e293b;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.workstation-card:hover {
+  border-color: #334155;
+}
+
+.workstation-card-highlight {
+  background: #101726;
+  border: 1px solid #0284c7;
+}
+
+/* Rectangular Action Buttons (Investigator Workstation Standards) */
+.btn-rect-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  background-color: #0369a1;
+  color: #f0f9ff;
+  border: 1px solid #0284c7;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+}
+.btn-rect-primary:hover:not(:disabled) {
+  background-color: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+.btn-rect-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-rect-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  background-color: #131a29;
+  color: #cbd5e1;
+  border: 1px solid #334155;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+}
+.btn-rect-secondary:hover:not(:disabled) {
+  background-color: #1e293b;
+  border-color: #475569;
+  color: #f8fafc;
+}
+.btn-rect-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-rect-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.45rem 0.9rem;
+  background-color: #881337;
+  color: #ffe4e6;
+  border: 1px solid #be123c;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+}
+.btn-rect-danger:hover:not(:disabled) {
+  background-color: #9f1239;
+  border-color: #f43f5e;
+}
+.btn-rect-danger:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-rect-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  background-color: transparent;
+  color: #94a3b8;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+}
+.btn-rect-ghost:hover:not(:disabled) {
+  background-color: #1e293b;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+/* 4-Tier Semantic Relationship Styles */
+.badge-observed {
+  background-color: rgba(6, 78, 59, 0.4);
+  border: 1px solid #059669;
+  color: #34d399;
+}
+
+.badge-inferred {
+  background-color: rgba(12, 74, 110, 0.4);
+  border: 1px dashed #0284c7;
+  color: #38bdf8;
+}
+
+.badge-predicted {
+  background-color: rgba(120, 53, 15, 0.4);
+  border: 1px dotted #d97706;
+  color: #fbbf24;
+}
+
+.badge-contested {
+  background-color: rgba(136, 19, 55, 0.4);
+  border: 1px dashed #e11d48;
+  color: #fb7185;
+}
+
+/* 5-Level AI Provenance & Epistemic Tags */
+.tag-evidence {
+  font-size: 9px;
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: #064e3b;
+  border: 1px solid #10b981;
+  color: #a7f3d0;
+}
+
+.tag-inference {
+  font-size: 9px;
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: #0c4a6e;
+  border: 1px solid #0284c7;
+  color: #bae6fd;
+}
+
+.tag-prediction {
+  font-size: 9px;
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: #78350f;
+  border: 1px solid #d97706;
+  color: #fde68a;
+}
+
+.tag-uncertainty {
+  font-size: 9px;
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: #4c1d95;
+  border: 1px solid #7c3aed;
+  color: #ddd6fe;
+}
+
+.tag-verified {
+  font-size: 9px;
+  font-family: 'Fira Code', monospace;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background-color: #14532d;
+  border: 1px solid #22c55e;
+  color: #86efac;
+}
+
+/* Institutional Tables */
+.workstation-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.75rem;
+}
+
+.workstation-table th {
+  background-color: #0b0f19;
+  color: #94a3b8;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #1e293b;
+  text-align: left;
+}
+
+.workstation-table td {
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid #131c2e;
+  color: #cbd5e1;
+}
+
+.workstation-table tr:hover td {
+  background-color: #0f172a;
+}

@@ -1,0 +1,61 @@
+{
+  "forensic_report_id": "FSL-CYB-2026-8941",
+  "examination_date": "2026-08-17T14:00:00Z",
+  "forensic_lab": "Digital Forensics & Cyber Analysis Laboratory, Hyderabad",
+  "examiner": "Dr. Ananya Reddy (Senior Forensic Scientist)",
+  "evidence_source": "Apple iPhone 14 Pro (IMEI 356789123456789) seized from Suresh Patel",
+  "hash_before_extraction_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "extracted_artifacts": {
+    "telegram_channels": [
+      {
+        "channel_title": "DUBAI SETTLEMENT",
+        "chat_id": "-1001882391024",
+        "members": [
+          "Vikram Sharma (@vicky_syndicate)",
+          "Tariq Mehmood (@tariq_dxb_fx)",
+          "Rohan Verma (@rohan_hyd_ops)",
+          "Suresh Patel (@suresh_patel_hyd)"
+        ],
+        "key_messages": [
+          {
+            "sender": "Vikram Sharma (@vicky_syndicate)",
+            "timestamp": "2026-08-12T09:30:00Z",
+            "text": "Tranche 1 INR 8.4 Cr hit mule accounts. Disperse 4.5 Cr to Axis immediately."
+          },
+          {
+            "sender": "Tariq Mehmood (@tariq_dxb_fx)",
+            "timestamp": "2026-08-12T10:32:00Z",
+            "text": "Received 94 Lakh hawala settlement for gold consignment invoice VK-771."
+          }
+        ]
+      }
+    ],
+    "crypto_wallets": [
+      {
+        "blockchain": "Ethereum / ERC-20",
+        "wallet_address": "0x71C4912903820192847291823918293819283918",
+        "token": "USDT",
+        "balance_observed": "125,000 USDT",
+        "attribution": "Tariq Mehmood / Dubai Hawala Desk"
+      }
+    ],
+    "device_imei_mappings": [
+      {
+        "phone_number": "+919876543210",
+        "imei": "356789123456789",
+        "user_alias": "Vikram Sharma @ Vicky"
+      },
+      {
+        "phone_number": "+919123456789",
+        "imei": "357890123456780",
+        "user_alias": "Rohan Verma"
+      },
+      {
+        "phone_number": "+918800112233",
+        "imei": "358901234567891",
+        "user_alias": "Suresh Patel"
+      }
+    ]
+  },
+  "bsa_section_63_certificate_status": "COMPLIANT_HASH_VERIFIED"
+}
