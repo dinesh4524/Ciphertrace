@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useRef, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import cytoscape, { Core, EventObject } from 'cytoscape';
 import { 
   Network, 
   RotateCw, 
   Search, 
-  Filter, 
   ZoomIn, 
   ZoomOut, 
   Maximize2, 
@@ -15,24 +15,17 @@ import {
   MapPin, 
   Building2, 
   FileCheck2, 
-  ShieldCheck, 
   Cpu,
   Layers,
   ArrowRight,
-  Info,
   X,
-  Scale,
   Flag,
-  Play,
-  Pause,
-  Compass,
-  GitFork,
-  Eye,
-  Crosshair,
   Download,
-  Share2,
   Sparkles,
-  Route
+  Route,
+  Focus,
+  SlidersHorizontal,
+  Compass
 } from 'lucide-react';
 import { Case, GraphData, GraphNode, GraphEdge, GraphStats } from '../../types';
 import { Badge } from '../common/Badge';
@@ -42,18 +35,7 @@ interface KnowledgeGraphViewerProps {
   activeCase: Case;
 }
 
-type LayoutType = 'FORCE' | 'CONCENTRIC' | 'HIERARCHICAL' | 'RADIAL_CLUSTER' | 'GRID';
-
-interface SimNode extends GraphNode {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  fx?: number | null;
-  fy?: number | null;
-  radius: number;
-  community?: number;
-}
+type LayoutName = 'cose' | 'concentric' | 'breadthfirst' | 'circle' | 'grid';
 
 export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ activeCase }) => {
   const [graphData, setGraphData] = useState<GraphData | null>(null);
@@ -63,20 +45,16 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
   
   const [selectedNode, setSelectedNode] = useState<GraphNode | null>(null);
   const [selectedEdge, setSelectedEdge] = useState<GraphEdge | null>(null);
-  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
   const [nodeFilter, setNodeFilter] = useState<string>('ALL');
-  const [layoutType, setLayoutType] = useState<LayoutType>('FORCE');
-  const [isSimRunning, setIsSimRunning] = useState<boolean>(true);
-  const [showMiniMap, setShowMiniMap] = useState<boolean>(true);
+  const [currentLayout, setCurrentLayout] = useState<LayoutName>('cose');
+  const [zoomPercent, setZoomPercent] = useState<number>(100);
 
-  // Pathfinding state
+  // Pathfinder state
   const [pathfindingMode, setPathfindingMode] = useState<boolean>(false);
   const [pathSourceId, setPathSourceId] = useState<string>('');
   const [pathTargetId, setPathTargetId] = useState<string>('');
-  const [highlightedPathEdgeIds, setHighlightedPathEdgeIds] = useState<Set<string>>(new Set());
-  const [highlightedPathNodeIds, setHighlightedPathNodeIds] = useState<Set<string>>(new Set());
+  const [pathFound, setPathFound] = useState<boolean | null>(null);
 
   const [tierFilter, setTierFilter] = useState<{
     observed: boolean;
@@ -90,17 +68,8 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
     contested: true
   });
 
-  const [zoomLevel, setZoomLevel] = useState(1.0);
-  const [panOffset, setPanOffset] = useState({ x: 0, y: 0 });
-  const [isDraggingCanvas, setIsDraggingCanvas] = useState(false);
-  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [draggedNodeId, setDraggedNodeId] = useState<string | null>(null);
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const simNodesRef = useRef<Record<string, SimNode>>({});
-  const animationFrameRef = useRef<number | null>(null);
-  const [, setTick] = useState(0);
+  const cyContainerRef = useRef<HTMLDivElement>(null);
+  const cyRef = useRef<Core | null>(null);
 
   // Fetch Graph Data
   const fetchGraph = async () => {
@@ -112,7 +81,6 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
       ]);
       setGraphData(data);
       setStats(statsData);
-      initSimPositions(data?.nodes || [], data?.edges || [], layoutType);
     } catch (err: any) {
       console.error('Failed to load knowledge graph:', err);
     } finally {
@@ -123,12 +91,10 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
   useEffect(() => {
     setSelectedNode(null);
     setSelectedEdge(null);
-    setHighlightedPathEdgeIds(new Set());
-    setHighlightedPathNodeIds(new Set());
+    setPathfindingMode(false);
     setPathSourceId('');
     setPathTargetId('');
-    setPanOffset({ x: 0, y: 0 });
-    setZoomLevel(1.0);
+    setPathFound(null);
     fetchGraph();
   }, [activeCase.id]);
 
@@ -144,7 +110,7 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
     }
   };
 
-  // Node Colors by Entity Type
+  // Node Color Mapper
   const getNodeColor = (label: string) => {
     switch (label) {
       case 'Person': return '#16805C';      // Forest Emerald
@@ -192,416 +158,397 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
     return 'observed';
   };
 
-  const getEdgeStrokeColor = (tier: 'observed' | 'inferred' | 'predicted' | 'contested') => {
-    switch (tier) {
-      case 'observed': return '#16805C'; // Forest green solid
-      case 'inferred': return '#2563EB'; // Blue dashed
-      case 'predicted': return '#B7791F'; // Amber dotted
-      case 'contested': return '#DC2626'; // Red
+  // Cytoscape Layout Configuration Factory
+  const getLayoutOptions = useCallback((layoutName: LayoutName) => {
+    switch (layoutName) {
+      case 'concentric':
+        return {
+          name: 'concentric',
+          concentric: (node: any) => node.data('degree') || 1,
+          levelWidth: () => 2,
+          minNodeSpacing: 60,
+          padding: 50,
+          animate: true,
+          animationDuration: 500
+        };
+      case 'breadthfirst':
+        return {
+          name: 'breadthfirst',
+          directed: true,
+          spacingFactor: 1.5,
+          padding: 50,
+          animate: true,
+          animationDuration: 500
+        };
+      case 'circle':
+        return {
+          name: 'circle',
+          spacingFactor: 1.2,
+          padding: 50,
+          animate: true,
+          animationDuration: 500
+        };
+      case 'grid':
+        return {
+          name: 'grid',
+          spacingFactor: 1.3,
+          padding: 50,
+          animate: true,
+          animationDuration: 500
+        };
+      case 'cose':
+      default:
+        return {
+          name: 'cose',
+          animate: true,
+          animationDuration: 600,
+          refresh: 20,
+          fit: true,
+          padding: 60,
+          randomize: false,
+          componentSpacing: 120,
+          nodeRepulsion: () => 900000,
+          nodeOverlap: 20,
+          idealEdgeLength: () => 140,
+          edgeElasticity: () => 100,
+          nestingFactor: 5,
+          gravity: 40,
+          numIter: 1000,
+          initialTemp: 200,
+          coolingFactor: 0.95,
+          minTemp: 1.0
+        };
     }
-  };
+  }, []);
 
-  // Filtered dataset
-  const filteredNodes = useMemo(() => {
-    if (!graphData?.nodes) return [];
-    return graphData.nodes.filter(n => {
+  // Initialize and update Cytoscape instance
+  useEffect(() => {
+    if (!cyContainerRef.current || !graphData) return;
+
+    // Filter elements
+    const visibleNodes = (graphData.nodes || []).filter(n => {
       if (nodeFilter !== 'ALL' && n.label !== nodeFilter) return false;
       if (!searchQuery) return true;
       return n.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
              n.label.toLowerCase().includes(searchQuery.toLowerCase());
     });
-  }, [graphData?.nodes, nodeFilter, searchQuery]);
 
-  const filteredNodeIdSet = useMemo(() => new Set(filteredNodes.map(n => n.id)), [filteredNodes]);
+    const visibleNodeIdSet = new Set(visibleNodes.map(n => n.id));
 
-  const filteredEdges = useMemo(() => {
-    if (!graphData?.edges) return [];
-    return graphData.edges.filter(e => {
-      if (!filteredNodeIdSet.has(e.source) || !filteredNodeIdSet.has(e.target)) return false;
+    const visibleEdges = (graphData.edges || []).filter(e => {
+      if (!visibleNodeIdSet.has(e.source) || !visibleNodeIdSet.has(e.target)) return false;
       const tier = getEdgeTier(e);
       return tierFilter[tier];
     });
-  }, [graphData?.edges, filteredNodeIdSet, tierFilter]);
 
-  // Direct Adjacency Map for 1-Hop / 2-Hop Highlighting
-  const adjacencyMap = useMemo(() => {
-    const map: Record<string, Set<string>> = {};
-    filteredEdges.forEach(e => {
-      if (!map[e.source]) map[e.source] = new Set();
-      if (!map[e.target]) map[e.target] = new Set();
-      map[e.source].add(e.target);
-      map[e.target].add(e.source);
+    // Build Cytoscape elements
+    const elements: cytoscape.ElementDefinition[] = [
+      ...visibleNodes.map(n => ({
+        group: 'nodes' as const,
+        data: {
+          id: n.id,
+          name: n.name,
+          label: n.label,
+          degree: n.degree || 1,
+          color: getNodeColor(n.label),
+          bgColor: getNodeBgColor(n.label),
+          rawNode: n
+        }
+      })),
+      ...visibleEdges.map(e => {
+        const tier = getEdgeTier(e);
+        let strokeColor = '#16805C';
+        let lineStyle: 'solid' | 'dashed' | 'dotted' = 'solid';
+
+        if (tier === 'inferred') {
+          strokeColor = '#2563EB';
+          lineStyle = 'dashed';
+        } else if (tier === 'predicted') {
+          strokeColor = '#B7791F';
+          lineStyle = 'dotted';
+        } else if (tier === 'contested') {
+          strokeColor = '#DC2626';
+          lineStyle = 'dashed';
+        }
+
+        return {
+          group: 'edges' as const,
+          data: {
+            id: e.id,
+            source: e.source,
+            target: e.target,
+            label: e.label,
+            tier: tier,
+            strokeColor: strokeColor,
+            lineStyle: lineStyle,
+            rawEdge: e
+          }
+        };
+      })
+    ];
+
+    // Destroy existing instance if container changed
+    if (cyRef.current) {
+      cyRef.current.destroy();
+    }
+
+    // Initialize Cytoscape Core
+    const cy = cytoscape({
+      container: cyContainerRef.current,
+      elements: elements,
+      boxSelectionEnabled: true,
+      autounselectify: false,
+      wheelSensitivity: 0.25,
+      minZoom: 0.2,
+      maxZoom: 3.5,
+      style: [
+        // Core Node Styling
+        {
+          selector: 'node',
+          style: {
+            'content': 'data(name)',
+            'font-family': 'Inter, system-ui, -apple-system, sans-serif',
+            'font-size': '11px',
+            'font-weight': 'bold',
+            'text-valign': 'bottom',
+            'text-halign': 'center',
+            'text-margin-y': 7,
+            'color': '#172033',
+            'text-background-color': '#FFFFFF',
+            'text-background-opacity': 0.95,
+            'text-background-padding': '3px',
+            'text-background-shape': 'roundrectangle',
+            'text-border-color': '#CBD5E1',
+            'text-border-width': 1,
+            'text-border-opacity': 0.8,
+            'text-wrap': 'ellipsis',
+            'text-max-width': '120px',
+            'background-color': 'data(bgColor)',
+            'border-color': 'data(color)',
+            'border-width': 2.5,
+            'width': (ele: any) => Math.max(34, Math.min(54, 30 + (ele.data('degree') || 1) * 3)),
+            'height': (ele: any) => Math.max(34, Math.min(54, 30 + (ele.data('degree') || 1) * 3)),
+            'overlay-opacity': 0,
+            'transition-property': 'background-color, border-color, width, height, opacity',
+            'transition-duration': 0.2
+          }
+        },
+        // Selected / Highlighted Node
+        {
+          selector: 'node:selected, node.highlighted',
+          style: {
+            'border-color': '#163A5F',
+            'border-width': 4.5,
+            'border-opacity': 1,
+            'text-background-color': '#163A5F',
+            'color': '#FFFFFF',
+            'text-border-color': '#0E2640'
+          }
+        },
+        // Pathhighlight Node
+        {
+          selector: 'node.path-node',
+          style: {
+            'border-color': '#D97706',
+            'border-width': 5,
+            'border-opacity': 1,
+            'background-color': '#FEF3C7',
+            'text-background-color': '#92400E',
+            'color': '#FFFFFF'
+          }
+        },
+        // Dimmed Node
+        {
+          selector: 'node.dimmed',
+          style: {
+            'opacity': 0.15
+          }
+        },
+        // Core Edge Styling
+        {
+          selector: 'edge',
+          style: {
+            'content': 'data(label)',
+            'font-family': 'ui-monospace, monospace',
+            'font-size': '8.5px',
+            'font-weight': 'bold',
+            'text-background-color': '#FFFFFF',
+            'text-background-opacity': 0.95,
+            'text-background-padding': '2px',
+            'text-background-shape': 'roundrectangle',
+            'text-border-color': '#E2E8F0',
+            'text-border-width': 1,
+            'text-border-opacity': 0.9,
+            'text-rotation': 'autorotate',
+            'color': '#334155',
+            'width': 2.2,
+            'line-color': 'data(strokeColor)',
+            'line-style': 'data(lineStyle)' as any,
+            'target-arrow-color': 'data(strokeColor)',
+            'target-arrow-shape': 'triangle',
+            'arrow-scale': 1.1,
+            'curve-style': 'bezier',
+            'control-point-step-size': 28,
+            'overlay-opacity': 0,
+            'transition-property': 'line-color, width, opacity',
+            'transition-duration': 0.2
+          }
+        },
+        // Selected / Highlighted Edge
+        {
+          selector: 'edge:selected, edge.highlighted',
+          style: {
+            'width': 3.8,
+            'line-color': '#163A5F',
+            'target-arrow-color': '#163A5F',
+            'color': '#163A5F',
+            'text-border-color': '#163A5F'
+          }
+        },
+        // Pathhighlight Edge
+        {
+          selector: 'edge.path-edge',
+          style: {
+            'width': 4.5,
+            'line-color': '#D97706',
+            'target-arrow-color': '#D97706',
+            'color': '#92400E',
+            'text-background-color': '#FEF3C7',
+            'text-border-color': '#D97706'
+          }
+        },
+        // Dimmed Edge
+        {
+          selector: 'edge.dimmed',
+          style: {
+            'opacity': 0.1
+          }
+        }
+      ]
     });
-    return map;
-  }, [filteredEdges]);
 
-  // Active Focus Node Set (1-hop highlight)
-  const activeFocusNodeIds = useMemo(() => {
-    const focusTargetId = selectedNode?.id || hoveredNodeId;
-    if (!focusTargetId) return null;
-    const set = new Set<string>([focusTargetId]);
-    const neighbors = adjacencyMap[focusTargetId];
-    if (neighbors) {
-      neighbors.forEach(nid => set.add(nid));
-    }
-    return set;
-  }, [selectedNode?.id, hoveredNodeId, adjacencyMap]);
+    // Event Listeners
+    cy.on('tap', 'node', (evt: EventObject) => {
+      const nodeData = evt.target.data('rawNode');
+      setSelectedNode(nodeData);
+      setSelectedEdge(null);
+    });
 
-  // Initialize Layout Coordinates
-  const initSimPositions = useCallback((nodes: GraphNode[], edges: GraphEdge[], layout: LayoutType) => {
-    const width = 1000;
-    const height = 680;
-    const cx = width / 2;
-    const cy = height / 2;
-    const newSimNodes: Record<string, SimNode> = {};
+    cy.on('tap', 'edge', (evt: EventObject) => {
+      const edgeData = evt.target.data('rawEdge');
+      setSelectedEdge(edgeData);
+      setSelectedNode(null);
+    });
 
-    if (nodes.length === 0) {
-      simNodesRef.current = {};
-      return;
-    }
+    cy.on('tap', (evt: EventObject) => {
+      if (evt.target === cy) {
+        setSelectedNode(null);
+        setSelectedEdge(null);
+        cy.elements().removeClass('dimmed highlighted');
+      }
+    });
 
-    const sortedByDegree = [...nodes].sort((a, b) => (b.degree || 0) - (a.degree || 0));
+    // Hover 1-hop Highlighting
+    cy.on('mouseover', 'node', (evt: EventObject) => {
+      const node = evt.target;
+      const neighborhood = node.neighborhood().add(node);
+      cy.elements().addClass('dimmed');
+      neighborhood.removeClass('dimmed').addClass('highlighted');
+    });
 
-    if (layout === 'CONCENTRIC') {
-      const hub = sortedByDegree[0];
-      newSimNodes[hub.id] = {
-        ...hub,
-        x: cx,
-        y: cy,
-        vx: 0,
-        vy: 0,
-        radius: 26,
-        community: 0
-      };
-
-      const rest = sortedByDegree.slice(1);
-      rest.forEach((node, idx) => {
-        const ring = Math.floor(idx / 7) + 1;
-        const radius = ring * 140;
-        const ringCount = Math.min(7, rest.length - (ring - 1) * 7);
-        const angle = ((idx % 7) * 2 * Math.PI) / Math.max(1, ringCount);
-        newSimNodes[node.id] = {
-          ...node,
-          x: cx + radius * Math.cos(angle),
-          y: cy + radius * Math.sin(angle),
-          vx: 0,
-          vy: 0,
-          radius: Math.max(16, 24 - ring * 2),
-          community: ring
-        };
-      });
-    } else if (layout === 'HIERARCHICAL') {
-      // Group into tiers: Persons -> Devices/Accounts -> Locations/Orgs
-      const tiers: Record<string, GraphNode[]> = {
-        tier1: [],
-        tier2: [],
-        tier3: [],
-        tier4: []
-      };
-
-      nodes.forEach(n => {
-        if (n.label === 'Person') tiers.tier1.push(n);
-        else if (n.label === 'Phone' || n.label === 'Device') tiers.tier2.push(n);
-        else if (n.label === 'Account') tiers.tier3.push(n);
-        else tiers.tier4.push(n);
-      });
-
-      const tierKeys = ['tier1', 'tier2', 'tier3', 'tier4'] as const;
-      tierKeys.forEach((k, rowIdx) => {
-        const rowNodes = tiers[k];
-        const rowY = 120 + rowIdx * 150;
-        rowNodes.forEach((node, colIdx) => {
-          const spacing = width / (rowNodes.length + 1);
-          newSimNodes[node.id] = {
-            ...node,
-            x: spacing * (colIdx + 1),
-            y: rowY,
-            vx: 0,
-            vy: 0,
-            radius: rowIdx === 0 ? 24 : 18,
-            community: rowIdx
-          };
-        });
-      });
-    } else if (layout === 'RADIAL_CLUSTER') {
-      const categories = Array.from(new Set(nodes.map(n => n.label)));
-      const clusterAngleStep = (2 * Math.PI) / categories.length;
-
-      categories.forEach((cat, cIdx) => {
-        const catAngle = cIdx * clusterAngleStep;
-        const clusterCenterX = cx + 220 * Math.cos(catAngle);
-        const clusterCenterY = cy + 220 * Math.sin(catAngle);
-        const catNodes = nodes.filter(n => n.label === cat);
-
-        catNodes.forEach((node, nIdx) => {
-          const subAngle = (nIdx * 2 * Math.PI) / Math.max(1, catNodes.length);
-          const subRadius = Math.min(80, 25 + nIdx * 12);
-          newSimNodes[node.id] = {
-            ...node,
-            x: clusterCenterX + subRadius * Math.cos(subAngle),
-            y: clusterCenterY + subRadius * Math.sin(subAngle),
-            vx: 0,
-            vy: 0,
-            radius: 20,
-            community: cIdx
-          };
-        });
-      });
-    } else if (layout === 'GRID') {
-      const cols = Math.ceil(Math.sqrt(nodes.length * 1.5));
-      const colWidth = width / (cols + 1);
-      const rowHeight = 110;
-
-      nodes.forEach((node, idx) => {
-        const col = idx % cols;
-        const row = Math.floor(idx / cols);
-        newSimNodes[node.id] = {
-          ...node,
-          x: colWidth * (col + 1),
-          y: 90 + row * rowHeight,
-          vx: 0,
-          vy: 0,
-          radius: 18,
-          community: row
-        };
-      });
-    } else {
-      // FORCE layout initial circular layout with jitter
-      nodes.forEach((node, idx) => {
-        const existing = simNodesRef.current[node.id];
-        const angle = (idx * 2 * Math.PI) / nodes.length;
-        const r = 200 + (idx % 3) * 60;
-        newSimNodes[node.id] = {
-          ...node,
-          x: existing ? existing.x : cx + r * Math.cos(angle) + (Math.random() - 0.5) * 40,
-          y: existing ? existing.y : cy + r * Math.sin(angle) + (Math.random() - 0.5) * 40,
-          vx: 0,
-          vy: 0,
-          radius: Math.max(18, Math.min(30, 16 + (node.degree || 1) * 2.5)),
-          community: (idx % 4)
-        };
-      });
-    }
-
-    simNodesRef.current = newSimNodes;
-    setTick(t => t + 1);
-  }, []);
-
-  // Layout change triggers reposition
-  useEffect(() => {
-    if (graphData?.nodes) {
-      initSimPositions(graphData.nodes, graphData.edges || [], layoutType);
-    }
-  }, [layoutType, graphData, initSimPositions]);
-
-  // Real-Time Force Physics Engine Loop
-  useEffect(() => {
-    if (layoutType !== 'FORCE' || !isSimRunning) {
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
-      return;
-    }
-
-    let isMounted = true;
-    const width = 1000;
-    const height = 680;
-    const cx = width / 2;
-    const cy = height / 2;
-
-    const runPhysicsStep = () => {
-      const simNodes = Object.values(simNodesRef.current);
-      if (simNodes.length === 0) return;
-
-      const kRepulsion = 2200;
-      const kAttraction = 0.045;
-      const restingDistance = 140;
-      const kCenterGravity = 0.015;
-      const damping = 0.82;
-
-      // 1. Repulsion between all node pairs (Coulomb force)
-      for (let i = 0; i < simNodes.length; i++) {
-        const n1 = simNodes[i];
-        for (let j = i + 1; j < simNodes.length; j++) {
-          const n2 = simNodes[j];
-          const dx = n2.x - n1.x;
-          const dy = n2.y - n1.y;
-          const distSq = dx * dx + dy * dy || 1;
-          const dist = Math.sqrt(distSq);
-          const minDist = n1.radius + n2.radius + 35;
-
-          // Force inversely proportional to distance squared
-          const force = (kRepulsion / Math.max(distSq, minDist * minDist)) * (dist < minDist ? 2.5 : 1.0);
-          const fx = (dx / dist) * force;
-          const fy = (dy / dist) * force;
-
-          if (!n1.fx) { n1.vx -= fx; n1.vy -= fy; }
-          if (!n2.fx) { n2.vx += fx; n2.vy += fy; }
+    cy.on('mouseout', 'node', () => {
+      cy.elements().removeClass('dimmed highlighted');
+      if (selectedNode) {
+        const selEle = cy.getElementById(selectedNode.id);
+        if (selEle.length > 0) {
+          const neighborhood = selEle.neighborhood().add(selEle);
+          cy.elements().addClass('dimmed');
+          neighborhood.removeClass('dimmed').addClass('highlighted');
         }
       }
+    });
 
-      // 2. Spring Attraction along edges (Hooke's law)
-      (graphData?.edges || []).forEach(edge => {
-        const src = simNodesRef.current[edge.source];
-        const tgt = simNodesRef.current[edge.target];
-        if (!src || !tgt) return;
+    cy.on('zoom', () => {
+      setZoomPercent(Math.round(cy.zoom() * 100));
+    });
 
-        const dx = tgt.x - src.x;
-        const dy = tgt.y - src.y;
-        const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-        const displacement = dist - restingDistance;
-        const force = displacement * kAttraction;
+    // Execute Layout
+    const layout = cy.layout(getLayoutOptions(currentLayout));
+    layout.run();
 
-        const fx = (dx / dist) * force;
-        const fy = (dy / dist) * force;
-
-        if (!src.fx) { src.vx += fx; src.vy += fy; }
-        if (!tgt.fx) { tgt.vx += fx; tgt.vy += fy; }
-      });
-
-      // 3. Center Gravity pull
-      simNodes.forEach(node => {
-        if (!node.fx) {
-          node.vx += (cx - node.x) * kCenterGravity;
-          node.vy += (cy - node.y) * kCenterGravity;
-
-          // Apply velocity and damping
-          node.vx *= damping;
-          node.vy *= damping;
-          node.x += node.vx;
-          node.y += node.vy;
-
-          // Clamp to boundary
-          node.x = Math.max(node.radius + 20, Math.min(width - node.radius - 20, node.x));
-          node.y = Math.max(node.radius + 20, Math.min(height - node.radius - 20, node.y));
-        } else {
-          node.x = node.fx;
-          node.y = node.fy;
-          node.vx = 0;
-          node.vy = 0;
-        }
-      });
-
-      setTick(t => (t + 1) % 1000);
-
-      if (isMounted && isSimRunning) {
-        animationFrameRef.current = requestAnimationFrame(runPhysicsStep);
-      }
-    };
-
-    animationFrameRef.current = requestAnimationFrame(runPhysicsStep);
+    cyRef.current = cy;
 
     return () => {
-      isMounted = false;
-      if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
+      cy.destroy();
+      cyRef.current = null;
     };
-  }, [layoutType, isSimRunning, graphData?.edges]);
+  }, [graphData, nodeFilter, searchQuery, tierFilter, currentLayout, getLayoutOptions]);
 
-  // Shortest Path Finder (BFS)
-  const calculateShortestPath = (srcId: string, tgtId: string) => {
-    if (!srcId || !tgtId || srcId === tgtId) return;
-
-    const queue: { id: string; pathNodes: string[]; pathEdges: string[] }[] = [
-      { id: srcId, pathNodes: [srcId], pathEdges: [] }
-    ];
-    const visited = new Set<string>([srcId]);
-
-    while (queue.length > 0) {
-      const current = queue.shift()!;
-      if (current.id === tgtId) {
-        setHighlightedPathNodeIds(new Set(current.pathNodes));
-        setHighlightedPathEdgeIds(new Set(current.pathEdges));
-        return;
-      }
-
-      (graphData?.edges || []).forEach(e => {
-        let nextNodeId: string | null = null;
-        if (e.source === current.id && !visited.has(e.target)) nextNodeId = e.target;
-        else if (e.target === current.id && !visited.has(e.source)) nextNodeId = e.source;
-
-        if (nextNodeId) {
-          visited.add(nextNodeId);
-          queue.push({
-            id: nextNodeId,
-            pathNodes: [...current.pathNodes, nextNodeId],
-            pathEdges: [...current.pathEdges, e.id]
-          });
-        }
-      });
-    }
-
-    alert('No connecting forensic trail found between the selected nodes.');
-  };
-
-  // Node Drag Handlers (Interactive Repositioning)
-  const handleNodeMouseDown = (e: React.MouseEvent, node: SimNode) => {
-    e.stopPropagation();
-    setDraggedNodeId(node.id);
-    const simNode = simNodesRef.current[node.id];
-    if (simNode) {
-      simNode.fx = simNode.x;
-      simNode.fy = simNode.y;
+  // Execute Layout Switch
+  const applyLayout = (layoutName: LayoutName) => {
+    setCurrentLayout(layoutName);
+    if (cyRef.current) {
+      const layout = cyRef.current.layout(getLayoutOptions(layoutName));
+      layout.run();
     }
   };
 
-  // Canvas Mouse Interaction Handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (e.button !== 0) return;
-    setIsDraggingCanvas(true);
-    setDragStart({ x: e.clientX - panOffset.x, y: e.clientY - panOffset.y });
-  };
+  // Run Shortest Path Analysis (Dijkstra / BFS via Cytoscape)
+  const runPathfinder = () => {
+    if (!cyRef.current || !pathSourceId || !pathTargetId) return;
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (draggedNodeId && svgRef.current) {
-      const rect = svgRef.current.getBoundingClientRect();
-      const rawX = (e.clientX - rect.left - panOffset.x) / zoomLevel;
-      const rawY = (e.clientY - rect.top - panOffset.y) / zoomLevel;
-      const simNode = simNodesRef.current[draggedNodeId];
-      if (simNode) {
-        simNode.fx = rawX;
-        simNode.fy = rawY;
-        simNode.x = rawX;
-        simNode.y = rawY;
-        setTick(t => t + 1);
-      }
-    } else if (isDraggingCanvas) {
-      setPanOffset({
-        x: e.clientX - dragStart.x,
-        y: e.clientY - dragStart.y
-      });
+    const cy = cyRef.current;
+    cy.elements().removeClass('path-node path-edge dimmed');
+
+    const sourceEle = cy.getElementById(pathSourceId);
+    const targetEle = cy.getElementById(pathTargetId);
+
+    if (sourceEle.length === 0 || targetEle.length === 0) return;
+
+    const dijkstra = cy.elements().dijkstra({
+      root: sourceEle,
+      directed: false
+    });
+
+    const pathToTarget = dijkstra.pathTo(targetEle);
+
+    if (pathToTarget.length > 0) {
+      setPathFound(true);
+      cy.elements().addClass('dimmed');
+      pathToTarget.removeClass('dimmed');
+      pathToTarget.nodes().addClass('path-node');
+      pathToTarget.edges().addClass('path-edge');
+      cy.fit(pathToTarget, 80);
+    } else {
+      setPathFound(false);
+      alert('No forensic path connects these two entities in the current network.');
     }
   };
 
-  const handleMouseUp = () => {
-    if (draggedNodeId) {
-      const simNode = simNodesRef.current[draggedNodeId];
-      if (simNode && layoutType === 'FORCE') {
-        simNode.fx = null;
-        simNode.fy = null;
-      }
-      setDraggedNodeId(null);
+  const clearPathfinder = () => {
+    if (cyRef.current) {
+      cyRef.current.elements().removeClass('path-node path-edge dimmed highlighted');
+      cyRef.current.fit(undefined, 50);
     }
-    setIsDraggingCanvas(false);
+    setPathSourceId('');
+    setPathTargetId('');
+    setPathFound(null);
   };
 
-  const handleWheel = (e: React.WheelEvent) => {
-    e.preventDefault();
-    const zoomDelta = e.deltaY > 0 ? -0.1 : 0.1;
-    setZoomLevel(z => Math.max(0.4, Math.min(2.5, z + zoomDelta)));
-  };
-
-  // Export Graph as SVG
-  const handleExportSVG = () => {
-    if (!svgRef.current) return;
-    const serializer = new XMLSerializer();
-    const source = serializer.serializeToString(svgRef.current);
-    const blob = new Blob([source], { type: 'image/svg+xml;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
+  // Export High-Res PNG
+  const handleExportPNG = () => {
+    if (!cyRef.current) return;
+    const png64 = cyRef.current.png({
+      bg: '#FFFFFF',
+      full: true,
+      scale: 2
+    });
     const a = document.createElement('a');
-    a.href = url;
-    a.download = `CIPHERTRACE_Graph_${activeCase.case_number}.svg`;
+    a.href = png64;
+    a.download = `CIPHERTRACE_Network_${activeCase.case_number}.png`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   return (
@@ -615,14 +562,14 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
               CRIMINAL NETWORK INVESTIGATION WORKSPACE
             </h1>
             <Badge variant="info">
-              {filteredNodes.length} Nodes / {filteredEdges.length} Links
+              {graphData?.nodes?.length || 0} Nodes / {graphData?.edges?.length || 0} Links
             </Badge>
             <span className="text-[11px] font-mono text-[#16805C] bg-[#ECFDF5] px-2 py-0.5 rounded border border-[#A7F3D0] font-semibold">
               ● SECTION 63 BSA COMPLIANT
             </span>
           </div>
           <p className="text-xs text-[#64748B] mt-0.5">
-            4-tier multi-modal semantic topology synthesizing CDR handovers, mule account transfers, shared hardware IMEIs, and predictive syndicate relationships.
+            Deterministic multi-modal semantic topology synthesizing CDR handovers, mule accounts, shared hardware IMEIs, and predictive syndicate relationships.
           </p>
         </div>
 
@@ -642,12 +589,12 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
           </button>
           
           <button
-            onClick={handleExportSVG}
+            onClick={handleExportPNG}
             className="btn-rect-secondary text-xs flex items-center gap-1.5"
-            title="Export High-Res SVG Dossier"
+            title="Export High-Res PNG Image"
           >
             <Download className="w-3.5 h-3.5" />
-            <span>Export SVG</span>
+            <span>Export Image</span>
           </button>
 
           <button
@@ -684,7 +631,7 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
               className="bg-white border border-[#CBD5E1] rounded px-2.5 py-1 text-xs text-[#172033]"
             >
               <option value="">-- Select Source Node --</option>
-              {filteredNodes.map(n => (
+              {(graphData?.nodes || []).map(n => (
                 <option key={n.id} value={n.id}>{n.name} ({n.label})</option>
               ))}
             </select>
@@ -697,13 +644,13 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
               className="bg-white border border-[#CBD5E1] rounded px-2.5 py-1 text-xs text-[#172033]"
             >
               <option value="">-- Select Target Node --</option>
-              {filteredNodes.map(n => (
+              {(graphData?.nodes || []).map(n => (
                 <option key={n.id} value={n.id}>{n.name} ({n.label})</option>
               ))}
             </select>
 
             <button
-              onClick={() => calculateShortestPath(pathSourceId, pathTargetId)}
+              onClick={runPathfinder}
               disabled={!pathSourceId || !pathTargetId}
               className="bg-[#163A5F] text-white px-3 py-1 rounded font-bold hover:bg-[#0E2640] disabled:opacity-50"
             >
@@ -711,12 +658,7 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
             </button>
 
             <button
-              onClick={() => {
-                setHighlightedPathEdgeIds(new Set());
-                setHighlightedPathNodeIds(new Set());
-                setPathSourceId('');
-                setPathTargetId('');
-              }}
+              onClick={clearPathfinder}
               className="px-2 py-1 text-[#64748B] hover:text-[#172033]"
             >
               Clear
@@ -725,7 +667,7 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
         </div>
       )}
 
-      {/* 4-Tier Semantic Filter & Topology Ribbon */}
+      {/* Topology & Semantic Filters Toolbar */}
       <div className="workstation-card rounded p-3 space-y-2.5 shadow-2xs">
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 text-xs font-mono">
           {/* Node Search Bar */}
@@ -762,55 +704,52 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
             ))}
           </div>
 
-          {/* Layout Algorithm Switcher */}
+          {/* Layout Algorithm Selector */}
           <div className="flex items-center gap-2">
             <span className="text-[11px] text-[#64748B] font-bold">TOPOLOGY:</span>
             <select
-              value={layoutType}
-              onChange={(e) => setLayoutType(e.target.value as LayoutType)}
-              className="bg-white border border-[#CBD5E1] rounded px-2 py-1 text-xs text-[#172033] font-semibold"
+              value={currentLayout}
+              onChange={(e) => applyLayout(e.target.value as LayoutName)}
+              className="bg-white border border-[#CBD5E1] rounded px-2.5 py-1 text-xs text-[#172033] font-semibold cursor-pointer"
             >
-              <option value="FORCE">🌐 Force-Directed (Physics)</option>
-              <option value="CONCENTRIC">🎯 Concentric (Centrality)</option>
-              <option value="HIERARCHICAL">🌲 Hierarchical (Syndicate Tree)</option>
-              <option value="RADIAL_CLUSTER">🕸️ Radial (Role Clusters)</option>
-              <option value="GRID">⊞ Matrix Grid</option>
+              <option value="cose">🌐 Organic Force (CoSE)</option>
+              <option value="concentric">🎯 Concentric (Centrality)</option>
+              <option value="breadthfirst">🌲 Hierarchical (Tree)</option>
+              <option value="circle">⭕ Radial Circle</option>
+              <option value="grid">⊞ Matrix Grid</option>
             </select>
-
-            {layoutType === 'FORCE' && (
-              <button
-                onClick={() => setIsSimRunning(r => !r)}
-                className={`p-1.5 rounded border ${isSimRunning ? 'bg-[#ECFDF5] text-[#16805C] border-[#A7F3D0]' : 'bg-[#F8FAFC] text-[#64748B] border-[#CBD5E1]'}`}
-                title={isSimRunning ? 'Pause Physics Simulation' : 'Resume Physics Simulation'}
-              >
-                {isSimRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
-              </button>
-            )}
           </div>
 
-          {/* Zoom and Reset Controls */}
+          {/* Zoom and Fit Controls */}
           <div className="flex items-center gap-1 text-[#64748B]">
             <button
-              onClick={() => setZoomLevel(z => Math.max(0.4, z - 0.2))}
+              onClick={() => cyRef.current?.zoom(cyRef.current.zoom() * 0.8)}
               className="p-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded text-[#334155]"
               title="Zoom Out"
             >
               <ZoomOut className="w-3.5 h-3.5" />
             </button>
-            <span className="text-[11px] px-1 font-bold text-[#172033]">{(zoomLevel * 100).toFixed(0)}%</span>
+            <span className="text-[11px] px-1 font-bold text-[#172033]">{zoomPercent}%</span>
             <button
-              onClick={() => setZoomLevel(z => Math.min(2.5, z + 0.2))}
+              onClick={() => cyRef.current?.zoom(cyRef.current.zoom() * 1.25)}
               className="p-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded text-[#334155]"
               title="Zoom In"
             >
               <ZoomIn className="w-3.5 h-3.5" />
             </button>
             <button
-              onClick={() => { setZoomLevel(1.0); setPanOffset({ x: 0, y: 0 }); }}
+              onClick={() => cyRef.current?.fit(undefined, 50)}
               className="p-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded text-[#334155]"
-              title="Fit & Reset View"
+              title="Fit to Screen"
             >
               <Maximize2 className="w-3.5 h-3.5" />
+            </button>
+            <button
+              onClick={() => cyRef.current?.center()}
+              className="p-1.5 bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#CBD5E1] rounded text-[#334155]"
+              title="Center View"
+            >
+              <Focus className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
@@ -873,409 +812,36 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
             </label>
           </div>
 
-          <div className="flex items-center gap-3 text-[#64748B]">
-            <label className="flex items-center gap-1 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={showMiniMap}
-                onChange={(e) => setShowMiniMap(e.target.checked)}
-                className="rounded border-[#CBD5E1]"
-              />
-              <span>Mini-Map</span>
-            </label>
+          <div className="text-[10px] text-[#64748B]">
+            <span>Tip: Drag nodes to rearrange • Double-click node to focus</span>
           </div>
         </div>
       </div>
 
-      {/* Main Interactive Canvas Area */}
-      <div 
-        ref={containerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onWheel={handleWheel}
-        className="relative w-full h-[680px] rounded-lg bg-[#FFFFFF] border border-[#D9E0E8] overflow-hidden select-none shadow-sm cursor-grab active:cursor-grabbing"
-      >
-        {/* Subtle Institutional Graph Grid Background */}
+      {/* Cytoscape Canvas Container */}
+      <div className="relative w-full h-[680px] rounded-lg bg-[#FAFCFF] border border-[#D9E0E8] overflow-hidden shadow-sm">
+        {/* Subtle Institutional Grid Texture */}
         <div 
-          className="absolute inset-0 pointer-events-none opacity-40"
+          className="absolute inset-0 pointer-events-none opacity-30"
           style={{
             backgroundImage: `radial-gradient(#CBD5E1 1px, transparent 1px)`,
-            backgroundSize: '24px 24px',
-            transform: `translate(${panOffset.x % 24}px, ${panOffset.y % 24}px)`
+            backgroundSize: '24px 24px'
           }}
         />
 
-        {loading ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-mono text-[#64748B] space-y-2">
+        {loading && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-xs font-mono text-[#64748B] space-y-2 z-10 bg-white/70">
             <RotateCw className="w-6 h-6 animate-spin text-[#163A5F]" />
-            <span>Rendering Multi-Modal Criminal Network Topology...</span>
-          </div>
-        ) : filteredNodes.length === 0 ? (
-          <div className="absolute inset-0 flex flex-col items-center justify-center space-y-2 text-[#64748B] text-xs font-mono">
-            <Network className="w-8 h-8 text-[#94A3B8]" />
-            <p>No graph nodes found matching filter criteria.</p>
-          </div>
-        ) : (
-          <svg
-            ref={svgRef}
-            className="w-full h-full"
-            style={{
-              transform: `translate(${panOffset.x}px, ${panOffset.y}px) scale(${zoomLevel})`,
-              transformOrigin: '500px 340px',
-              transition: isDraggingCanvas || draggedNodeId ? 'none' : 'transform 0.1s ease-out'
-            }}
-            onClick={() => {
-              setSelectedNode(null);
-              setSelectedEdge(null);
-            }}
-          >
-            {/* Arrowhead Defs */}
-            <defs>
-              <marker
-                id="graph-arrow-observed"
-                viewBox="0 0 10 10"
-                refX="28"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#16805C" />
-              </marker>
-              <marker
-                id="graph-arrow-inferred"
-                viewBox="0 0 10 10"
-                refX="28"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#2563EB" />
-              </marker>
-              <marker
-                id="graph-arrow-predicted"
-                viewBox="0 0 10 10"
-                refX="28"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#B7791F" />
-              </marker>
-              <marker
-                id="graph-arrow-contested"
-                viewBox="0 0 10 10"
-                refX="28"
-                refY="5"
-                markerWidth="6"
-                markerHeight="6"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#DC2626" />
-              </marker>
-              <marker
-                id="graph-arrow-gold"
-                viewBox="0 0 10 10"
-                refX="28"
-                refY="5"
-                markerWidth="7"
-                markerHeight="7"
-                orient="auto-start-reverse"
-              >
-                <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#D97706" />
-              </marker>
-
-              {/* Glowing filter for highlighted path */}
-              <filter id="path-glow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
-                <feComposite in="SourceGraphic" in2="blur" operator="over" />
-              </filter>
-            </defs>
-
-            {/* Render Edges */}
-            {filteredEdges.map((edge) => {
-              const srcNode = simNodesRef.current[edge.source];
-              const tgtNode = simNodesRef.current[edge.target];
-              if (!srcNode || !tgtNode) return null;
-
-              const tier = getEdgeTier(edge);
-              const strokeColor = getEdgeStrokeColor(tier);
-              const isSelected = selectedEdge?.id === edge.id;
-              const isPathHighlighted = highlightedPathEdgeIds.has(edge.id);
-
-              // Focus mode dimming
-              let isDimmed = false;
-              if (activeFocusNodeIds) {
-                isDimmed = !activeFocusNodeIds.has(edge.source) || !activeFocusNodeIds.has(edge.target);
-              }
-
-              // Compute curved midpoint for bidirectional separation
-              const dx = tgtNode.x - srcNode.x;
-              const dy = tgtNode.y - srcNode.y;
-              const dist = Math.sqrt(dx * dx + dy * dy) || 1;
-              const midX = (srcNode.x + tgtNode.x) / 2;
-              const midY = (srcNode.y + tgtNode.y) / 2;
-
-              // Slight perpendicular curvature
-              const curvatureOffset = 12;
-              const normX = -dy / dist;
-              const normY = dx / dist;
-              const ctrlX = midX + normX * curvatureOffset;
-              const ctrlY = midY + normY * curvatureOffset;
-
-              const pathString = `M ${srcNode.x} ${srcNode.y} Q ${ctrlX} ${ctrlY} ${tgtNode.x} ${tgtNode.y}`;
-
-              let dashArray: string | undefined = undefined;
-              if (tier === 'inferred') dashArray = '6,4';
-              if (tier === 'predicted') dashArray = '2,4';
-              if (tier === 'contested') dashArray = '8,3,2,3';
-
-              return (
-                <g 
-                  key={edge.id} 
-                  className={`group cursor-pointer transition-opacity duration-200 ${isDimmed ? 'opacity-15' : 'opacity-100'}`}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedNode(null);
-                    setSelectedEdge(edge);
-                  }}
-                >
-                  {/* Glowing backing for pathfinder */}
-                  {isPathHighlighted && (
-                    <path
-                      d={pathString}
-                      fill="none"
-                      stroke="#F59E0B"
-                      strokeWidth="6"
-                      filter="url(#path-glow)"
-                      className="animate-pulse"
-                    />
-                  )}
-
-                  {/* Main Edge Line */}
-                  <path
-                    d={pathString}
-                    fill="none"
-                    stroke={isPathHighlighted ? '#D97706' : isSelected ? '#163A5F' : strokeColor}
-                    strokeWidth={isPathHighlighted ? '3.5' : isSelected ? '3.5' : tier === 'observed' ? '2.5' : '1.8'}
-                    strokeDasharray={dashArray}
-                    markerEnd={`url(#graph-arrow-${isPathHighlighted ? 'gold' : tier})`}
-                    className="transition-all group-hover:stroke-[#163A5F] group-hover:stroke-[3]"
-                  />
-
-                  {/* Edge Label Badge */}
-                  <g transform={`translate(${ctrlX}, ${ctrlY})`}>
-                    <rect
-                      x="-40"
-                      y="-9"
-                      width="80"
-                      height="18"
-                      rx="3"
-                      fill="#FFFFFF"
-                      stroke={isPathHighlighted ? '#D97706' : isSelected ? '#163A5F' : '#CBD5E1'}
-                      strokeWidth={isSelected || isPathHighlighted ? '1.5' : '1'}
-                      className="shadow-2xs"
-                    />
-                    <text
-                      y="3.5"
-                      textAnchor="middle"
-                      fill={isPathHighlighted ? '#92400E' : isSelected ? '#163A5F' : '#334155'}
-                      fontSize="8"
-                      fontFamily="monospace"
-                      fontWeight="bold"
-                      className="pointer-events-none select-none"
-                    >
-                      {edge.label.length > 14 ? `${edge.label.slice(0, 13)}.` : edge.label}
-                    </text>
-                  </g>
-                </g>
-              );
-            })}
-
-            {/* Render Nodes */}
-            {filteredNodes.map((node) => {
-              const simNode = simNodesRef.current[node.id];
-              if (!simNode) return null;
-
-              const color = getNodeColor(node.label);
-              const bgColor = getNodeBgColor(node.label);
-              const isSelected = selectedNode?.id === node.id;
-              const isHovered = hoveredNodeId === node.id;
-              const isPathHighlighted = highlightedPathNodeIds.has(node.id);
-
-              // Focus mode dimming
-              let isDimmed = false;
-              if (activeFocusNodeIds) {
-                isDimmed = !activeFocusNodeIds.has(node.id);
-              }
-
-              const radius = isSelected ? simNode.radius + 4 : simNode.radius;
-
-              return (
-                <g
-                  key={node.id}
-                  transform={`translate(${simNode.x}, ${simNode.y})`}
-                  onMouseDown={(e) => handleNodeMouseDown(e, simNode)}
-                  onMouseEnter={() => setHoveredNodeId(node.id)}
-                  onMouseLeave={() => setHoveredNodeId(null)}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setSelectedEdge(null);
-                    setSelectedNode(node);
-                  }}
-                  className={`cursor-pointer group transition-opacity duration-200 ${isDimmed ? 'opacity-20' : 'opacity-100'}`}
-                >
-                  {/* Outer Pulsing Halo when Selected / Path-highlighted */}
-                  {(isSelected || isPathHighlighted) && (
-                    <circle
-                      r={radius + 8}
-                      fill="none"
-                      stroke={isPathHighlighted ? '#F59E0B' : '#2563EB'}
-                      strokeWidth="2.5"
-                      strokeDasharray="4,3"
-                      className="animate-spin-slow"
-                    />
-                  )}
-
-                  {/* Outer Border Halo */}
-                  <circle
-                    r={radius + 3}
-                    fill="none"
-                    stroke={color}
-                    strokeWidth="1.5"
-                    opacity="0.4"
-                    className="group-hover:opacity-90 transition-opacity"
-                  />
-
-                  {/* Inner Node Circle Body */}
-                  <circle
-                    r={radius}
-                    fill={bgColor}
-                    stroke={isSelected ? '#163A5F' : color}
-                    strokeWidth={isSelected ? '3' : '2'}
-                    className="transition-all shadow-sm group-hover:scale-105"
-                  />
-
-                  {/* Central Node Glyph / Category Text */}
-                  <text
-                    y="4"
-                    textAnchor="middle"
-                    fill={color}
-                    fontSize={radius > 22 ? '11' : '9'}
-                    fontWeight="bold"
-                    fontFamily="monospace"
-                    className="pointer-events-none select-none"
-                  >
-                    {node.label.slice(0, 3).toUpperCase()}
-                  </text>
-
-                  {/* Node Name Card Container Below Node */}
-                  <g transform={`translate(0, ${radius + 14})`}>
-                    <rect
-                      x="-55"
-                      y="-9"
-                      width="110"
-                      height="20"
-                      rx="3"
-                      fill="#FFFFFF"
-                      stroke={isSelected ? '#2563EB' : '#CBD5E1'}
-                      strokeWidth={isSelected ? '1.5' : '1'}
-                      className="shadow-2xs"
-                    />
-                    <text
-                      y="4"
-                      textAnchor="middle"
-                      fill="#172033"
-                      fontSize="9.5"
-                      fontFamily="sans-serif"
-                      fontWeight="bold"
-                      className="pointer-events-none select-none"
-                    >
-                      {node.name.length > 15 ? `${node.name.slice(0, 14)}…` : node.name}
-                    </text>
-                  </g>
-
-                  {/* Degree Centrality Badge Pill */}
-                  <g transform={`translate(${radius - 4}, ${-radius + 4})`}>
-                    <circle r="8" fill="#163A5F" />
-                    <text
-                      y="2.5"
-                      textAnchor="middle"
-                      fill="#FFFFFF"
-                      fontSize="7.5"
-                      fontFamily="monospace"
-                      fontWeight="bold"
-                      className="pointer-events-none"
-                    >
-                      {node.degree || 1}
-                    </text>
-                  </g>
-                </g>
-              );
-            })}
-          </svg>
-        )}
-
-        {/* Tactical Mini-Map Radar (Bottom-Right Viewport Preview) */}
-        {showMiniMap && filteredNodes.length > 0 && (
-          <div className="absolute bottom-3 left-3 w-44 h-32 bg-[#FFFFFF]/90 backdrop-blur border border-[#CBD5E1] rounded-md shadow-md p-1 font-mono text-[9px] text-[#64748B] pointer-events-none">
-            <div className="text-[8px] font-bold text-[#163A5F] px-1 uppercase tracking-wider flex items-center justify-between border-b border-[#E2E8F0] pb-0.5 mb-1">
-              <span>RADAR MINIMAP</span>
-              <span>{(zoomLevel * 100).toFixed(0)}%</span>
-            </div>
-            <svg viewBox="0 0 1000 680" className="w-full h-24">
-              {/* Mini-map edges */}
-              {filteredEdges.map(e => {
-                const s = simNodesRef.current[e.source];
-                const t = simNodesRef.current[e.target];
-                if (!s || !t) return null;
-                return (
-                  <line
-                    key={`mini-${e.id}`}
-                    x1={s.x}
-                    y1={s.y}
-                    x2={t.x}
-                    y2={t.y}
-                    stroke="#CBD5E1"
-                    strokeWidth="2"
-                  />
-                );
-              })}
-              {/* Mini-map nodes */}
-              {filteredNodes.map(n => {
-                const sn = simNodesRef.current[n.id];
-                if (!sn) return null;
-                return (
-                  <circle
-                    key={`mini-${n.id}`}
-                    cx={sn.x}
-                    cy={sn.y}
-                    r={sn.radius}
-                    fill={getNodeColor(n.label)}
-                  />
-                );
-              })}
-              {/* Camera Frame */}
-              <rect
-                x={Math.max(0, -panOffset.x / zoomLevel)}
-                y={Math.max(0, -panOffset.y / zoomLevel)}
-                width={1000 / zoomLevel}
-                height={680 / zoomLevel}
-                fill="none"
-                stroke="#2563EB"
-                strokeWidth="4"
-                strokeDasharray="8,6"
-              />
-            </svg>
+            <span>Rendering High-Precision Criminal Knowledge Graph...</span>
           </div>
         )}
+
+        {/* The DOM container for Cytoscape.js */}
+        <div ref={cyContainerRef} className="w-full h-full" />
 
         {/* Node Inspector Drawer */}
         {selectedNode && (
-          <div className="absolute top-3 right-3 w-84 bg-[#FFFFFF] border border-[#D9E0E8] rounded-lg shadow-xl p-4 space-y-3 font-mono text-xs max-h-[620px] overflow-y-auto">
+          <div className="absolute top-3 right-3 w-84 bg-[#FFFFFF] border border-[#D9E0E8] rounded-lg shadow-xl p-4 space-y-3 font-mono text-xs max-h-[620px] overflow-y-auto z-20">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-2">
               <div className="flex items-center gap-2">
                 <div 
@@ -1318,30 +884,6 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
               </div>
             </div>
 
-            {/* Connected Neighbors List */}
-            <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded space-y-1.5">
-              <div className="text-[10px] text-[#64748B] uppercase font-semibold flex items-center justify-between">
-                <span>CONNECTED ADJACENCIES</span>
-                <span>{(adjacencyMap[selectedNode.id] || new Set()).size} NODES</span>
-              </div>
-              <div className="space-y-1 max-h-28 overflow-y-auto pr-1">
-                {Array.from(adjacencyMap[selectedNode.id] || []).map(neighborId => {
-                  const neighborNode = graphData?.nodes.find(n => n.id === neighborId);
-                  if (!neighborNode) return null;
-                  return (
-                    <div 
-                      key={neighborId}
-                      onClick={() => setSelectedNode(neighborNode)}
-                      className="flex items-center justify-between text-[10px] p-1 bg-white hover:bg-[#EEF2FF] rounded border border-[#E2E8F0] cursor-pointer"
-                    >
-                      <span className="text-[#172033] font-semibold truncate max-w-[140px]">{neighborNode.name}</span>
-                      <span className="text-[#64748B] text-[9px]">{neighborNode.label}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-
             {/* Properties View */}
             {selectedNode.properties && Object.keys(selectedNode.properties).length > 0 && (
               <div className="p-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded space-y-1">
@@ -1375,7 +917,7 @@ export const KnowledgeGraphViewer: React.FC<KnowledgeGraphViewerProps> = ({ acti
 
         {/* Edge Inspector Drawer */}
         {selectedEdge && (
-          <div className="absolute top-3 right-3 w-84 bg-[#FFFFFF] border border-[#D9E0E8] rounded-lg shadow-xl p-4 space-y-3 font-mono text-xs">
+          <div className="absolute top-3 right-3 w-84 bg-[#FFFFFF] border border-[#D9E0E8] rounded-lg shadow-xl p-4 space-y-3 font-mono text-xs z-20">
             <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-2">
               <div className="flex items-center gap-2">
                 <Layers className="w-3.5 h-3.5 text-[#163A5F]" />
