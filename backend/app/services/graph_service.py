@@ -216,19 +216,7 @@ class GraphService:
         edges_list: List[GraphEdge] = []
         node_degrees: Dict[str, int] = {}
 
-        # 1. Fetch Case
-        case = db.query(Case).filter(Case.id == case_id).first()
-        if case:
-            case_node_id = f"case_{case.id}"
-            nodes_dict[case_node_id] = GraphNode(
-                id=case_node_id,
-                label="Case",
-                name=f"{case.case_number}: {case.title}",
-                properties={"priority": case.priority, "stage": case.stage, "status": case.status},
-                is_canonical=True
-            )
-
-        # 2. Fetch Extracted Entities
+        # 1. Fetch Extracted Entities
         query_ent = db.query(ExtractedEntity).filter(ExtractedEntity.case_id == case_id)
         if node_types:
             query_ent = query_ent.filter(ExtractedEntity.entity_type.in_([t.upper() for t in node_types]))
@@ -250,7 +238,7 @@ class GraphService:
                 is_canonical=False
             )
 
-        # 3. Fetch Extracted Relationships
+        # 2. Fetch Extracted Relationships
         query_rel = db.query(ExtractedRelationship).filter(ExtractedRelationship.case_id == case_id)
         if rel_types:
             query_rel = query_rel.filter(ExtractedRelationship.relationship_type.in_([r.upper() for r in rel_types]))
@@ -265,14 +253,16 @@ class GraphService:
 
             # Fallback if IDs were not directly mapped
             if not src_id:
-                # Find matching entity node by value
+                # Find matching entity node by value (case-insensitive)
+                src_val_clean = (rel.source_value or "").upper().strip()
                 for nid, n in nodes_dict.items():
-                    if n.name == rel.source_value:
+                    if n.name.upper().strip() == src_val_clean:
                         src_id = nid
                         break
             if not tgt_id:
+                tgt_val_clean = (rel.target_value or "").upper().strip()
                 for nid, n in nodes_dict.items():
-                    if n.name == rel.target_value:
+                    if n.name.upper().strip() == tgt_val_clean:
                         tgt_id = nid
                         break
 

@@ -171,21 +171,43 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "text": "Extracted encrypted chat history from seized OnePlus 11 (IMEI 861209384910283). Chat group 'Hawala Clearings DXB' containing crypto wallet address 0x71C4912903820192847291823918293819283918 and transfer confirmations.",
                     "entities": [
                         ("0x71C4912903820192847291823918293819283918", "FINANCIAL_ACCOUNT", 0.99),
+                        ("0x3F5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE", "FINANCIAL_ACCOUNT", 0.97),
                         ("IMEI-861209384910283", "DEVICE", 0.98),
-                        ("Hawala Clearings DXB", "ORGANIZATION", 0.91)
+                        ("IMEI-354921098471203", "DEVICE", 0.96),
+                        ("Hawala Clearings DXB", "ORGANIZATION", 0.91),
+                        ("Apex Bullion Trade FZE", "ORGANIZATION", 0.94),
+                        ("Amina Qureshi", "PERSON", 0.95),
+                        ("Karan Singhal", "PERSON", 0.93),
+                        ("KOTAK-SHELL-771029", "FINANCIAL_ACCOUNT", 0.96),
+                        ("+971501234567", "PHONE_NUMBER", 0.98),
+                        ("+919711223344", "PHONE_NUMBER", 0.99),
+                        ("Dubai Gold Souk Vault", "LOCATION", 0.92),
+                        ("DL-01-AB-1234", "VEHICLE", 0.95)
                     ]
                 }
             ],
             "relationships": [
                 ("Ravi Kumar", "+919811024819", "USES_DEVICE", "OBSERVED", 0.98),
                 ("Ravi Kumar", "HDFC-MULE-481920", "OPERATES_ACCOUNT", "INFERRED", 0.92),
+                ("Ravi Kumar", "IMEI-861209384910283", "OPERATES_DEVICE", "OBSERVED", 0.99),
                 ("+919811024819", "+919876543210", "CALLS_TO", "OBSERVED", 0.99),
                 ("Vikram Malhotra", "+919876543210", "USES_DEVICE", "OBSERVED", 0.95),
                 ("Vikram Malhotra", "ShadowTech Global", "ASSOCIATED_WITH", "OBSERVED", 0.94),
+                ("Vikram Malhotra", "Apex Bullion Trade FZE", "CONTROLS_OFFSHORE", "INFERRED", 0.91),
                 ("Suresh Patel", "Ravi Kumar", "CO_ACCUSED_WITH", "OBSERVED", 0.99),
+                ("Suresh Patel", "+919711223344", "USES_DEVICE", "OBSERVED", 0.98),
+                ("Suresh Patel", "Karan Singhal", "RECRUITS_MULE", "OBSERVED", 0.96),
+                ("Karan Singhal", "KOTAK-SHELL-771029", "OPERATES_ACCOUNT", "OBSERVED", 0.97),
                 ("HDFC-MULE-481920", "ICICI-MULE-902144", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.97),
                 ("ICICI-MULE-902144", "0x71C4912903820192847291823918293819283918", "TRANSFERS_FUNDS_TO", "INFERRED", 0.88),
-                ("Ravi Kumar", "CP Mandir Marg Tower", "LOCATED_AT", "OBSERVED", 0.93)
+                ("0x71C4912903820192847291823918293819283918", "0x3F5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.95),
+                ("Amina Qureshi", "0x3F5CE5FBFe3E9af3971dD833D26bA9b5C936f0bE", "OPERATES_ACCOUNT", "INFERRED", 0.93),
+                ("Amina Qureshi", "+971501234567", "USES_DEVICE", "OBSERVED", 0.98),
+                ("+971501234567", "+919876543210", "CALLS_TO", "OBSERVED", 0.96),
+                ("Ravi Kumar", "CP Mandir Marg Tower", "LOCATED_AT", "OBSERVED", 0.93),
+                ("Ravi Kumar", "DL-01-AB-1234", "OPERATES_VEHICLE", "OBSERVED", 0.95),
+                ("Amina Qureshi", "Dubai Gold Souk Vault", "OPERATES_IN", "INFERRED", 0.89),
+                ("Hawala Clearings DXB", "Dubai Gold Souk Vault", "LOCATED_AT", "OBSERVED", 0.94)
             ]
         },
         {
@@ -230,8 +252,20 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "text": "Seizure memo for Hybertone GoIP 128-channel GSM gateway. Hardware serial number SN-GOIP128-99201. Operating suspect Tariq Sheikh apprehended on-site.",
                     "entities": [
                         ("Tariq Sheikh", "PERSON", 0.99),
+                        ("Mohd. Irfan", "PERSON", 0.96),
+                        ("Rashid Ali", "PERSON", 0.94),
+                        ("Neha Sharma", "PERSON", 0.92),
                         ("Hybertone GoIP 128", "DEVICE", 0.96),
-                        ("Mandir Marg Building 12", "LOCATION", 0.95)
+                        ("D-Link DWR-921 Router", "DEVICE", 0.95),
+                        ("IMEI-359128091823019", "DEVICE", 0.98),
+                        ("IMEI-864019284719201", "DEVICE", 0.97),
+                        ("Mandir Marg Building 12", "LOCATION", 0.95),
+                        ("Nuh Mewat Node", "LOCATION", 0.91),
+                        ("Jamtara Relay Point", "LOCATION", 0.93),
+                        ("VoIP Connect FZ-LLC", "ORGANIZATION", 0.94),
+                        ("PAYTM-MULE-998877", "FINANCIAL_ACCOUNT", 0.98),
+                        ("SBI-CYBER-882104", "FINANCIAL_ACCOUNT", 0.97),
+                        ("HR-26-CC-9011", "VEHICLE", 0.93)
                     ]
                 },
                 {
@@ -246,6 +280,8 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "entities": [
                         ("+919988776655", "PHONE_NUMBER", 0.99),
                         ("+919123456780", "PHONE_NUMBER", 0.99),
+                        ("+919810192834", "PHONE_NUMBER", 0.98),
+                        ("+919820394857", "PHONE_NUMBER", 0.97),
                         ("Delhi-NCR BTS Cluster", "LOCATION", 0.92)
                     ]
                 }
@@ -253,7 +289,21 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
             "relationships": [
                 ("Tariq Sheikh", "Hybertone GoIP 128", "USES_DEVICE", "OBSERVED", 0.99),
                 ("Tariq Sheikh", "+919988776655", "USES_DEVICE", "OBSERVED", 0.97),
-                ("+919988776655", "Delhi-NCR BTS Cluster", "LOCATED_AT", "OBSERVED", 0.94)
+                ("Tariq Sheikh", "Mandir Marg Building 12", "LOCATED_AT", "OBSERVED", 0.98),
+                ("Tariq Sheikh", "Mohd. Irfan", "CO_ACCUSED_WITH", "OBSERVED", 0.97),
+                ("Mohd. Irfan", "D-Link DWR-921 Router", "CONFIGURES_DEVICE", "OBSERVED", 0.96),
+                ("Mohd. Irfan", "IMEI-359128091823019", "OPERATES_DEVICE", "OBSERVED", 0.98),
+                ("Rashid Ali", "+919123456780", "USES_DEVICE", "OBSERVED", 0.95),
+                ("Rashid Ali", "Tariq Sheikh", "SUPPLIES_SIMS_TO", "OBSERVED", 0.96),
+                ("Rashid Ali", "Nuh Mewat Node", "OPERATES_IN", "INFERRED", 0.91),
+                ("Neha Sharma", "Jamtara Relay Point", "OPERATES_IN", "OBSERVED", 0.94),
+                ("Neha Sharma", "+919810192834", "USES_DEVICE", "OBSERVED", 0.96),
+                ("+919810192834", "+919820394857", "CALLS_TO", "OBSERVED", 0.99),
+                ("+919988776655", "Delhi-NCR BTS Cluster", "LOCATED_AT", "OBSERVED", 0.94),
+                ("Hybertone GoIP 128", "VoIP Connect FZ-LLC", "ROUTES_TRAFFIC_TO", "INFERRED", 0.93),
+                ("Tariq Sheikh", "PAYTM-MULE-998877", "RECEIVES_FUNDS_IN", "OBSERVED", 0.97),
+                ("PAYTM-MULE-998877", "SBI-CYBER-882104", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.96),
+                ("Tariq Sheikh", "HR-26-CC-9011", "OPERATES_VEHICLE", "OBSERVED", 0.92)
             ]
         },
         {
@@ -292,9 +342,21 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "text": "Registrar of Companies filings for ShadowTech Global Pvt Ltd (CIN U72900DL2024PTC391021). Directors listed: Vikram Malhotra (DIN 09218412) and Dummy Director Ramesh Gupta.",
                     "entities": [
                         ("ShadowTech Global Pvt Ltd", "ORGANIZATION", 0.99),
+                        ("Trident Finlease Ltd", "ORGANIZATION", 0.96),
+                        ("Vanguard Paper Products Pvt Ltd", "ORGANIZATION", 0.95),
                         ("Vikram Malhotra", "PERSON", 0.98),
                         ("Ramesh Gupta", "PERSON", 0.95),
-                        ("CIN U72900DL2024PTC391021", "FINANCIAL_ACCOUNT", 0.97)
+                        ("CA Deepak Singhania", "PERSON", 0.97),
+                        ("Sunil Agarwal", "PERSON", 0.93),
+                        ("CIN U72900DL2024PTC391021", "FINANCIAL_ACCOUNT", 0.97),
+                        ("ICICI-CORP-990214", "FINANCIAL_ACCOUNT", 0.99),
+                        ("HDFC-ESCROW-330192", "FINANCIAL_ACCOUNT", 0.98),
+                        ("+919876543210", "PHONE_NUMBER", 0.99),
+                        ("+919811099887", "PHONE_NUMBER", 0.98),
+                        ("HP-SERVER-EOW-01", "DEVICE", 0.95),
+                        ("Nehru Place Financial Hub", "LOCATION", 0.96),
+                        ("Nariman Point Corporate Tower", "LOCATION", 0.94),
+                        ("Kolkata GST Zone", "LOCATION", 0.93)
                     ]
                 },
                 {
@@ -309,15 +371,30 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "entities": [
                         ("Alpine Bank Geneva", "ORGANIZATION", 0.98),
                         ("Emirates NBD Dubai", "ORGANIZATION", 0.97),
-                        ("USD 1.85 Million", "FINANCIAL_ACCOUNT", 0.99)
+                        ("USD 1.85 Million", "FINANCIAL_ACCOUNT", 0.99),
+                        ("SWIFT-CH-GENEVA-8812", "FINANCIAL_ACCOUNT", 0.98)
                     ]
                 }
             ],
             "relationships": [
-                ("Vikram Malhotra", "ShadowTech Global Pvt Ltd", "ASSOCIATED_WITH", "OBSERVED", 0.99),
-                ("Ramesh Gupta", "ShadowTech Global Pvt Ltd", "ASSOCIATED_WITH", "OBSERVED", 0.95),
-                ("ShadowTech Global Pvt Ltd", "Alpine Bank Geneva", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.96),
-                ("ShadowTech Global Pvt Ltd", "Emirates NBD Dubai", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.96)
+                ("Vikram Malhotra", "ShadowTech Global Pvt Ltd", "BENEFICIAL_OWNER_OF", "OBSERVED", 0.99),
+                ("Ramesh Gupta", "ShadowTech Global Pvt Ltd", "NOMINEE_DIRECTOR_OF", "OBSERVED", 0.95),
+                ("CA Deepak Singhania", "ShadowTech Global Pvt Ltd", "AUDITS_ACCOUNTS_FOR", "OBSERVED", 0.98),
+                ("CA Deepak Singhania", "Trident Finlease Ltd", "INCORPORATED_ENTITY", "OBSERVED", 0.96),
+                ("Sunil Agarwal", "Vanguard Paper Products Pvt Ltd", "OPERATES_FRONT", "OBSERVED", 0.94),
+                ("ShadowTech Global Pvt Ltd", "Trident Finlease Ltd", "CIRCULAR_INVOICE_TO", "OBSERVED", 0.97),
+                ("Trident Finlease Ltd", "Vanguard Paper Products Pvt Ltd", "CIRCULAR_INVOICE_TO", "OBSERVED", 0.96),
+                ("Vanguard Paper Products Pvt Ltd", "ShadowTech Global Pvt Ltd", "CIRCULAR_INVOICE_TO", "OBSERVED", 0.95),
+                ("ShadowTech Global Pvt Ltd", "ICICI-CORP-990214", "CONTROLS_ACCOUNT", "OBSERVED", 0.99),
+                ("ICICI-CORP-990214", "HDFC-ESCROW-330192", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.98),
+                ("HDFC-ESCROW-330192", "SWIFT-CH-GENEVA-8812", "TRANSFERS_FUNDS_TO", "OBSERVED", 0.97),
+                ("SWIFT-CH-GENEVA-8812", "Alpine Bank Geneva", "ROUTED_TO_BANK", "OBSERVED", 0.98),
+                ("ShadowTech Global Pvt Ltd", "Emirates NBD Dubai", "OFFSHORE_WIRE_TO", "OBSERVED", 0.96),
+                ("Vikram Malhotra", "+919876543210", "USES_DEVICE", "OBSERVED", 0.99),
+                ("CA Deepak Singhania", "+919811099887", "USES_DEVICE", "OBSERVED", 0.97),
+                ("+919876543210", "+919811099887", "CALLS_TO", "OBSERVED", 0.98),
+                ("ShadowTech Global Pvt Ltd", "Nehru Place Financial Hub", "LOCATED_AT", "OBSERVED", 0.96),
+                ("CA Deepak Singhania", "Nariman Point Corporate Tower", "OPERATES_IN", "OBSERVED", 0.94)
             ]
         },
         {
@@ -356,13 +433,47 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                     "text": "Logistics airway tracking manifest. Consignment AWB #7729103 shipped from New Delhi to Bengaluru. Drop point coordinates: Outer Ring Road Hub.",
                     "entities": [
                         ("AWB #7729103", "FINANCIAL_ACCOUNT", 0.97),
+                        ("XMR-WALLET-88492019", "FINANCIAL_ACCOUNT", 0.98),
+                        ("BTC-ESCROW-348102", "FINANCIAL_ACCOUNT", 0.96),
+                        ("FEDERAL-ACC-449102", "FINANCIAL_ACCOUNT", 0.95),
                         ("Outer Ring Road Hub", "LOCATION", 0.94),
-                        ("Sanjay Verma", "PERSON", 0.92)
+                        ("Terminal 2 Cargo Complex", "LOCATION", 0.96),
+                        ("Whitefield Dead-Drop #4", "LOCATION", 0.95),
+                        ("Koramangala Parcel Locker", "LOCATION", 0.93),
+                        ("Sanjay Verma", "PERSON", 0.92),
+                        ("Dev Anand", "PERSON", 0.96),
+                        ("Kabir Oberoi", "PERSON", 0.98),
+                        ("Rajat Sen", "PERSON", 0.94),
+                        ("Meera Nair", "PERSON", 0.91),
+                        ("Wickr phantom_route", "DEVICE", 0.97),
+                        ("Session ID 05a8f219c", "DEVICE", 0.96),
+                        ("IMEI-352901928341029", "DEVICE", 0.98),
+                        ("+919845012345", "PHONE_NUMBER", 0.99),
+                        ("+919886098765", "PHONE_NUMBER", 0.98),
+                        ("KA-03-HA-8821", "VEHICLE", 0.95),
+                        ("DL-1C-AA-4910", "VEHICLE", 0.92)
                     ]
                 }
             ],
             "relationships": [
-                ("Sanjay Verma", "Outer Ring Road Hub", "LOCATED_AT", "INFERRED", 0.86)
+                ("Kabir Oberoi", "Wickr phantom_route", "USES_DEVICE", "OBSERVED", 0.98),
+                ("Kabir Oberoi", "XMR-WALLET-88492019", "CONTROLS_WALLET", "INFERRED", 0.92),
+                ("Kabir Oberoi", "Dev Anand", "COMMANDS", "OBSERVED", 0.96),
+                ("Dev Anand", "Terminal 2 Cargo Complex", "DISPATCHES_FROM", "OBSERVED", 0.97),
+                ("Dev Anand", "AWB #7729103", "SHIPPED_CONSIGNMENT", "OBSERVED", 0.99),
+                ("AWB #7729103", "Outer Ring Road Hub", "ROUTED_TO", "OBSERVED", 0.98),
+                ("Sanjay Verma", "Outer Ring Road Hub", "COLLECTS_FROM", "OBSERVED", 0.95),
+                ("Sanjay Verma", "KA-03-HA-8821", "OPERATES_VEHICLE", "OBSERVED", 0.97),
+                ("Sanjay Verma", "Whitefield Dead-Drop #4", "DROPS_CONTRABAND_AT", "OBSERVED", 0.96),
+                ("Rajat Sen", "Whitefield Dead-Drop #4", "RETRIEVES_FROM", "INFERRED", 0.91),
+                ("Rajat Sen", "Koramangala Parcel Locker", "DELIVERS_TO", "OBSERVED", 0.94),
+                ("Sanjay Verma", "+919845012345", "USES_PHONE", "OBSERVED", 0.99),
+                ("Dev Anand", "+919886098765", "USES_PHONE", "OBSERVED", 0.98),
+                ("+919845012345", "+919886098765", "CALLS_TO", "OBSERVED", 0.97),
+                ("XMR-WALLET-88492019", "BTC-ESCROW-348102", "SWAPS_FUNDS_TO", "INFERRED", 0.89),
+                ("BTC-ESCROW-348102", "FEDERAL-ACC-449102", "CASHOUT_TO", "PREDICTED", 0.85),
+                ("Meera Nair", "Koramangala Parcel Locker", "SUPERVISES_LOCKER", "INFERRED", 0.88),
+                ("Sanjay Verma", "IMEI-352901928341029", "OPERATES_DEVICE", "OBSERVED", 0.96)
             ]
         }
     ]
@@ -505,6 +616,12 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
                 else:
                     entity_id_map[norm_val] = existing_ent.id
 
+        # Populate all existing entities into map for this case
+        all_case_entities = db.query(ExtractedEntity).filter(ExtractedEntity.case_id == case.id).all()
+        for ent in all_case_entities:
+            entity_id_map[ent.normalized_value.upper().strip()] = ent.id
+            entity_id_map[ent.raw_value.upper().strip()] = ent.id
+
         # Seed Relationships
         for src, tgt, rel_type, rel_nat, conf in c_data.get("relationships", []):
             src_norm = src.upper().strip()
@@ -513,6 +630,61 @@ def seed_database_comprehensive(db: Session) -> Dict[str, Any]:
             # Find a parent evidence item in case
             parent_ev = db.query(EvidenceItem).filter(EvidenceItem.case_id == case.id).first()
             if parent_ev:
+                # Ensure source entity exists
+                if src_norm not in entity_id_map:
+                    # Infer entity type
+                    ent_t = "PERSON"
+                    if src_norm.startswith("+") or "PHONE" in src_norm: ent_t = "PHONE_NUMBER"
+                    elif "IMEI" in src_norm or "ROUTER" in src_norm or "GOIP" in src_norm or "DEVICE" in src_norm or "SESSION" in src_norm or "WICKR" in src_norm: ent_t = "DEVICE"
+                    elif "ACC" in src_norm or "MULE" in src_norm or "0X" in src_norm or "XMR" in src_norm or "BTC" in src_norm or "CIN" in src_norm or "SWIFT" in src_norm or "AWB" in src_norm: ent_t = "FINANCIAL_ACCOUNT"
+                    elif "HUB" in src_norm or "TOWER" in src_norm or "BUILDING" in src_norm or "POINT" in src_norm or "ZONE" in src_norm or "CLUSTER" in src_norm or "COMPLEX" in src_norm or "LOCKER" in src_norm: ent_t = "LOCATION"
+                    elif "LTD" in src_norm or "PVT" in src_norm or "BANK" in src_norm or "FZ" in src_norm or "FZE" in src_norm: ent_t = "ORGANIZATION"
+                    elif src_norm.startswith("KA-") or src_norm.startswith("DL-") or src_norm.startswith("HR-"): ent_t = "VEHICLE"
+
+                    new_ent = ExtractedEntity(
+                        evidence_id=parent_ev.id,
+                        case_id=case.id,
+                        entity_type=ent_t,
+                        raw_value=src,
+                        normalized_value=src_norm,
+                        confidence=conf,
+                        context_snippet=f"Entity {src} in case {case.case_number}",
+                        extraction_method="GRAPH_TOPOLOGY_INFERENCE",
+                        entity_metadata={"seeded": True}
+                    )
+                    db.add(new_ent)
+                    db.commit()
+                    db.refresh(new_ent)
+                    entity_id_map[src_norm] = new_ent.id
+                    results["entities"] += 1
+
+                # Ensure target entity exists
+                if tgt_norm not in entity_id_map:
+                    ent_t = "PERSON"
+                    if tgt_norm.startswith("+") or "PHONE" in tgt_norm: ent_t = "PHONE_NUMBER"
+                    elif "IMEI" in tgt_norm or "ROUTER" in tgt_norm or "GOIP" in tgt_norm or "DEVICE" in tgt_norm or "SESSION" in tgt_norm or "WICKR" in tgt_norm: ent_t = "DEVICE"
+                    elif "ACC" in tgt_norm or "MULE" in tgt_norm or "0X" in tgt_norm or "XMR" in tgt_norm or "BTC" in tgt_norm or "CIN" in tgt_norm or "SWIFT" in tgt_norm or "AWB" in tgt_norm: ent_t = "FINANCIAL_ACCOUNT"
+                    elif "HUB" in tgt_norm or "TOWER" in tgt_norm or "BUILDING" in tgt_norm or "POINT" in tgt_norm or "ZONE" in tgt_norm or "CLUSTER" in tgt_norm or "COMPLEX" in tgt_norm or "LOCKER" in tgt_norm: ent_t = "LOCATION"
+                    elif "LTD" in tgt_norm or "PVT" in tgt_norm or "BANK" in tgt_norm or "FZ" in tgt_norm or "FZE" in tgt_norm: ent_t = "ORGANIZATION"
+                    elif tgt_norm.startswith("KA-") or tgt_norm.startswith("DL-") or tgt_norm.startswith("HR-"): ent_t = "VEHICLE"
+
+                    new_ent = ExtractedEntity(
+                        evidence_id=parent_ev.id,
+                        case_id=case.id,
+                        entity_type=ent_t,
+                        raw_value=tgt,
+                        normalized_value=tgt_norm,
+                        confidence=conf,
+                        context_snippet=f"Entity {tgt} in case {case.case_number}",
+                        extraction_method="GRAPH_TOPOLOGY_INFERENCE",
+                        entity_metadata={"seeded": True}
+                    )
+                    db.add(new_ent)
+                    db.commit()
+                    db.refresh(new_ent)
+                    entity_id_map[tgt_norm] = new_ent.id
+                    results["entities"] += 1
+
                 existing_rel = db.query(ExtractedRelationship).filter(
                     ExtractedRelationship.case_id == case.id,
                     ExtractedRelationship.source_value == src_norm,
