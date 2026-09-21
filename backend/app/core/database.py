@@ -51,13 +51,14 @@ def init_db() -> None:
     except Exception as e:
         print(f"Warning during schema migration: {e}")
 
-    # Seed default institutional users
+    # Seed default institutional users & comprehensive investigation test dataset
     try:
-        from app.services.user_service import UserService
+        from app.core.seeder import seed_database_comprehensive
         db = SessionLocal()
-        UserService.seed_default_users(db)
+        seed_database_comprehensive(db)
         db.close()
     except Exception as e:
-        print(f"Warning during user seeding: {e}")
+        print(f"Warning during comprehensive seeding: {e}")
+
 
 
