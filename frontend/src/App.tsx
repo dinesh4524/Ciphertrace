@@ -28,11 +28,40 @@ import { SIHDemoWorkflow } from './components/sih/SIHDemoWorkflow';
 import { Case, EvidenceItem, CaseCreatePayload } from './types';
 import { api } from './services/api';
 import { useAuth } from './context/AuthContext';
+const VALID_TABS: TabType[] = [
+  'dashboard', 'cases', 'ledger', 'evidence', 'ingestion',
+  'entities', 'timeline', 'graph', 'relationships', 'analytics',
+  'search', 'rag', 'graphrag', 'hypotheses', 'reasoning',
+  'counterfactual', 'priority', 'resolution', 'legal', 'reports',
+  'sih-demo', 'audit', 'users', 'health'
+];
+
+function parseHash(): { page: 'landing' | 'login' | 'app'; tab: TabType; caseId: string | null } {
+  const rawHash = window.location.hash.replace(/^#\/?/, '');
+  if (!rawHash || rawHash === 'landing') {
+    return { page: 'landing', tab: 'dashboard', caseId: null };
+  }
+  if (rawHash === 'login') {
+    return { page: 'login', tab: 'dashboard', caseId: null };
+  }
+
+  const [routePart, queryPart] = rawHash.split('?');
+  const params = new URLSearchParams(queryPart || '');
+  const caseId = params.get('case');
+
+  const tab = VALID_TABS.includes(routePart as TabType) ? (routePart as TabType) : 'dashboard';
+  return { page: 'app', tab, caseId };
+}
 
 export function App() {
   const { currentUser, loading: authLoading, logout } = useAuth();
-  const [publicPage, setPublicPage] = useState<'landing' | 'login'>('landing');
-  const [currentTab, setCurrentTab] = useState<TabType>('dashboard');
+  
+  // Initialize state from location hash
+  const initialRoute = parseHash();
+  const [publicPage, setPublicPage] = useState<'landing' | 'login'>(
+    initialRoute.page === 'login' ? 'login' : 'landing'
+  );
+  const [currentTab, setCurrentTab] = useState<TabType>(initialRoute.tab);
   const [cases, setCases] = useState<Case[]>([]);
   const [activeCase, setActiveCase] = useState<Case | null>(null);
   const [evidenceList, setEvidenceList] = useState<EvidenceItem[]>([]);
@@ -40,12 +69,79 @@ export function App() {
   const [loadingCases, setLoadingCases] = useState(false);
   const [loadingEvidence, setLoadingEvidence] = useState(false);
 
+  // Centralized Navigation Dispatcher that pushes to browser history
+  const navigate = (
+    target: { page?: 'landing' | 'login'; tab?: TabType; caseId?: string | null },
+    replace: boolean = false
+  ) => {
+    let newHash = '';
+    if (!currentUser) {
+      if (target.page === 'login') {
+        newHash = '#login';
+      } else {
+        newHash = '#landing';
+      }
+    } else {
+      if (target.page === 'login') {
+        newHash = '#login';
+      } else if (target.page === 'landing') {
+        newHash = '#landing';
+      } else {
+        const destTab = target.tab || currentTab;
+        const targetCaseId = target.caseId !== undefined ? target.caseId : activeCase?.id;
+        newHash = `#${destTab}${targetCaseId ? `?case=${targetCaseId}` : ''}`;
+      }
+    }
+
+    if (window.location.hash !== newHash) {
+      if (replace) {
+        window.history.replaceState(null, '', newHash);
+      } else {
+        window.history.pushState(null, '', newHash);
+      }
+    }
+
+    if (target.page) {
+      setPublicPage(target.page);
+    }
+    if (target.tab) {
+      setCurrentTab(target.tab);
+    }
+    if (target.caseId !== undefined) {
+      if (target.caseId) {
+        const found = cases.find(c => c.id === target.caseId);
+        if (found) {
+          setActiveCase(found);
+        } else {
+          api.getCaseById(target.caseId).then(c => setActiveCase(c)).catch(console.error);
+        }
+      } else {
+        setActiveCase(null);
+      }
+    }
+  };
+
   const fetchCases = async () => {
     setLoadingCases(true);
     try {
       const caseList = await api.getCases();
       setCases(caseList);
-      if (!activeCase && caseList.length > 0) {
+
+      // If URL hash has a specific case id, select it; otherwise default to first case
+      const { caseId } = parseHash();
+      if (caseId) {
+        const matching = caseList.find(c => c.id === caseId);
+        if (matching) {
+          setActiveCase(matching);
+        } else {
+          try {
+            const fetched = await api.getCaseById(caseId);
+            setActiveCase(fetched);
+          } catch {
+            if (caseList.length > 0) setActiveCase(caseList[0]);
+          }
+        }
+      } else if (!activeCase && caseList.length > 0) {
         setActiveCase(caseList[0]);
       }
     } catch (err) {
@@ -67,6 +163,42 @@ export function App() {
     }
   };
 
+  // Sync state when browser back/forward buttons or hash change occurs
+  useEffect(() => {
+    const handleHashSync = () => {
+      const { page, tab, caseId } = parseHash();
+      if (!currentUser) {
+        if (page === 'login') {
+          setPublicPage('login');
+        } else {
+          setPublicPage('landing');
+        }
+      } else {
+        setCurrentTab(tab);
+        if (caseId) {
+          if (cases.length > 0) {
+            const match = cases.find(c => c.id === caseId);
+            if (match) {
+              setActiveCase(match);
+            } else {
+              api.getCaseById(caseId).then(setActiveCase).catch(console.error);
+            }
+          } else {
+            api.getCaseById(caseId).then(setActiveCase).catch(console.error);
+          }
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handleHashSync);
+    window.addEventListener('hashchange', handleHashSync);
+
+    return () => {
+      window.removeEventListener('popstate', handleHashSync);
+      window.removeEventListener('hashchange', handleHashSync);
+    };
+  }, [currentUser, cases]);
+
   useEffect(() => {
     if (currentUser) {
       fetchCases();
@@ -85,7 +217,7 @@ export function App() {
       setCases(prev => [newCase, ...prev]);
       setActiveCase(newCase);
       setIsCreateModalOpen(false);
-      setCurrentTab('ledger');
+      navigate({ tab: 'ledger', caseId: newCase.id });
     } catch (err) {
       console.error('Failed to create case:', err);
       alert('Failed to create case');
@@ -94,12 +226,12 @@ export function App() {
 
   const handleSelectCase = (selectedCase: Case) => {
     setActiveCase(selectedCase);
-    setCurrentTab('ledger');
+    navigate({ tab: 'ledger', caseId: selectedCase.id });
   };
 
   const handleLogout = () => {
     logout();
-    setPublicPage('landing');
+    navigate({ page: 'landing' }, true);
   };
 
   // 1. If checking auth token on page load
@@ -119,15 +251,21 @@ export function App() {
     if (publicPage === 'login') {
       return (
         <LoginPage
-          onBackToLanding={() => setPublicPage('landing')}
-          onLoginSuccess={() => setCurrentTab('dashboard')}
+          onBackToLanding={() => {
+            if (window.history.length > 1) {
+              window.history.back();
+            } else {
+              navigate({ page: 'landing' });
+            }
+          }}
+          onLoginSuccess={() => navigate({ tab: 'dashboard' })}
         />
       );
     }
     return (
       <LandingPage
-        onSignInClick={() => setPublicPage('login')}
-        onDemoClick={() => setPublicPage('login')}
+        onSignInClick={() => navigate({ page: 'login' })}
+        onDemoClick={() => navigate({ page: 'login' })}
       />
     );
   }
@@ -138,14 +276,20 @@ export function App() {
       <Header
         activeCaseNumber={activeCase?.case_number}
         activeCaseTitle={activeCase?.title}
-        onOpenCaseSelector={() => setCurrentTab('cases')}
+        currentTab={currentTab}
+        onOpenCaseSelector={() => navigate({ tab: 'cases' })}
+        onNavigateToDashboard={() => navigate({ tab: 'dashboard' })}
+        onNavigateToCases={() => navigate({ tab: 'cases' })}
+        onNavigateToActiveCase={() => activeCase && navigate({ tab: 'ledger', caseId: activeCase.id })}
+        onNavigateBack={() => window.history.back()}
+        onNavigateForward={() => window.history.forward()}
         onLogout={handleLogout}
       />
 
       <div className="flex-1 flex overflow-hidden">
         <Sidebar
           currentTab={currentTab}
-          setCurrentTab={setCurrentTab}
+          setCurrentTab={(tab) => navigate({ tab, caseId: activeCase?.id })}
           evidenceCount={evidenceList.length}
           hasActiveCase={!!activeCase}
           onLogout={handleLogout}
@@ -156,8 +300,10 @@ export function App() {
           {(currentTab === 'sih-demo' || currentTab === 'reports') && (
             <SIHDemoWorkflow
               onSelectCase={(caseId) => {
-                api.getCaseById(caseId).then(setActiveCase);
-                setCurrentTab('ledger');
+                api.getCaseById(caseId).then(c => {
+                  setActiveCase(c);
+                  navigate({ tab: 'ledger', caseId: c.id });
+                });
               }}
             />
           )}
@@ -185,13 +331,14 @@ export function App() {
           {currentTab === 'ledger' && activeCase && (
             <CaseDetailLedger
               activeCase={activeCase}
-              onNavigateToIngestion={() => setCurrentTab('ingestion')}
-              onNavigateToEvidence={() => setCurrentTab('evidence')}
-              onNavigateToEntities={() => setCurrentTab('entities')}
-              onNavigateToRelationships={() => setCurrentTab('relationships')}
-              onNavigateToResolution={() => setCurrentTab('resolution')}
-              onNavigateToGraph={() => setCurrentTab('graph')}
-              onNavigateToAnalytics={() => setCurrentTab('analytics')}
+              onNavigateToCases={() => navigate({ tab: 'cases' })}
+              onNavigateToIngestion={() => navigate({ tab: 'ingestion', caseId: activeCase.id })}
+              onNavigateToEvidence={() => navigate({ tab: 'evidence', caseId: activeCase.id })}
+              onNavigateToEntities={() => navigate({ tab: 'entities', caseId: activeCase.id })}
+              onNavigateToRelationships={() => navigate({ tab: 'relationships', caseId: activeCase.id })}
+              onNavigateToResolution={() => navigate({ tab: 'resolution', caseId: activeCase.id })}
+              onNavigateToGraph={() => navigate({ tab: 'graph', caseId: activeCase.id })}
+              onNavigateToAnalytics={() => navigate({ tab: 'analytics', caseId: activeCase.id })}
               onRefreshCase={() => {
                 fetchCases();
                 if (activeCase) {
@@ -205,7 +352,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">No active investigation selected.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -239,7 +386,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -256,7 +403,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -273,7 +420,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -290,7 +437,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -307,7 +454,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -324,7 +471,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -341,7 +488,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -358,7 +505,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -375,7 +522,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -392,7 +539,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -409,7 +556,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -426,7 +573,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry
@@ -443,7 +590,7 @@ export function App() {
             <div className="p-8 text-center workstation-card rounded-lg space-y-2">
               <p className="text-xs text-[#64748B] font-mono">Select an investigation case first.</p>
               <button
-                onClick={() => setCurrentTab('cases')}
+                onClick={() => navigate({ tab: 'cases' })}
                 className="btn-rect-primary"
               >
                 Go to Case Registry

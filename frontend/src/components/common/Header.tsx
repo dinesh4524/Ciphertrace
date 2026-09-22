@@ -8,7 +8,9 @@ import {
   FileCheck2, 
   Scale, 
   Info, 
-  Layers
+  Layers,
+  ArrowLeft,
+  ArrowRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { Badge } from './Badge';
@@ -20,14 +22,26 @@ import { LegalPrivacyTermsModal } from './LegalPrivacyTermsModal';
 interface HeaderProps {
   activeCaseNumber?: string;
   activeCaseTitle?: string;
+  currentTab?: string;
   onOpenCaseSelector?: () => void;
+  onNavigateToDashboard?: () => void;
+  onNavigateToCases?: () => void;
+  onNavigateToActiveCase?: () => void;
+  onNavigateBack?: () => void;
+  onNavigateForward?: () => void;
   onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({ 
   activeCaseNumber, 
   activeCaseTitle,
+  currentTab,
   onOpenCaseSelector,
+  onNavigateToDashboard,
+  onNavigateToCases,
+  onNavigateToActiveCase,
+  onNavigateBack,
+  onNavigateForward,
   onLogout
 }) => {
   const { currentUser, switchPersona, logout } = useAuth();
@@ -66,32 +80,112 @@ export const Header: React.FC<HeaderProps> = ({
     }
   };
 
+  const handleBack = () => {
+    if (onNavigateBack) {
+      onNavigateBack();
+    } else {
+      window.history.back();
+    }
+  };
+
+  const handleForward = () => {
+    if (onNavigateForward) {
+      onNavigateForward();
+    } else {
+      window.history.forward();
+    }
+  };
+
+  const formatTabName = (tab?: string) => {
+    if (!tab) return '';
+    switch (tab) {
+      case 'dashboard': return 'Dashboard';
+      case 'cases': return 'Case Registry';
+      case 'ledger': return 'Case Ledger';
+      case 'evidence': return 'Evidence Locker';
+      case 'ingestion': return 'Evidence Ingestion';
+      case 'entities': return 'Entity 360';
+      case 'timeline': return 'Investigation Timeline';
+      case 'graph': return 'Knowledge Graph';
+      case 'relationships': return 'Relationship Matrix';
+      case 'analytics': return 'Graph Centrality';
+      case 'search': return 'Semantic Search';
+      case 'rag': return 'Case RAG';
+      case 'graphrag': return 'Graph RAG';
+      case 'hypotheses': return 'Hypotheses';
+      case 'reasoning': return 'Multi-Perspective';
+      case 'counterfactual': return 'Ablation Analysis';
+      case 'priority': return 'Investigative Priority';
+      case 'resolution': return 'Entity Resolution';
+      case 'legal': return 'Legal Reference';
+      case 'reports': return 'Court Dossiers';
+      case 'sih-demo': return 'Benchmark Dossier';
+      case 'audit': return 'Chain of Custody';
+      case 'users': return 'User Directory';
+      case 'health': return 'System Health';
+      default: return tab.toUpperCase();
+    }
+  };
+
   return (
     <>
-      <header className="h-14 border-b border-[#D9E0E8] bg-[#FFFFFF] px-4 md:px-6 flex items-center justify-between sticky top-0 z-40 select-none shadow-sm">
-        {/* Left: System Branding & Active Case Context */}
-        <div className="flex items-center gap-4">
+      <header className="h-14 border-b border-[#D9E0E8] bg-[#FFFFFF] px-3 md:px-6 flex items-center justify-between sticky top-0 z-40 select-none shadow-sm">
+        {/* Left: System Branding, History Controls & Case Context */}
+        <div className="flex items-center gap-3 md:gap-4">
           <Logo size="sm" subtitle="Investigation Intelligence Platform" />
 
-          {/* Active Investigation Breadcrumb */}
+          {/* History Back / Forward Controls */}
+          <div className="flex items-center gap-1 border-l border-[#D9E0E8] pl-3">
+            <button
+              onClick={handleBack}
+              className="p-1.5 rounded hover:bg-[#F1F5F9] text-[#475569] hover:text-[#172033] border border-[#CBD5E1] transition-colors flex items-center gap-1 text-xs font-mono"
+              title="Navigate Back (Alt + Left Arrow)"
+              aria-label="Back"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline text-[10px] font-bold">BACK</span>
+            </button>
+            <button
+              onClick={handleForward}
+              className="p-1.5 rounded hover:bg-[#F1F5F9] text-[#475569] hover:text-[#172033] border border-[#CBD5E1] transition-colors flex items-center text-xs font-mono"
+              title="Navigate Forward (Alt + Right Arrow)"
+              aria-label="Forward"
+            >
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
+
+          {/* Active Investigation & Tab Breadcrumb */}
           {activeCaseNumber ? (
-            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-[#D9E0E8]">
-              <span className="text-[10px] text-[#64748B] font-mono uppercase">CASE:</span>
+            <div className="hidden lg:flex items-center gap-1.5 pl-3 border-l border-[#D9E0E8] text-xs font-mono">
               <button
-                onClick={onOpenCaseSelector}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#F8FAFC] border border-[#CBD5E1] text-xs font-mono text-[#163A5F] font-bold hover:bg-[#F1F5F9] transition-colors"
-                title="Click to switch or view case"
+                onClick={onNavigateToCases}
+                className="text-[#64748B] hover:text-[#163A5F] hover:underline transition-colors uppercase text-[10px]"
+                title="Go to Case Registry"
+              >
+                CASES
+              </button>
+              <span className="text-[#94A3B8]">/</span>
+              <button
+                onClick={onNavigateToActiveCase || onOpenCaseSelector}
+                className="flex items-center gap-1 px-2 py-0.5 rounded bg-[#F8FAFC] border border-[#CBD5E1] text-xs font-mono text-[#163A5F] font-bold hover:bg-[#F1F5F9] transition-colors"
+                title="View Case Ledger"
               >
                 <span>{activeCaseNumber}</span>
-                <span className="text-[#64748B] text-[10px] max-w-[200px] truncate font-sans font-normal">
-                  — {activeCaseTitle}
-                </span>
               </button>
+              {currentTab && currentTab !== 'ledger' && (
+                <>
+                  <span className="text-[#94A3B8]">/</span>
+                  <span className="text-[#163A5F] font-bold uppercase text-[11px]">
+                    {formatTabName(currentTab)}
+                  </span>
+                </>
+              )}
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-2 pl-4 border-l border-[#D9E0E8] text-xs text-[#64748B] font-mono">
+            <div className="hidden lg:flex items-center gap-2 pl-3 border-l border-[#D9E0E8] text-xs text-[#64748B] font-mono">
               <button
-                onClick={onOpenCaseSelector}
+                onClick={onOpenCaseSelector || onNavigateToCases}
                 className="text-[#2563EB] hover:underline"
               >
                 SELECT ACTIVE CASE

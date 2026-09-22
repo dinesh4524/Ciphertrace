@@ -11,6 +11,7 @@ import {
   Network, 
   GitMerge,
   ArrowRight,
+  ArrowLeft,
   UploadCloud,
   Layers,
   ChevronRight,
@@ -36,6 +37,7 @@ interface CaseDetailLedgerProps {
   onNavigateToResolution: () => void;
   onNavigateToGraph: () => void;
   onNavigateToAnalytics?: () => void;
+  onNavigateToCases?: () => void;
   onRefreshCase: () => void;
 }
 
@@ -48,6 +50,7 @@ export const CaseDetailLedger: React.FC<CaseDetailLedgerProps> = ({
   onNavigateToResolution,
   onNavigateToGraph,
   onNavigateToAnalytics,
+  onNavigateToCases,
   onRefreshCase,
 }) => {
   const { hasPermission } = useAuth();
@@ -99,7 +102,8 @@ export const CaseDetailLedger: React.FC<CaseDetailLedgerProps> = ({
   };
 
   const workflowBreadcrumbs = [
-    { label: 'CASE', onClick: () => {} },
+    { label: '← ALL CASES', onClick: onNavigateToCases || (() => {}) },
+    { label: 'CASE OVERVIEW', onClick: () => {} },
     { label: 'EVIDENCE', onClick: onNavigateToEvidence },
     { label: 'ENTITIES', onClick: onNavigateToEntities },
     { label: 'RELATIONSHIPS', onClick: onNavigateToRelationships },
@@ -119,8 +123,10 @@ export const CaseDetailLedger: React.FC<CaseDetailLedgerProps> = ({
             <button
               onClick={crumb.onClick}
               className={`px-2.5 py-0.5 rounded transition-colors whitespace-nowrap text-xs ${
-                idx === 0
+                idx === 1
                   ? 'bg-[#163A5F] text-white font-bold'
+                  : idx === 0
+                  ? 'text-[#2563EB] hover:text-[#1D4ED8] hover:bg-[#EFF6FF] font-semibold'
                   : 'text-[#475569] hover:text-[#172033] hover:bg-[#F1F5F9]'
               }`}
             >
@@ -135,6 +141,15 @@ export const CaseDetailLedger: React.FC<CaseDetailLedgerProps> = ({
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
+              {onNavigateToCases && (
+                <button
+                  onClick={onNavigateToCases}
+                  className="mr-1 p-1 rounded hover:bg-[#E2E8F0] text-[#64748B] hover:text-[#172033] transition-colors"
+                  title="Back to Case Registry"
+                >
+                  <ArrowLeft className="w-4 h-4" />
+                </button>
+              )}
               <span className="text-base font-bold font-mono text-[#163A5F]">{activeCase.case_number}</span>
               {getPriorityBadge(activeCase.priority)}
               {getStatusBadge(activeCase.status)}
@@ -147,6 +162,17 @@ export const CaseDetailLedger: React.FC<CaseDetailLedgerProps> = ({
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
+            {onNavigateToCases && (
+              <button
+                onClick={onNavigateToCases}
+                className="btn-rect-secondary text-xs flex items-center gap-1.5"
+                title="Return to investigation case registry"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Cases</span>
+              </button>
+            )}
+
             {hasPermission('CASE_CHANGE_STATUS') && (
               <button
                 onClick={() => setIsStatusModalOpen(true)}
